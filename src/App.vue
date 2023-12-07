@@ -1,15 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <SidebarAgent/>
+  <header>
+    <NavbarAgent/>
+  </header>
+  <LabList/>
+  <AgentFooter/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import LabList from './components/LabList.vue';
+import NavbarAgent from "./components/NavbarAgent.vue";
+import SidebarAgent from "./components/SidebarAgent.vue";
+import AgentFooter from "./components/AgentFooter.vue";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    LabList,
+    NavbarAgent,
+    SidebarAgent,
+    AgentFooter
   }
 }
 </script>
@@ -21,6 +31,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
