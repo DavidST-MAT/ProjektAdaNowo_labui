@@ -1,10 +1,12 @@
 <template>
-  <SidebarAgent/>
-  <header>
-    <NavbarAgent/>
-  </header>
-  <LabList/>
-  <AgentFooter/>
+  <div id="app" class="flex flex-col min-h-screen">
+    <SidebarAgent/>
+    <header>
+      <NavbarAgent/>
+    </header>
+    <LabList class="flex-grow"/>
+    <AgentFooter/>
+  </div>
 </template>
 
 <script>
