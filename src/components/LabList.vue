@@ -2,19 +2,24 @@
     <div class="modal">
       <div class="modal-content flex flex-col items-center">
         <div class="header flex">
-            <button type="button" @click="handleNewButtonClick" class="mt-4 text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">New</button>
-            <button type="button" @click="" class="mt-4  text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Open</button>
+          <button type="button" @click="handleNewButtonClick" class="mt-4 text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">New</button>
+          <button type="button" @click="" class="mt-4  text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Open</button>
         </div>
 
-
-        <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 text-gray-500 dark:text-gray-100 mt-100">
-          <tbody>
+       
+        <table  class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 text-gray-500 dark:text-gray-100 mt-100">
+          <tbody id="labUIdata">
             <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.data" :key="index">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
                 {{ item.Paramter }}
               </th>
               <td class="px-6 py-4 dark:text-black">
-                <input v-model="item.Value" type="text" text-center/>
+                <template v-if="item.Paramter === 'Tester'">
+                  <TesterInput v-model="testerName"/>
+                </template>
+                <template v-else>
+                  <input v-model="item.Value" type="text" />
+                </template>
               </td>
 
             </tr>
@@ -41,7 +46,8 @@
       </table>
 
         <div class="flex">
-        <PrintButton @print="handlePrintButtonClick" />
+          
+        <PrintButton/>
         <button type="button" @click="" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button>
       </div>
      </div>
@@ -50,6 +56,7 @@
   
   <script>
   import PrintButton from './PrintButton.vue';
+  import TesterInput from './TesterInput.vue';
 
   export default {
     props: {
@@ -59,17 +66,18 @@
     data() {
       return {
         currentValue: '',
+        testerName: '',
         data: [
-          { Paramter: 'Probe Date/Time', Value: 'Placeholder' },
-          { Paramter: 'Tester', Value: 'Placeholder' },
-          { Paramter: 'Product', Value: 'Placeholder' },
-          { Paramter: 'Batch number', Value: 'Placeholder' },
+          { Paramter: 'Probe Date/Time', Value: '' },
+          { Paramter: 'Tester', Value: '' },
+          { Paramter: 'Product', Value: '' },
+          { Paramter: 'Batch number', Value: '' },
         ],
         data2: [
-          { Paramter: 'Required Parameter A', Value: 'Placeholder', Unit: 'Unit' },
-          { Paramter: 'Required Parameter B', Value: 'Placeholder', Unit: 'Unit' },
-          { Paramter: 'Optional Parameter A', Value: 'Placeholder', Unit: 'Unit' },
-          { Paramter: 'Optional Parameter A', Value: 'Placeholder', Unit: 'Unit' },
+          { Paramter: 'Required Parameter A', Value: '', Unit: 'Unit' },
+          { Paramter: 'Required Parameter B', Value: '', Unit: 'Unit' },
+          { Paramter: 'Optional Parameter A', Value: '', Unit: 'Unit' },
+          { Paramter: 'Optional Parameter A', Value: '', Unit: 'Unit' },
         ],
       };
     },
@@ -91,6 +99,7 @@
 
     components: {
       PrintButton,
+      TesterInput
     },
 
   };
@@ -117,5 +126,7 @@
   input {
     text-align: center;
   }
+
+  
 
 </style>
