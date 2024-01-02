@@ -4,7 +4,9 @@
     <header>
       <NavbarAgent/>
     </header>
-    <LabList class="flex-grow"/>
+    <div class="flex-grow flex items-center justify-center">
+      <LabList class="flex-grow"/>
+    </div>
     <AgentFooter/>
   </div>
 </template>
@@ -15,6 +17,7 @@ import NavbarAgent from "./components/NavbarAgent.vue";
 import SidebarAgent from "./components/SidebarAgent.vue";
 import AgentFooter from "./components/AgentFooter.vue";
 
+
 export default {
   name: 'App',
   components: {
@@ -22,7 +25,7 @@ export default {
     NavbarAgent,
     SidebarAgent,
     AgentFooter
-  }
+  },
 }
 </script>
 
