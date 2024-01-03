@@ -1,12 +1,13 @@
 <template>
     <div class="modal">
       <div class="modal-content flex flex-col items-center">
+        <h2 class="sample-number-heading">Sample number: {{ sampleNumber }}</h2>
         <div class="header flex">
-          <button type="button" @click="handleNewButtonClick" class="mt-4 text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">New</button>
+          <NewButton @newButtonClick="handleNewButtonClick" />
           <button type="button" @click="" class="mt-4  text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Open</button>
         </div>
 
-       
+    
         <table  class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 text-gray-500 dark:text-gray-100 mt-100">
           <tbody id="labUIdata">
             <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.data" :key="index">
@@ -55,6 +56,7 @@
   </template>
   
   <script>
+  import NewButton from './NewButton.vue';
   import PrintButton from './PrintButton.vue';
   import TesterInput from './TesterInput.vue';
 
@@ -65,13 +67,18 @@
   
     data() {
       return {
+        sampleNumber: '',
         currentValue: '',
         testerName: '',
         data: [
           { Paramter: 'Probe Date/Time', Value: '' },
           { Paramter: 'Tester', Value: '' },
+          { Paramter: 'Test', Value: '' },
+          { Paramter: 'Test standard', Value: '' },
           { Paramter: 'Product', Value: '' },
           { Paramter: 'Batch number', Value: '' },
+          { Paramter: 'Production facility', Value: '' },
+          { Paramter: 'Comment', Value: '' },
         ],
         data2: [
           { Paramter: 'Required Parameter A', Value: '', Unit: 'Unit' },
@@ -83,7 +90,8 @@
     },
   
     methods: {
-      handleNewButtonClick() {
+      // Function for clicking button "New"
+      handleNewButtonClick(result) {
         const currentDate = new Date();
         const formattedDate = currentDate.toLocaleString(); // You can customize the date format as needed
   
@@ -92,12 +100,19 @@
         if (probeDateTimeItem) {
           probeDateTimeItem.Value = formattedDate;
         }
+
+        // Increment the sample number
+        this.sampleNumber = result
+        this.sampleNumber++
+        console.log('hi')
+        console.log(this.sampleNumber)
       },
   
       // Add other methods as needed
     },
 
     components: {
+      NewButton,
       PrintButton,
       TesterInput
     },
@@ -127,6 +142,10 @@
     text-align: center;
   }
 
-  
+  .sample-number-heading {
+  /* Styles for the sample number heading */
+  font-size: 24px; /* Adjust the size as needed */
+  font-weight: bold; /* Adjust the weight as needed */
+}
 
 </style>

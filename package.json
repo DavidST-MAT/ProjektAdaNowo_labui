@@ -7,8 +7,11 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@influxdata/influxdb-client": "^1.33.2",
+    "@influxdata/influxdb-client-apis": "^1.33.2",
     "core-js": "^3.8.3",
     "html2pdf.js": "^0.10.1",
+    "influx": "^5.9.3",
     "vue": "^3.2.13"
   },
   "devDependencies": {
