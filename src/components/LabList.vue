@@ -4,7 +4,7 @@
         <h2 class="sample-number-heading">Sample number: {{ sampleNumber }}</h2>
         <div class="header flex">
           <NewButton @newButtonClick="handleNewButtonClick" />
-          <button type="button" @click="" class="mt-4  text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Open</button>
+          <button type="button" @click="" class="hidden-print mt-4  text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Open</button>
         </div>
 
     
@@ -40,7 +40,7 @@
               {{ item.Unit }}
             </td>
             <td class="px-6 py-4 dark:text-black">
-              <button type="button" @click="handleSetButtonClick(item)" class="btn">Set</button>
+              <button type="button" @click="handleSetButtonClick(item)" class="btn hidden-print">Set</button>
             </td>
           </tr>
         </tbody>    
@@ -49,7 +49,7 @@
         <div class="flex">
           
         <PrintButton/>
-        <button type="button" @click="" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button>
+        <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button>
       </div>
      </div>
     </div>
@@ -146,6 +146,20 @@
   /* Styles for the sample number heading */
   font-size: 24px; /* Adjust the size as needed */
   font-weight: bold; /* Adjust the weight as needed */
+}
+
+@media print {
+  .hidden-print {
+    display: none !important;
+  }
+
+  a[href]:after {
+    content: none !important;
+  }
+
+  header, footer {
+    display: none;
+  }
 }
 
 </style>
