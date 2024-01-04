@@ -19,47 +19,34 @@
 </template>
 
 <script>
-  const { InfluxDB, Point} = require('@influxdata/influxdb-client');
+  const { InfluxDB } = require('@influxdata/influxdb-client');
   const url = "http://localhost:8086"
   const token = "Qc6s7RKI7ZnQpB5ZdesJzEmgd46XLGRmcXv5RJRbhTUc758Ma8g-LQv6_A2p125BZohkhbYnEhVtpeOHJ-BqTw=="
   const org = "MAT"
-  const queryApi = new InfluxDB({url, token}).getQueryApi(org)
+  const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
 
 export default {
   data() {
     return {
       suggest: "",
       suggestions: [],
-      allNames: ["John", "Jane", "Johnny", "Sarah", "David"],
+      allNames: [],
       showSuggestions: false
     };
   },
 
+  created() {
+    // Laden Sie die Daten beim Erstellen der Komponente
+    this.fetchNames();
+  },
 
   methods: {
-
     async fetchNames() {
-        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "Tester") |> group(columns: ["_field"]) |> last()'
-        const myQuery = async () => {
-        const result = []
-         
-        for await (const {values, tableMeta} of queryApi.iterateRows(fluxQuery)) {
-          const o = tableMeta.toObject(values)
-          result.push({Tester: o.Tester})
-        }
-        console.log(result)
-        return result
-      }
-
-      // Execute query and populate data for html table
-      myQuery().then(result => {
-        this.sampleNumber = result[0].Tester
-        console.log(this.sampleNumber)
-        //this.$emit('newButtonClick', this.sampleNumber);
-      })
-      },
-
-
+      const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
+      const result = await queryApi.collectRows(fluxQuery);
+      this.allNames = [...new Set(result.map(row => row.Tester))];
+      console.log(this.allNames);
+    },
 
     filterNames() {
       if (this.suggest.length === 0) {
@@ -80,9 +67,8 @@ export default {
       this.filterNames();
     },
 
-    async  handleFocus() {
+    handleFocus() {
       this.showSuggestions = true;
-      await this.fetchNames();
       this.filterNames();
       // Hinzugefügt: Event Listener für das Schließen des Menüs bei Klick auf die Seite
       document.addEventListener("click", this.closeSuggestions);
@@ -104,6 +90,7 @@ export default {
   }
 };
 </script>
+
   
   <style scoped>
   .tester-input {
