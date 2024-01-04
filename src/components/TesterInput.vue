@@ -19,6 +19,12 @@
 </template>
 
 <script>
+  const { InfluxDB, Point} = require('@influxdata/influxdb-client');
+  const url = "http://localhost:8086"
+  const token = "Qc6s7RKI7ZnQpB5ZdesJzEmgd46XLGRmcXv5RJRbhTUc758Ma8g-LQv6_A2p125BZohkhbYnEhVtpeOHJ-BqTw=="
+  const org = "MAT"
+  const queryApi = new InfluxDB({url, token}).getQueryApi(org)
+
 export default {
   data() {
     return {
@@ -29,7 +35,32 @@ export default {
     };
   },
 
+
   methods: {
+
+    async fetchNames() {
+        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "Tester") |> group(columns: ["_field"]) |> last()'
+        const myQuery = async () => {
+        const result = []
+         
+        for await (const {values, tableMeta} of queryApi.iterateRows(fluxQuery)) {
+          const o = tableMeta.toObject(values)
+          result.push({Tester: o.Tester})
+        }
+        console.log(result)
+        return result
+      }
+
+      // Execute query and populate data for html table
+      myQuery().then(result => {
+        this.sampleNumber = result[0].Tester
+        console.log(this.sampleNumber)
+        //this.$emit('newButtonClick', this.sampleNumber);
+      })
+      },
+
+
+
     filterNames() {
       if (this.suggest.length === 0) {
         this.suggestions = this.allNames;
@@ -39,19 +70,24 @@ export default {
         );
       }
     },
+
     selectSuggestion(suggest) {
       this.suggest = suggest;
       this.showSuggestions = false;
     },
+
     handleInput() {
       this.filterNames();
     },
-    handleFocus() {
+
+    async  handleFocus() {
       this.showSuggestions = true;
+      await this.fetchNames();
       this.filterNames();
       // Hinzugefügt: Event Listener für das Schließen des Menüs bei Klick auf die Seite
       document.addEventListener("click", this.closeSuggestions);
     },
+
     closeSuggestions(event) {
       const testerInput = this.$refs.testerInput;
       if (!testerInput.contains(event.target)) {

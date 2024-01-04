@@ -75,9 +75,10 @@
           { Paramter: 'Tester', Value: '' },
           { Paramter: 'Test', Value: '' },
           { Paramter: 'Test standard', Value: '' },
-          { Paramter: 'Product', Value: '' },
+          { Paramter: 'Article', Value: '' },
+          { Paramter: 'Article number', Value: '' },
           { Paramter: 'Batch number', Value: '' },
-          { Paramter: 'Production facility', Value: '' },
+          { Paramter: 'Order number', Value: '' },
           { Paramter: 'Comment', Value: '' },
         ],
         data2: [
