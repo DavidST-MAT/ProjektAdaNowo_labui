@@ -60,7 +60,7 @@ export default {
           name.toLowerCase().includes(this.suggest.toLowerCase())
         );
       }
-      this.$emit('input-change', this.suggest);
+      this.$emit('input-change', 'Tester', this.suggest);
     },
 
     selectSuggestion(suggest) {

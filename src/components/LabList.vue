@@ -13,23 +13,23 @@
               <tbody id="labUIdata">
                 <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.headerData" :key="index">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                    {{ item.Paramter }}
+                    {{ item.Parameter }}
                   </th>
                   <td class="px-6 py-4 dark:text-black">
-                    <template v-if="item.Paramter === 'Tester'">
-                      <TesterInput @input-change="handleInputChange('Tester')" />
+                    <template v-if="item.Parameter === 'Tester'">
+                      <TesterInput @input-change="handleInputChange" />
                     </template>
-                    <template v-else-if="item.Paramter === 'Article'">
-                      <ArticleInput @input-change="handleInputChange('Article')"/>
+                    <template v-else-if="item.Parameter === 'Article'">
+                      <ArticleInput @input-change="handleInputChange"/>
                     </template>
-                    <template v-else-if="item.Paramter === 'Batch number'">
-                      <BatchInput @input-change="handleInputChange('Batch number')"/>
+                    <template v-else-if="item.Parameter === 'Batch number'">
+                      <BatchInput @input-change="handleInputChange"/>
                     </template>
-                    <template v-else-if="item.Paramter === 'Order number'">
-                      <OrderInput @input-change="handleInputChange('Order number')"/>
+                    <template v-else-if="item.Parameter === 'Order number'">
+                      <OrderInput @input-change="handleInputChange"/>
                     </template>
-                    <template v-else-if="item.Paramter === 'Article number'">
-                      <ArticleNumberInput @input-change="handleInputChange('Article number')"/>
+                    <template v-else-if="item.Parameter === 'Article number'">
+                      <ArticleNumberInput @input-change="handleInputChange"/>
                     </template>
                     <template v-else>
                       <input v-model="item.Value" type="text" />
@@ -44,7 +44,7 @@
               <tbody>
                 <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labData" :key="index">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                    {{ item.Paramter }}
+                    {{ item.Parameter }}
                   </th>
                   <td class="px-6 py-4 dark:text-black">
                     <input v-model="item.Value" type="text"/>
@@ -96,21 +96,21 @@
         testerName: '',
         suggest: '',
         headerData: [
-          { Paramter: 'Probe Date/Time', Value: '' },
-          { Paramter: 'Tester', Value: '' },
-          { Paramter: 'Test', Value: '' },
-          { Paramter: 'Test standard', Value: '' },
-          { Paramter: 'Article', Value: '' },
-          { Paramter: 'Article number', Value: '' },
-          { Paramter: 'Batch number', Value: '' },
-          { Paramter: 'Order number', Value: '' },
-          { Paramter: 'Comment', Value: '' },
+          { Parameter: 'Probe Date/Time', Value: '' },
+          { Parameter: 'Tester', Value: '' },
+          { Parameter: 'Test', Value: '' },
+          { Parameter: 'Test standard', Value: '' },
+          { Parameter: 'Article', Value: '' },
+          { Parameter: 'Article number', Value: '' },
+          { Parameter: 'Batch number', Value: '' },
+          { Parameter: 'Order number', Value: '' },
+          { Parameter: 'Comment', Value: '' },
         ],
         labData: [
-          { Paramter: 'Required Parameter A', Value: '', Unit: 'Unit' },
-          { Paramter: 'Required Parameter B', Value: '', Unit: 'Unit' },
-          { Paramter: 'Optional Parameter A', Value: '', Unit: 'Unit' },
-          { Paramter: 'Optional Parameter A', Value: '', Unit: 'Unit' },
+          { Parameter: 'Required Parameter A', Value: '', Unit: 'Unit' },
+          { Parameter: 'Required Parameter B', Value: '', Unit: 'Unit' },
+          { Parameter: 'Optional Parameter A', Value: '', Unit: 'Unit' },
+          { Parameter: 'Optional Parameter A', Value: '', Unit: 'Unit' },
         ],
       };
     },
@@ -118,11 +118,8 @@
     methods: {
 
       handleInputChange(paramterName, value) {
-        const parameterItem = this.headerData.find(item => item.Paramter === paramterName);
-        if (parameterItem) {
-          parameterItem.Value = value;
-        }
-      },
+      this.headerData.find(item => item.Parameter === paramterName).Value = value;
+    },
 
 
       handleOpenButtonClick() {
@@ -139,7 +136,7 @@
         const formattedDate = currentDate.toLocaleString(); // You can customize the date format as needed
   
         // Find the "Probe Date/Time" item in the data array and update its value
-        const probeDateTimeItem = this.headerData.find(item => item.Paramter === 'Probe Date/Time');
+        const probeDateTimeItem = this.headerData.find(item => item.Parameter === 'Probe Date/Time');
         if (probeDateTimeItem) {
           probeDateTimeItem.Value = formattedDate;
         }

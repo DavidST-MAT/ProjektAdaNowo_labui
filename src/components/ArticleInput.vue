@@ -57,7 +57,7 @@
             name.toLowerCase().includes(this.suggest.toLowerCase())
           );
         }
-        this.$emit('input-change', this.suggest);
+        this.$emit('input-change', 'Article', this.suggest);
       },
   
       selectSuggestion(suggest) {
