@@ -43,18 +43,22 @@
   
     methods: {
       async fetchNames() {
-        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
-        const result = await queryApi.collectRows(fluxQuery);
-        this.allArticels = [...new Set(result.map(row => row.Article))];
-        console.log(this.allArticels);
+        try {
+          const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
+          const result = await queryApi.collectRows(fluxQuery);
+          this.allArticels = [...new Set(result.map(row => row.Article))];
+          console.log(this.allArticels);
+        } catch (error) {
+            console.error('Error fetching names:', error);
+        }
       },
   
       filterNames() {
         if (this.suggest.length === 0) {
-          this.suggestions = this.allArticels;
+          this.suggestions = this.allArticels.filter(name => name && name.trim() !== "");
         } else {
           this.suggestions = this.allArticels.filter(name =>
-            name.toLowerCase().includes(this.suggest.toLowerCase())
+            name && name.toLowerCase().includes(this.suggest.toLowerCase())
           );
         }
         this.$emit('input-change', 'Article', this.suggest);

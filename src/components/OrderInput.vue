@@ -42,18 +42,22 @@
   
     methods: {
       async fetchNames() {
-        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
-        const result = await queryApi.collectRows(fluxQuery);
-        this.allOrderNumbers = [...new Set(result.map(row => row.Order_Number))];
-        console.log(this.allOrderNumbers);
+        try {
+          const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
+          const result = await queryApi.collectRows(fluxQuery);
+          this.allOrderNumbers = [...new Set(result.map(row => row.Order_Number))];
+          console.log(this.allOrderNumbers);
+        } catch (error) {
+            console.error('Error fetching names:', error);
+        }
       },
   
       filterNames() {
         if (this.suggest.length === 0) {
-          this.suggestions = this.allOrderNumbers;
+          this.suggestions = this.allOrderNumbers.filter(name => name && name.trim() !== "");
         } else {
           this.suggestions = this.allOrderNumbers.filter(name =>
-            name.toLowerCase().includes(this.suggest.toLowerCase())
+            name && name.toLowerCase().includes(this.suggest.toLowerCase())
           );
         }
         this.$emit('input-change', 'Order number', this.suggest);

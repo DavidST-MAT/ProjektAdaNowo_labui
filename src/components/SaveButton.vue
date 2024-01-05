@@ -6,7 +6,7 @@
   
   <script>
     // Import required modules
-    const { InfluxDB} = require('@influxdata/influxdb-client');
+    const { InfluxDB, Point} = require('@influxdata/influxdb-client');
 
     // InfluxDB configuration
     const url = "http://localhost:8086"
@@ -21,6 +21,7 @@
 
     props: {
         headerData: Array,
+        sampleNumber: Number,
     },
 
     // data() {
@@ -35,33 +36,34 @@
 
             console.log(this.headerData)
 
-            // console.log(newRecipeName)
-            // console.log(editedList)
+            const writeApi = influxDB.getWriteApi(org, bucket);
+            const currentTime = new Date();
 
-            // const writeApi = influxDB.getWriteApi(org, bucket);
-            // const currentTime = new Date();
+            const point = new Point('HeaderData')
+                .timestamp(currentTime)
+                .tag('Tester', this.headerData[1].Value)
+                .tag('Test', this.headerData[2].Value)
+                .tag('Test_Standard', this.headerData[3].Value)
+                .tag('Article', this.headerData[4].Value)
+                .tag('Article_Number', this.headerData[5].Value)
+                .tag('Order_Number', this.headerData[6].Value)
+                .tag('Batch_Number', this.headerData[7].Value)
+                .tag('Comment', this.headerData[8].Value)
+                .intField('sample_number', this.sampleNumber)
 
-            // for (const dataPoint of editedList) {
-            // const { Paramter, Value, Unit} = dataPoint;
+            console.log(point)
 
-            // const point = new Point('Recipe')
-            //     .timestamp(currentTime)
-            //     .tag('recipe', newRecipeName)
-            //     .tag('Unit', Unit)
-            //     .floatField(Paramter, Value)
-
-            // writeApi.writePoint(point);
-            // }
-
-            // writeApi
-            // .close()
-            // .then(() => {
-            //     console.log("FINISHED");
-            // })
-            // .catch((e) => {
-            //     console.error(e);
-            //     console.log("Finished ERROR");
-            // });
+            writeApi.writePoint(point);
+            
+            writeApi
+            .close()
+            .then(() => {
+                console.log("FINISHED");
+            })
+            .catch((e) => {
+                console.error(e);
+                console.log("Finished ERROR");
+            });
         },
 
     },

@@ -42,18 +42,22 @@
   
     methods: {
       async fetchNames() {
+        try {
         const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
         const result = await queryApi.collectRows(fluxQuery);
-        this.allArticleNumbers = [...new Set(result.map(row => row.Article_No))];
+        this.allArticleNumbers = [...new Set(result.map(row => row.Article_Number))];
         console.log(this.allArticleNumbers);
+        } catch (error) {
+            console.error('Error fetching names:', error);
+        }
       },
   
       filterNames() {
         if (this.suggest.length === 0) {
-          this.suggestions = this.allArticleNumbers;
+          this.suggestions = this.allArticleNumbers.filter(name => name && name.trim() !== "");
         } else {
           this.suggestions = this.allArticleNumbers.filter(name =>
-            name.toLowerCase().includes(this.suggest.toLowerCase())
+            name && name.toLowerCase().includes(this.suggest.toLowerCase())
           );
         }
         this.$emit('input-change', 'Article number', this.suggest);

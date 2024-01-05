@@ -43,23 +43,27 @@
   
     methods: {
       async fetchNames() {
-        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
-        const result = await queryApi.collectRows(fluxQuery);
-        this.allBatchNumbers = [...new Set(result.map(row => row.Batch_Number))];
-        console.log(this.allBatchNumbers);
-      },
+        try {
+          const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
+          const result = await queryApi.collectRows(fluxQuery);
+          this.allBatchNumbers = [...new Set(result.map(row => row.Batch_Number))];
+          console.log(this.allBatchNumbers);
+        } catch (error) {
+            console.error('Error fetching names:', error);
+        }
+        },
   
       filterNames() {
         if (this.suggest.length === 0) {
-          this.suggestions = this.allBatchNumbers;
+          this.suggestions = this.allBatchNumbers.filter(name => name && name.trim() !== "");
         } else {
           this.suggestions = this.allBatchNumbers.filter(name =>
-            name.toLowerCase().includes(this.suggest.toLowerCase())
+            name && name.toLowerCase().includes(this.suggest.toLowerCase())
           );
         }
         this.$emit('input-change', 'Batch number', this.suggest);
       },
-  
+    
       selectSuggestion(suggest) {
         this.suggest = suggest;
         this.showSuggestions = false;

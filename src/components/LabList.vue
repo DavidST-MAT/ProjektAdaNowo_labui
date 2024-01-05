@@ -22,11 +22,11 @@
                     <template v-else-if="item.Parameter === 'Article'">
                       <ArticleInput @input-change="handleInputChange"/>
                     </template>
-                    <template v-else-if="item.Parameter === 'Batch number'">
-                      <BatchInput @input-change="handleInputChange"/>
-                    </template>
                     <template v-else-if="item.Parameter === 'Order number'">
                       <OrderInput @input-change="handleInputChange"/>
+                    </template>
+                    <template v-else-if="item.Parameter === 'Batch number'">
+                      <BatchInput @input-change="handleInputChange"/>
                     </template>
                     <template v-else-if="item.Parameter === 'Article number'">
                       <ArticleNumberInput @input-change="handleInputChange"/>
@@ -61,7 +61,7 @@
 
             <div class="flex">
               <!-- <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button> -->
-              <SaveButton :headerData="headerData"/>
+              <SaveButton :headerData="headerData" :sampleNumber="sampleNumber"/>
               <PrintButton/>
             </div>
 
@@ -102,8 +102,8 @@
           { Parameter: 'Test standard', Value: '' },
           { Parameter: 'Article', Value: '' },
           { Parameter: 'Article number', Value: '' },
-          { Parameter: 'Batch number', Value: '' },
           { Parameter: 'Order number', Value: '' },
+          { Parameter: 'Batch number', Value: '' },
           { Parameter: 'Comment', Value: '' },
         ],
         labData: [
