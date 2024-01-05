@@ -17,19 +17,19 @@
                   </th>
                   <td class="px-6 py-4 dark:text-black">
                     <template v-if="item.Paramter === 'Tester'">
-                      <TesterInput v-model="item.Value"/>
+                      <TesterInput @input-change="handleInputChange('Tester')" />
                     </template>
                     <template v-else-if="item.Paramter === 'Article'">
-                      <ArticleInput v-model="item.Value"/>
+                      <ArticleInput @input-change="handleInputChange('Article')"/>
                     </template>
                     <template v-else-if="item.Paramter === 'Batch number'">
-                      <BatchInput v-model="testerName"/>
+                      <BatchInput @input-change="handleInputChange('Batch number')"/>
                     </template>
                     <template v-else-if="item.Paramter === 'Order number'">
-                      <OrderInput v-model="testerName"/>
+                      <OrderInput @input-change="handleInputChange('Order number')"/>
                     </template>
                     <template v-else-if="item.Paramter === 'Article number'">
-                      <ArticleNumberInput v-model="testerName"/>
+                      <ArticleNumberInput @input-change="handleInputChange('Article number')"/>
                     </template>
                     <template v-else>
                       <input v-model="item.Value" type="text" />
@@ -61,8 +61,8 @@
 
             <div class="flex">
               <!-- <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button> -->
-              <PrintButton/>
               <SaveButton :headerData="headerData"/>
+              <PrintButton/>
             </div>
 
           </template>
@@ -94,6 +94,7 @@
         sampleNumber: '',
         currentValue: '',
         testerName: '',
+        suggest: '',
         headerData: [
           { Paramter: 'Probe Date/Time', Value: '' },
           { Paramter: 'Tester', Value: '' },
@@ -116,10 +117,19 @@
   
     methods: {
 
+      handleInputChange(paramterName, value) {
+        const parameterItem = this.headerData.find(item => item.Paramter === paramterName);
+        if (parameterItem) {
+          parameterItem.Value = value;
+        }
+      },
+
+
       handleOpenButtonClick() {
         this.isNewButtonClicked = false;
         this.isNewButtonClicked = true;
       },
+
 
 
       // Function for clicking button "New"
@@ -137,7 +147,6 @@
         // Increment the sample number
         this.sampleNumber = result
         this.sampleNumber++
-        console.log('hi')
         console.log(this.sampleNumber)
       },
   

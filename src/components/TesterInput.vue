@@ -26,6 +26,10 @@
   const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
 
 export default {
+  props: {
+      value: String // oder den entsprechenden Datentyp von item.Value
+  },
+
   data() {
     return {
       suggest: "",
@@ -56,15 +60,18 @@ export default {
           name.toLowerCase().includes(this.suggest.toLowerCase())
         );
       }
+      this.$emit('input-change', this.suggest);
     },
 
     selectSuggestion(suggest) {
       this.suggest = suggest;
       this.showSuggestions = false;
+
     },
 
     handleInput() {
       this.filterNames();
+      
     },
 
     handleFocus() {

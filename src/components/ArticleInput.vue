@@ -3,7 +3,7 @@
       <div class="input-container">
         <input
           type="text"
-          v-model="item.Value"
+          v-model="suggest"
           @input="handleInput"
           @focus="handleFocus"
         />
@@ -26,11 +26,8 @@
     const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
   
   export default {
-
-    props: ['item'],
-
-    
     data() {
+      
       return {
         suggest: "",
         suggestions: [],
@@ -50,7 +47,6 @@
         const result = await queryApi.collectRows(fluxQuery);
         this.allArticels = [...new Set(result.map(row => row.Article))];
         console.log(this.allArticels);
-        console.log('hi');
       },
   
       filterNames() {
@@ -61,11 +57,13 @@
             name.toLowerCase().includes(this.suggest.toLowerCase())
           );
         }
+        this.$emit('input-change', this.suggest);
       },
   
       selectSuggestion(suggest) {
         this.suggest = suggest;
         this.showSuggestions = false;
+        this.$emit('input', suggest);
       },
   
       handleInput() {

@@ -47,7 +47,6 @@
         const result = await queryApi.collectRows(fluxQuery);
         this.allBatchNumbers = [...new Set(result.map(row => row.Batch_Number))];
         console.log(this.allBatchNumbers);
-        console.log('hi');
       },
   
       filterNames() {
@@ -58,6 +57,7 @@
             name.toLowerCase().includes(this.suggest.toLowerCase())
           );
         }
+        this.$emit('input-change', this.suggest);
       },
   
       selectSuggestion(suggest) {

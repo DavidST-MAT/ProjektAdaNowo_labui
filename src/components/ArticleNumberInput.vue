@@ -46,7 +46,6 @@
         const result = await queryApi.collectRows(fluxQuery);
         this.allArticleNumbers = [...new Set(result.map(row => row.Article_No))];
         console.log(this.allArticleNumbers);
-        console.log('hi');
       },
   
       filterNames() {
@@ -57,6 +56,7 @@
             name.toLowerCase().includes(this.suggest.toLowerCase())
           );
         }
+        this.$emit('input-change', this.suggest);
       },
   
       selectSuggestion(suggest) {
