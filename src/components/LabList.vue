@@ -11,16 +11,16 @@
       
             <table  class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 text-gray-500 dark:text-gray-100 mt-100">
               <tbody id="labUIdata">
-                <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.data" :key="index">
+                <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.headerData" :key="index">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
                     {{ item.Paramter }}
                   </th>
                   <td class="px-6 py-4 dark:text-black">
                     <template v-if="item.Paramter === 'Tester'">
-                      <TesterInput v-model="testerName"/>
+                      <TesterInput v-model="item.Value"/>
                     </template>
                     <template v-else-if="item.Paramter === 'Article'">
-                      <ArticleInput v-model="testerName"/>
+                      <ArticleInput v-model="item.Value"/>
                     </template>
                     <template v-else-if="item.Paramter === 'Batch number'">
                       <BatchInput v-model="testerName"/>
@@ -42,7 +42,7 @@
 
             <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 text-gray-500 dark:text-gray-100 mt-100">
               <tbody>
-                <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.data2" :key="index">
+                <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labData" :key="index">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
                     {{ item.Paramter }}
                   </th>
@@ -60,8 +60,9 @@
             </table>
 
             <div class="flex">
+              <!-- <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button> -->
               <PrintButton/>
-              <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button>
+              <SaveButton :headerData="headerData"/>
             </div>
 
           </template>
@@ -78,6 +79,8 @@
   import BatchInput from './BatchInput.vue';
   import OrderInput from './OrderInput.vue';
   import ArticleNumberInput from './ArticleNumberInput.vue';
+  import SaveButton from './SaveButton.vue';
+
 
   export default {
     props: {
@@ -91,7 +94,7 @@
         sampleNumber: '',
         currentValue: '',
         testerName: '',
-        data: [
+        headerData: [
           { Paramter: 'Probe Date/Time', Value: '' },
           { Paramter: 'Tester', Value: '' },
           { Paramter: 'Test', Value: '' },
@@ -102,7 +105,7 @@
           { Paramter: 'Order number', Value: '' },
           { Paramter: 'Comment', Value: '' },
         ],
-        data2: [
+        labData: [
           { Paramter: 'Required Parameter A', Value: '', Unit: 'Unit' },
           { Paramter: 'Required Parameter B', Value: '', Unit: 'Unit' },
           { Paramter: 'Optional Parameter A', Value: '', Unit: 'Unit' },
@@ -126,7 +129,7 @@
         const formattedDate = currentDate.toLocaleString(); // You can customize the date format as needed
   
         // Find the "Probe Date/Time" item in the data array and update its value
-        const probeDateTimeItem = this.data.find(item => item.Paramter === 'Probe Date/Time');
+        const probeDateTimeItem = this.headerData.find(item => item.Paramter === 'Probe Date/Time');
         if (probeDateTimeItem) {
           probeDateTimeItem.Value = formattedDate;
         }
@@ -148,7 +151,8 @@
       ArticleInput,
       BatchInput,
       OrderInput,
-      ArticleNumberInput
+      ArticleNumberInput,
+      SaveButton
     },
 
   };

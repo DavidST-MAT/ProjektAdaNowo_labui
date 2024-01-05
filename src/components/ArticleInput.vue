@@ -3,7 +3,7 @@
       <div class="input-container">
         <input
           type="text"
-          v-model="suggest"
+          v-model="item.Value"
           @input="handleInput"
           @focus="handleFocus"
         />
@@ -26,6 +26,10 @@
     const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
   
   export default {
+
+    props: ['item'],
+
+    
     data() {
       return {
         suggest: "",
