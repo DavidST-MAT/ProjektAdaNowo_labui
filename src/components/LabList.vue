@@ -4,7 +4,7 @@
         <h2 class="sample-number-heading">Sample number: {{ sampleNumber }}</h2>
         <div class="header flex">
           <NewButton @newButtonClick="handleNewButtonClick" />
-          <button type="button" @click="" class="hidden-print mt-4  text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Open</button>
+          <button type="button" @click="handleOpenButtonClick" class="hidden-print mt-4  text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Open</button>
         </div>
 
           <template v-if="isNewButtonClicked || isOpenButtonClicked">
@@ -61,7 +61,7 @@
 
             <div class="flex">
               <!-- <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button> -->
-              <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" @button-clicked="handleSaveButtonClick"/>
+              <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labData="labData" @button-clicked="handleSaveButtonClick"/>
               <PrintButton/>
             </div>
 
@@ -107,10 +107,16 @@
           { Parameter: 'Comment', Value: '' },
         ],
         labData: [
-          { Parameter: 'Required Parameter A', Value: '', Unit: 'Unit' },
-          { Parameter: 'Required Parameter B', Value: '', Unit: 'Unit' },
-          { Parameter: 'Optional Parameter A', Value: '', Unit: 'Unit' },
-          { Parameter: 'Optional Parameter A', Value: '', Unit: 'Unit' },
+          { Parameter: 'maximum tensile force 1', Value: '', Unit: 'N' },
+          { Parameter: 'maximum tensile force 2', Value: '', Unit: 'N' },
+          { Parameter: 'maximum tensile force 3', Value: '', Unit: 'N' },
+          { Parameter: 'maximum tensile force 4', Value: '', Unit: 'N' },
+          { Parameter: 'maximum tensile force 5', Value: '', Unit: 'N' },
+          { Parameter: 'maximum stretch 1', Value: '', Unit: '%' },
+          { Parameter: 'maximum stretch 2', Value: '', Unit: '%' },
+          { Parameter: 'maximum stretch 3', Value: '', Unit: '%' },
+          { Parameter: 'maximum stretch 4', Value: '', Unit: '%' },
+          { Parameter: 'maximum stretch 5', Value: '', Unit: '%' },
         ],
       };
     },
@@ -122,9 +128,8 @@
       },
 
       handleOpenButtonClick() {
-        this.isNewButtonClicked = true;
+        this.isOpenButtonClicked = true;
       },
-
 
       // Function for clicking button "New"
       handleNewButtonClick(result) {
@@ -148,6 +153,8 @@
       handleSaveButtonClick() {
         this.isNewButtonClicked = false;
         this.isOpenButtonClicked = false;
+        console.log("isNewButtonClicked:", this.isNewButtonClicked);
+        console.log("isOpenButtonClicked:", this.isOpenButtonClicked);
       },
   
       // Add other methods as needed
