@@ -18,30 +18,43 @@
     const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
   
-  export default {
-    methods: {
-      async handleNewButtonClick() {
-        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "LabValues") |> group(columns: ["_field"]) |> last()'
-        const myQuery = async () => {
-        const result = []
-         
-        for await (const {values, tableMeta} of queryApi.iterateRows(fluxQuery)) {
-          const o = tableMeta.toObject(values)
-          result.push({SampleNumber: o._value})
-        }
-        console.log(result)
-        return result
-      }
+    export default {
+      methods: {
+        async handleNewButtonClick() {
+          try {
+            const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "LabValues") |> group(columns: ["_field"]) |> last()';
 
-      // Execute query and populate data for html table
-      myQuery().then(result => {
-        this.sampleNumber = result[0].SampleNumber
-        console.log(this.sampleNumber)
-        this.$emit('newButtonClick', this.sampleNumber);
-      })
-      },
-    },
+            const myQuery = async () => {
+              const result = [];
+
+              for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
+                const o = tableMeta.toObject(values);
+                result.push({ SampleNumber: o._value });
+              }
+              return result;
+              };
+
+              // Execute query and populate data for html table
+              myQuery().then((result) => {
+                if (result.length > 0) {
+                  this.sampleNumber = result[0].SampleNumber;
+                } else {
+                // Set a default value of 0 if the result array is empty
+                  this.sampleNumber = 0;
+                }
+
+              console.log(this.sampleNumber);
+              this.$emit('newButtonClick', this.sampleNumber);
+              }
+            );
+
+          } catch (error) {
+          console.error(error); // Fix the typo here (consol -> console)
+          }
+        }
+      }
   };
+
   </script>
   
   <style scoped>
