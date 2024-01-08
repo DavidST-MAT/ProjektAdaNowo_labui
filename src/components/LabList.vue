@@ -53,7 +53,7 @@
                     {{ item.Unit }}
                   </td>
                   <td class="px-6 py-4 dark:text-black">
-                    <SetButton :data="item.Parameter" />
+                    <SetButton :parameter="item.Parameter" :labValue="item.Value"/>
                     <!-- <button type="button" @click="handleSetButtonClick(item)" class="btn hidden-print">Set</button> -->
                   </td>
                 </tr>
@@ -97,6 +97,7 @@
         currentValue: '',
         testerName: '',
         suggest: '',
+        labValue: '',
         headerData: [
           { Parameter: 'Probe Date/Time', Value: '' },
           { Parameter: 'Tester', Value: '' },
