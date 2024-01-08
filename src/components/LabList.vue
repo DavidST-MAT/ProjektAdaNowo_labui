@@ -53,7 +53,8 @@
                     {{ item.Unit }}
                   </td>
                   <td class="px-6 py-4 dark:text-black">
-                    <button type="button" @click="handleSetButtonClick(item)" class="btn hidden-print">Set</button>
+                    <SetButton :data="item.Parameter" />
+                    <!-- <button type="button" @click="handleSetButtonClick(item)" class="btn hidden-print">Set</button> -->
                   </td>
                 </tr>
               </tbody>    
@@ -80,6 +81,7 @@
   import OrderInput from './OrderInput.vue';
   import ArticleNumberInput from './ArticleNumberInput.vue';
   import SaveButton from './SaveButton.vue';
+  import SetButton from './SetButton.vue';
 
 
   export default {
@@ -168,7 +170,8 @@
       BatchInput,
       OrderInput,
       ArticleNumberInput,
-      SaveButton
+      SaveButton,
+      SetButton
     },
 
   };
