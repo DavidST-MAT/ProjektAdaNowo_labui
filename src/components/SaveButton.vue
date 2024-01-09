@@ -35,7 +35,7 @@
 
       handleButtonClick() {
         this.saveHeaderDataToInflux();
-        this.saveLabValesToOPC();
+        this.sendSaveLabValuesToOPC();
         this.$emit("button-clicked");
       },
 
@@ -75,15 +75,15 @@
 
 
               // Function to send data to OPCUA-Server via REST-API (fastAPI)
-      async saveLabValesToOPC() {
+      async sendSaveLabValuesToOPC() {
         console.log('HI')
         console.log(this.labData)
         try {
-          const response = await axios.post('http://localhost:8000/send_labData_to_opcua', {data: this.labData});
+          const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labData});
           //console.log(response.data);
         } catch (error) {
           console.error('Error:', error);
-          console.error('Response data:', error.response.data);
+          //console.error('Response data:', error.response.data);
         }
       },
 

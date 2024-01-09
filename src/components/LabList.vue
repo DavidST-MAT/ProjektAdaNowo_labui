@@ -47,13 +47,13 @@
                     {{ item.Parameter }}
                   </th>
                   <td class="px-6 py-4 dark:text-black">
-                    <input v-model="item.Value" type="text"/>
+                    <input v-model="item.Value" :disabled="isInputDisabled(item)" type="text"/>
                   </td>
                   <td class="px-6 py-4 dark:text-black">
                     {{ item.Unit }}
                   </td>
                   <td class="px-6 py-4 dark:text-black">
-                    <SetButton :parameter="item.Parameter" :labValue="item.Value"/>
+                    <SetButton :parameter="item.Parameter" :labValue="item.Value" @disable-input="disableInput"/>
                     <!-- <button type="button" @click="handleSetButtonClick(item)" class="btn hidden-print">Set</button> -->
                   </td>
                 </tr>
@@ -159,8 +159,17 @@
         console.log("isNewButtonClicked:", this.isNewButtonClicked);
         console.log("isOpenButtonClicked:", this.isOpenButtonClicked);
       },
-      
-      // Add other methods as needed
+
+      disableInput(parameter) {
+        const item = this.labData.find((labItem) => labItem.Parameter === parameter);
+        if (item) {
+          item.isInputDisabled = true;
+        }
+      },
+      isInputDisabled(item) {
+        return item.isInputDisabled || false;
+      },
+          // Add other methods as needed
     },
 
     components: {
