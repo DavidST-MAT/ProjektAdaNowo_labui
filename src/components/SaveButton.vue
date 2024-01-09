@@ -34,17 +34,21 @@
     methods: {
 
       handleButtonClick() {
-        this.saveHeaderDataToInflux();
+        const currentTime = new Date();
+        this.saveHeaderDataToInflux(currentTime);
+        this.saveLabValuesToInflux(currentTime);
         this.sendSaveLabValuesToOPC();
+        
         this.$emit("button-clicked");
       },
 
-      saveHeaderDataToInflux() {
 
-        console.log(this.headerData)
+      saveHeaderDataToInflux(currentTime) {
+
+        //console.log(this.headerData)
             
         const writeApi = influxDB.getWriteApi(org, bucket);
-        const currentTime = new Date();
+        
 
         const point = new Point('HeaderData')
           .timestamp(currentTime)
@@ -71,15 +75,48 @@
         //     console.error(e);
         //     console.log("Finished ERROR");
         // });
-        },
+      },
 
 
-              // Function to send data to OPCUA-Server via REST-API (fastAPI)
+    saveLabValuesToInflux(currentTime){
+      console.log('TEST')
+      // console.log(this.labData)
+      // console.log('TEST')
+            
+      // const writeApi = influxDB.getWriteApi(org, bucket);
+
+      // for (let i = 0; i < this.labData.length; i++) {
+
+      //   const correctedValue = this.labData[i].Value.replace(',', '.');
+
+      //   const point = new Point('LabValues')
+      //     .timestamp(currentTime)
+      //     .tag('sample_number', this.sampleNumber)
+      //     .tag('Unit', this.labData[i].Unit)
+      //     .floatField(this.labData[i].Parameter, parseFloat(correctedValue))
+
+          
+      //   writeApi.writePoint(point);
+              
+      //   writeApi
+      //     .close()
+      //     .then(() => {
+      //        console.log("FINISHED");
+      //     })
+      //     .catch((e) => {
+      //       console.error(e);
+      //       console.log("Finished ERROR");
+      //     });
+      // }
+    },
+
+
+      // Function to send data to OPCUA-Server via REST-API (fastAPI)
       async sendSaveLabValuesToOPC() {
-        console.log('HI')
-        console.log(this.labData)
+        //console.log('HI')
+        //console.log(this.labData)
         try {
-          const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labData});
+          //const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labData});
           //console.log(response.data);
         } catch (error) {
           console.error('Error:', error);

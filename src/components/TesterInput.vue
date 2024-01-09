@@ -2,10 +2,12 @@
   <div class="tester-input" ref="testerInput">
     <div class="input-container">
       <input
+        ref="testerInputField"
         type="text"
         v-model="suggest"
         @input="handleInput"
         @focus="handleFocus"
+        @click="selectText"
       />
       <div v-if="showSuggestions" class="suggestions-container" @click.stop="">
         <ul>
@@ -35,7 +37,8 @@ export default {
       suggest: "",
       suggestions: [],
       allNames: [],
-      showSuggestions: false
+      showSuggestions: false,
+      testerInput: null
     };
   },
 
@@ -50,6 +53,7 @@ export default {
         const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
         const result = await queryApi.collectRows(fluxQuery);
         this.allNames = [...new Set(result.map(row => row.Tester))];
+        this.suggest = this.allNames.length > 0 ? this.allNames[0] : "";
         console.log(this.allNames);
       } catch (error) {
           console.error('Error fetching names:', error);
@@ -78,16 +82,20 @@ export default {
       
     },
 
+    selectText() {
+      this.$refs.testerInputField.select();
+    },
+
     handleFocus() {
       this.showSuggestions = true;
       this.filterNames();
+      this.testerInput = this.$refs.testerInput; // Hinzugefügt: testerInput setzen
       // Hinzugefügt: Event Listener für das Schließen des Menüs bei Klick auf die Seite
       document.addEventListener("click", this.closeSuggestions);
     },
 
     closeSuggestions(event) {
-      const testerInput = this.$refs.testerInput;
-      if (!testerInput.contains(event.target)) {
+      if (this.testerInput && !this.testerInput.contains(event.target)) {
         this.showSuggestions = false;
         document.removeEventListener("click", this.closeSuggestions);
       }

@@ -1,7 +1,7 @@
 <template>
     <div class="modal">
       <div class="modal-content flex flex-col items-center">
-        <h2 class="sample-number-heading">Sample number: {{ sampleNumber }}</h2>
+        <h2 class="sample-number-heading">Laboratory testing {{ sampleNumber }}</h2>
         <div class="header flex">
           <NewButton @newButtonClick="handleNewButtonClick" />
           <button type="button" @click="handleOpenButtonClick" class="hidden-print mt-4  text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Open</button>
@@ -31,6 +31,9 @@
                     <template v-else-if="item.Parameter === 'Article number'">
                       <ArticleNumberInput @input-change="handleInputChange"/>
                     </template>
+                    <template v-else-if="item.Parameter === 'Comment'">
+                      <textarea v-model.lazy="item.Value" rows="4" cols="22"></textarea>
+                    </template>
                     <template v-else>
                       <input v-model="item.Value" type="text" />
                     </template>
@@ -40,7 +43,9 @@
               </tbody>    
             </table>
 
-            <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 text-gray-500 dark:text-gray-100 mt-100">
+            <div class="flex">
+              <div class="table-container equal-height-table">
+            <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 text-gray-500 dark:text-gray-100 mt-100 equal-height-table">
               <tbody>
                 <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labData" :key="index">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
@@ -59,8 +64,34 @@
                 </tr>
               </tbody>    
             </table>
+          </div>
 
-            <div class="flex">
+
+            <div class="table-container equal-height-table">
+            <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 text-gray-500 dark:text-gray-100 mt-100 equal-height-table">
+              <tbody>
+                <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labData2" :key="index">
+                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
+                    {{ item.Parameter }}
+                  </th>
+                  <td class="px-6 py-4 dark:text-black">
+                    <input v-model="item.Value" :disabled="isInputDisabled(item)" type="text"/>
+                  </td>
+                  <td class="px-6 py-4 dark:text-black">
+                    {{ item.Unit }}
+                  </td>
+                  <td class="px-6 py-4 dark:text-black">
+                    <SetButton :parameter="item.Parameter" :labValue="item.Value" @disable-input="disableInput"/>
+                    <!-- <button type="button" @click="handleSetButtonClick(item)" class="btn hidden-print">Set</button> -->
+                  </td>
+                </tr>
+              </tbody>    
+            </table>
+          </div>
+
+          </div>
+
+            <div class="buttons-container flex">
               <!-- <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button> -->
               <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labData="labData" @button-clicked="handleSaveButtonClick"/>
               <PrintButton/>
@@ -115,12 +146,14 @@
           { Parameter: 'maximum tensile force 3', Value: '', Unit: 'N' },
           { Parameter: 'maximum tensile force 4', Value: '', Unit: 'N' },
           { Parameter: 'maximum tensile force 5', Value: '', Unit: 'N' },
+        ],
+        labData2: [
           { Parameter: 'maximum stretch 1', Value: '', Unit: '%' },
           { Parameter: 'maximum stretch 2', Value: '', Unit: '%' },
           { Parameter: 'maximum stretch 3', Value: '', Unit: '%' },
           { Parameter: 'maximum stretch 4', Value: '', Unit: '%' },
           { Parameter: 'maximum stretch 5', Value: '', Unit: '%' },
-        ],
+        ]
       };
     },
   
@@ -158,6 +191,7 @@
         this.isOpenButtonClicked = false;
         console.log("isNewButtonClicked:", this.isNewButtonClicked);
         console.log("isOpenButtonClicked:", this.isOpenButtonClicked);
+        //window.location.reload()
       },
 
       disableInput(parameter) {
@@ -214,6 +248,19 @@
   font-size: 24px; /* Adjust the size as needed */
   font-weight: bold; /* Adjust the weight as needed */
 }
+
+.flex {
+    display: flex;
+  }
+
+  .equal-height-table {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .table-container {
+    margin: 0 10px; /* Anpassen des Abstands nach Bedarf */
+  }
 
 @media print {
   .hidden-print {

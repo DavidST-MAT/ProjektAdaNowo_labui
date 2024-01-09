@@ -22,14 +22,15 @@
       methods: {
         async handleNewButtonClick() {
           try {
-            const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "LabValues") |> group(columns: ["_field"]) |> last()';
+            const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "LabValues") |> group(columns: ["_measurement"]) |> last()';
 
             const myQuery = async () => {
               const result = [];
 
               for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
                 const o = tableMeta.toObject(values);
-                result.push({ SampleNumber: o._value });
+                result.push({ SampleNumber: o.sample_number });
+                console.log(result)
               }
               return result;
               };
@@ -38,6 +39,8 @@
               myQuery().then((result) => {
                 if (result.length > 0) {
                   this.sampleNumber = result[0].SampleNumber;
+                  console.log(result[0].SampleNumber)
+                  console.log('FAV)D')
                 } else {
                 // Set a default value of 0 if the result array is empty
                   this.sampleNumber = 0;
