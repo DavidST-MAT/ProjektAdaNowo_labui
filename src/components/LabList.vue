@@ -159,7 +159,7 @@
         console.log("isNewButtonClicked:", this.isNewButtonClicked);
         console.log("isOpenButtonClicked:", this.isOpenButtonClicked);
       },
-  
+      
       // Add other methods as needed
     },
 

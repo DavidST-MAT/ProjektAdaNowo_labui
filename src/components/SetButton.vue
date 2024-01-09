@@ -17,15 +17,15 @@
 
         },
 
-
         methods: {
 
             async sendSetLabValueToOPC() {
                 const labValueObject = {[this.parameter]: this.labValue}
 
                 try {
-                    const response = await axios.post('http://localhost:8000/send_set_LabValue_to_opc', {data: labValueObject});
-                //console.log(response.data);
+                    //const response = await axios.post('http://localhost:8000/send_set_LabValue_to_opc', {data: labValueObject});
+                    console.log(labValueObject);
+                    this.isRowEnabled = false;
                 } catch (error) {
                     console.error('Error:', error);
                     //console.error('Response data:', error.response.data);
