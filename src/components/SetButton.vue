@@ -6,44 +6,46 @@
 
 
 <script>
-    import axios from 'axios'
+import axios from 'axios'
 
-    export default {
+export default {
 
-        props: {
-           
-            parameter: String,
-            labValue: String,
-            isSetButtonDisabled: Boolean,
+    props: { 
+        parameter: String,
+        labValue: String,
+        isSetButtonDisabled: Boolean,
+    },
 
+    data() {
+        return {
+            isSetButtonDisabled2: false,
+        };
+    },
+
+    methods: {
+
+        async sendSetLabValueToOPC() {
+            const labValueObject = {[this.parameter]: this.labValue}
+            let labValue = this.labValue.replace(',', '.');
+
+            if (isNaN(labValue)) {
+                console.error('Error: Lab value is not a valid number.');
+                return; // Verlasse die Funktion, wenn labValue keine Zahl ist
+            }
+
+            try {
+                const response = await axios.post('http://localhost:8000/send_set_LabValue_to_opc', {data: labValueObject});
+                console.log(labValueObject);
+                this.$emit("disable-input", this.parameter);
+            } catch (error) {
+                console.error('Error:', error);
+                //console.error('Response data:', error.response.data);
+            } finally {
+                this.isSetButtonDisabled2 = true;
+            }
         },
-
-        data() {
-            return {
-                isSetButtonDisabled2: false,
-            };
-        },
-
-        methods: {
-
-            async sendSetLabValueToOPC() {
-                const labValueObject = {[this.parameter]: this.labValue}
-
-                try {
-                    const response = await axios.post('http://localhost:8000/send_set_LabValue_to_opc', {data: labValueObject});
-                    console.log(labValueObject);
-                    this.$emit("disable-input", this.parameter);
-                } catch (error) {
-                    console.error('Error:', error);
-                    //console.error('Response data:', error.response.data);
-                } finally {
-                    // Update the local property to disable the button
-                    this.isSetButtonDisabled2 = true;
-                }
-      
-            },
-        }
-
 
     }
+
+}
 </script>

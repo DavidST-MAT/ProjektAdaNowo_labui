@@ -2,7 +2,7 @@
   <div class="modal">
     <div class="modal-content flex flex-col items-center">
 
-      <h2 class="sample-number-heading">Laboratory testing {{ sampleNumber }}</h2>
+      <h2 class="sample-number-heading">{{ headerNew }} {{ sampleNumber }}</h2>
       <div class="header flex">
         <NewButton @newButtonClick="handleNewButtonClick" />
         <button type="button" @click="handleOpenButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-900 dark:text-gray-900 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Open</button>
@@ -127,6 +127,7 @@ export default {
     return {
       isNewButtonClicked: false,
       isOpenButtonClicked: false,
+      headerNew: 'Laboratory testing',
       sampleNumber: '',
       currentValue: '',
       testerName: '',
@@ -187,6 +188,8 @@ export default {
       this.sampleNumber = result
       this.sampleNumber++
       console.log(this.sampleNumber)
+
+      this.headerNew = 'sample number';
     },
 
     handleSaveButtonClick() {
@@ -196,6 +199,23 @@ export default {
     },
 
     disableInput(parameter) {
+      console.log(parameter)
+
+      if (parameter.includes("stretch")) {
+        const item = this.labData2.find((labItem) => labItem.Parameter === parameter);
+          if (item) {
+            item.isInputDisabled = true;
+          }
+      } else if (parameter.includes("force")) {
+        const item = this.labData.find((labItem) => labItem.Parameter === parameter);
+          if (item) {
+            item.isInputDisabled = true;
+          }
+      } else {
+          console.log("Set invalid");
+      }
+
+
       const item = this.labData.find((labItem) => labItem.Parameter === parameter);
       if (item) {
         item.isInputDisabled = true;
