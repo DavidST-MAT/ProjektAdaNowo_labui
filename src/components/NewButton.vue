@@ -42,7 +42,6 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
               if (result.length > 0) {
                 this.sampleNumber = result[0].SampleNumber;
                 console.log(result[0].SampleNumber)
-                console.log('FAV)D')
               } else {
               // Set a default value of 0 if the result array is empty
                 this.sampleNumber = 0;

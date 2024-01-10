@@ -36,13 +36,22 @@
 
       handleButtonClick() {
         const currentTime = new Date();
-        this.saveHeaderDataToInflux(currentTime);
-        this.saveLabValuesToInflux(currentTime);
-        this.sendSaveLabValuesToOPC();
         
-        //this.$emit("button-clicked");
-      },
+        const labValuesSaved = this.saveLabValuesToInflux(currentTime);
+        const labValuesSent =  this.sendSaveLabValuesToOPC();
+        const headerDataSaved = this.saveHeaderDataToInflux(currentTime);
 
+        
+          
+          if (headerDataSaved && labValuesSaved && labValuesSent) {
+            this.$emit("button-clicked");
+          } else {
+            console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");
+          }
+        }, 
+ 
+
+  
 
       saveHeaderDataToInflux(currentTime) {
 
@@ -65,24 +74,24 @@
 
         console.log(point)
 
-        // writeApi.writePoint(point);
+        writeApi.writePoint(point);
             
-        // writeApi
-        // .close()
-        // .then(() => {
-        //     console.log("FINISHED");
-        // })
-        // .catch((e) => {
-        //     console.error(e);
-        //     console.log("Finished ERROR");
-        // });
+        writeApi
+        .close()
+        .then(() => {
+            console.log("FINISHED");
+            console.log("1234");
+            return true
+        })
+        .catch((e) => {
+            console.error(e);
+            console.log("Finished ERROR");
+            return false
+        });
       },
 
 
     saveLabValuesToInflux(currentTime){
-      console.log('TEST')
-      console.log(this.labData)
-      console.log('TEST')
       this.labValues = this.labData.concat(this.labData2);
             
       const writeApi = influxDB.getWriteApi(org, bucket);
@@ -90,10 +99,10 @@
       for (let i = 0; i < this.labValues.length; i++) {
 
         const correctedValue = this.labValues[i].Value.replace(',', '.');
-        if (isNaN(correctedValue)) {
-                  console.error(`Error: ${correctedValue} is not a valid number.`);
-                  return; // Verlasse die Funktion, wenn labValue keine Zahl ist
-              }
+        if (correctedValue == '' || isNaN(correctedValue)) {
+          console.error(`Error: ${correctedValue} is not a valid number.`);
+          return false; // Verlasse die Funktion, wenn labValue keine Zahl ist
+        }
 
         const point = new Point('LabValues')
           .timestamp(currentTime)
@@ -101,23 +110,22 @@
           .tag('Unit', this.labValues[i].Unit)
           .floatField(this.labValues[i].Parameter, parseFloat(correctedValue))
 
-          
-        writeApi.writePoint(point);
-              
-        writeApi
-          .close()
-          .then(() => {
-             console.log("FINISHED");
-          })
-          .catch((e) => {
-            console.error(e);
-            console.log("Finished ERROR");
-          });
+          console.log(point)
+          writeApi.writePoint(point);
+                
+          writeApi
+            .close()
+            .then(() => {
+              console.log("FINISHED");
+            })
+            .catch((e) => {
+              console.error(e);
+              console.log("Finished ERROR");
+              return false
+            });
       }
-
-
-
-
+      return true
+      
     },
 
 
@@ -128,12 +136,23 @@
         console.log(this.labData2)
         this.labValues = this.labData.concat(this.labData2);
         console.log(this.labValues)
+
+        for (let i = 0; i < this.labValues.length; i++) {
+          if (this.labValues[i].Value == '' || isNaN(this.labValues[i].Value)) {
+            console.error(`Error: ${this.labValues[i].Value} is not a valid number.`);
+            return false; // Verlasse die Funktion, wenn labValue keine Zahl ist
+          }
+        }
+
         try {
-          //const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labValues});
-          //console.log(response.data);
+          const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labValues});
+          console.log(response.data);
+          console.log(response.data);
+          return true
         } catch (error) {
           console.error('Error:', error);
           //console.error('Response data:', error.response.data);
+          return false
         }
       },
 

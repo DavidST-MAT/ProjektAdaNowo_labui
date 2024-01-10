@@ -98,6 +98,7 @@ export default {
       if (this.testerInput && !this.testerInput.contains(event.target)) {
         this.showSuggestions = false;
         document.removeEventListener("click", this.closeSuggestions);
+        
       }
     }
   },
