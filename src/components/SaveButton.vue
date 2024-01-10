@@ -40,7 +40,7 @@
         this.saveLabValuesToInflux(currentTime);
         this.sendSaveLabValuesToOPC();
         
-        this.$emit("button-clicked");
+        //this.$emit("button-clicked");
       },
 
 
@@ -90,6 +90,10 @@
       for (let i = 0; i < this.labValues.length; i++) {
 
         const correctedValue = this.labValues[i].Value.replace(',', '.');
+        if (isNaN(correctedValue)) {
+                  console.error(`Error: ${correctedValue} is not a valid number.`);
+                  return; // Verlasse die Funktion, wenn labValue keine Zahl ist
+              }
 
         const point = new Point('LabValues')
           .timestamp(currentTime)
@@ -125,7 +129,7 @@
         this.labValues = this.labData.concat(this.labData2);
         console.log(this.labValues)
         try {
-          const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labValues});
+          //const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labValues});
           //console.log(response.data);
         } catch (error) {
           console.error('Error:', error);

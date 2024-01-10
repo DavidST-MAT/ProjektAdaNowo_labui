@@ -27,9 +27,11 @@ export default {
         async sendSetLabValueToOPC() {
             const labValueObject = {[this.parameter]: this.labValue}
             let labValue = this.labValue.replace(',', '.');
+            console.log(labValue)
+            console.log(typeof labValue);
 
-            if (isNaN(labValue)) {
-                console.error('Error: Lab value is not a valid number.');
+            if (labValue == '' || isNaN(labValue)) {
+                console.error(`Error: ${labValue} is not a valid number.`);
                 return; // Verlasse die Funktion, wenn labValue keine Zahl ist
             }
 
