@@ -1,5 +1,5 @@
 <template>
-  <button type="button" @click="handleButtonClick" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
+  <button type="button" @click="handleButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-900 dark:text-gray-900 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
     Save
   </button>
 </template>
@@ -23,6 +23,7 @@
         headerData: Array,
         sampleNumber: Number,
         labData: Array,
+        labData2: Array,
     },
 
     // data() {
@@ -80,43 +81,51 @@
 
     saveLabValuesToInflux(currentTime){
       console.log('TEST')
-      // console.log(this.labData)
-      // console.log('TEST')
+      console.log(this.labData)
+      console.log('TEST')
+      this.labValues = this.labData.concat(this.labData2);
             
-      // const writeApi = influxDB.getWriteApi(org, bucket);
+      const writeApi = influxDB.getWriteApi(org, bucket);
 
-      // for (let i = 0; i < this.labData.length; i++) {
+      for (let i = 0; i < this.labValues.length; i++) {
 
-      //   const correctedValue = this.labData[i].Value.replace(',', '.');
+        const correctedValue = this.labValues[i].Value.replace(',', '.');
 
-      //   const point = new Point('LabValues')
-      //     .timestamp(currentTime)
-      //     .tag('sample_number', this.sampleNumber)
-      //     .tag('Unit', this.labData[i].Unit)
-      //     .floatField(this.labData[i].Parameter, parseFloat(correctedValue))
+        const point = new Point('LabValues')
+          .timestamp(currentTime)
+          .tag('sample_number', this.sampleNumber)
+          .tag('Unit', this.labValues[i].Unit)
+          .floatField(this.labValues[i].Parameter, parseFloat(correctedValue))
 
           
-      //   writeApi.writePoint(point);
+        writeApi.writePoint(point);
               
-      //   writeApi
-      //     .close()
-      //     .then(() => {
-      //        console.log("FINISHED");
-      //     })
-      //     .catch((e) => {
-      //       console.error(e);
-      //       console.log("Finished ERROR");
-      //     });
-      // }
+        writeApi
+          .close()
+          .then(() => {
+             console.log("FINISHED");
+          })
+          .catch((e) => {
+            console.error(e);
+            console.log("Finished ERROR");
+          });
+      }
+
+
+
+
     },
 
 
       // Function to send data to OPCUA-Server via REST-API (fastAPI)
       async sendSaveLabValuesToOPC() {
         //console.log('HI')
-        //console.log(this.labData)
+        console.log(this.labData)
+        console.log(this.labData2)
+        this.labValues = this.labData.concat(this.labData2);
+        console.log(this.labValues)
         try {
-          //const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labData});
+          const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labValues});
           //console.log(response.data);
         } catch (error) {
           console.error('Error:', error);

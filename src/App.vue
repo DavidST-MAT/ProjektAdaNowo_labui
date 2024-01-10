@@ -7,7 +7,7 @@
     <div class="flex-grow flex items-center justify-center">
       <LabList class="flex-grow"/>
     </div>
-    <AgentFooter/>
+    <AgentFooter class="footer-spacing"/>
   </div>
 </template>
 
@@ -36,5 +36,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.footer-spacing {
+  margin-top: 30px; /* Hier können Sie den gewünschten Abstand anpassen */
 }
 </style>
