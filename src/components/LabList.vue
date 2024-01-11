@@ -44,55 +44,6 @@
           </tbody>    
         </table>
 
-        <div class="flex" id="test">
-
-          <div class="table-container equal-height-table mt-4">
-            <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
-              <tbody>
-                <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labData" :key="index">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black w-20">
-                    {{ item.Parameter }}
-                  </th>
-                  <td class="px-6 py-4 dark:text-black">
-                    <input v-model="item.Value" :disabled="isInputDisabled(item)" type="text"/>
-                  </td>
-                  <td class="px-6 py-4 dark:text-black">
-                    {{ item.Unit }}
-                  </td>
-                  <td class="px-6 py-4 dark:text-black">
-                    <SetButton :parameter="item.Parameter" :labValue="item.Value" @disable-input="disableInput"/>
-                    <!-- <button type="button" @click="handleSetButtonClick(item)" class="btn hidden-print">Set</button> -->
-                  </td>
-                </tr>
-              </tbody>    
-            </table>
-          </div>
-
-          <div class="table-container equal-height-table mt-4">
-            <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
-              <tbody>
-                <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labData2" :key="index">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                    {{ item.Parameter }}
-                  </th>
-                  <td class="px-6 py-4 dark:text-black">
-                    <input v-model="item.Value" :disabled="isInputDisabled(item)" type="text"/>
-                  </td>
-                  <td class="px-6 py-4 dark:text-black">
-                    {{ item.Unit }}
-                  </td>
-                  <td class="px-6 py-4 dark:text-black">
-                    <SetButton :parameter="item.Parameter" :labValue="item.Value" @disable-input="disableInput"/>
-                    <!-- <button type="button" @click="handleSetButtonClick(item)" class="btn hidden-print">Set</button> -->
-                  </td>
-                </tr>
-              </tbody>    
-            </table>
-          </div>
-
-        </div>
-
-
         <div class="table-container equal-height-table mt-4">
             <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
 
@@ -113,11 +64,11 @@
                   </th>
                   <td class="px-6 py-4 dark:text-black">
                     <input v-model="item.tensileValue" :disabled="isInputDisabled(item)" type="text"/>
-                    <SetButton :parameter="item.Parameter" :labValue="item.Value" @disable-input="disableInput"/>
+                    <SetButton :row="item.row" :labValue="item.tensileValue" :parameterHeader="tensileHeader" @disable-input="disableInput"/>
                   </td>
                   <td class="px-6 py-4 dark:text-black">
                     <input v-model="item.stretchValue" :disabled="isInputDisabled(item)" type="text"/>
-                    <SetButton :parameter="item.Parameter" :labValue="item.Value" @disable-input="disableInput"/>
+                    <SetButton :row="item.row" :labValue="item.stretchValue" :parameterHeader="stretchHeader" @disable-input="disableInput"/>
                   </td>
                 </tr>
               </tbody>    
@@ -170,6 +121,8 @@ export default {
         'Maximum Tensile Force [N]',
         'Maximum Stretch [%]'
         ],
+      tensileHeader: 'maximum_tensile_force_',
+      stretchHeader: 'maximum_stretch_',
       headerData: [
         { Parameter: 'Sample Date/Time', Value: '' },
         { Parameter: 'Tester', Value: '' },
@@ -248,12 +201,12 @@ export default {
       console.log(parameter)
 
       if (parameter.includes("stretch")) {
-        const item = this.labData2.find((labItem) => labItem.Parameter === parameter);
+        const item = this.labDataTable.find((labItem) => labItem.stretchValue === parameter);
           if (item) {
             item.isInputDisabled = true;
           }
       } else if (parameter.includes("force")) {
-        const item = this.labData.find((labItem) => labItem.Parameter === parameter);
+        const item = this.labDataTable.find((labItem) => labItem.Parameter === parameter);
           if (item) {
             item.isInputDisabled = true;
           }

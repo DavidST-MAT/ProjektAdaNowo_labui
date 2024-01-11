@@ -11,9 +11,10 @@ import axios from 'axios'
 export default {
 
     props: { 
-        parameter: String,
+        row: String,
         labValue: String,
         isSetButtonDisabled: Boolean,
+        parameterHeader: String,
     },
 
     data() {
@@ -25,10 +26,12 @@ export default {
     methods: {
 
         async sendSetLabValueToOPC() {
+            this.parameter = this.parameterHeader.concat(this.row)
+            let labValue = this.labValue.replace(',', '.')
             const labValueObject = {[this.parameter]: this.labValue}
-            let labValue = this.labValue.replace(',', '.');
-            console.log(labValue)
-            console.log(typeof labValue);
+            console.log(this.labValue)
+            console.log(labValueObject)
+           
 
             if (labValue == '' || isNaN(labValue)) {
                 console.error(`Error: ${labValue} is not a valid number.`);
@@ -36,8 +39,9 @@ export default {
             }
 
             try {
-                const response = await axios.post('http://localhost:8000/send_set_LabValue_to_opc', {data: labValueObject});
-                console.log(labValueObject);
+                //const response = await axios.post('http://localhost:8000/send_set_LabValue_to_opc', {data: labValueObject});
+                //console.log(labValueObject);
+                console.log('hi');
                 this.$emit("disable-input", this.parameter);
             } catch (error) {
                 console.error('Error:', error);
