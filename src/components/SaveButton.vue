@@ -36,7 +36,7 @@
         
           
           if (labValuesSaved && labValuesSent) {
-            this.$emit("button-clicked");
+            
             console.log("Save Button succeeded");
           } else {
             console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");

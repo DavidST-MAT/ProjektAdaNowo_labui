@@ -193,9 +193,10 @@ export default {
     },
 
     handleSaveButtonClick() {
+      
       this.isNewButtonClicked = false;
       this.isOpenButtonClicked = false;
-      //window.location.reload()
+
     },
 
     disableInput(parameter) {
