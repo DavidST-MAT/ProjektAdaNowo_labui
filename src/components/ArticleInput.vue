@@ -57,16 +57,18 @@
       },
   
       filterNames() {
-        if (this.suggest.length === 0) {
-          this.suggestions = this.allArticels.filter(name => name && name.trim() !== "");
-        } else {
-          this.suggestions = this.allArticels.filter(name =>
-            name && name.toLowerCase().includes(this.suggest.toLowerCase())
-          );
+        if(this.suggest){
+          if (this.suggest.length === 0) {
+            this.suggestions = this.allArticels.filter(name => name && name.trim() !== "");
+          } else {
+            this.suggestions = this.allArticels.filter(name =>
+              name && name.toLowerCase().includes(this.suggest.toLowerCase())
+            );
+          }
+          this.$emit('input-change', 'Article', this.suggest);
         }
-        this.$emit('input-change', 'Article', this.suggest);
       },
-  
+    
       selectSuggestion(suggest) {
         this.suggest = suggest;
         this.showSuggestions = false;

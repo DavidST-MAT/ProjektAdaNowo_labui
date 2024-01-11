@@ -7,7 +7,6 @@
   <script>
     import axios from 'axios';
 
-    // InfluxDB configuration
     const { InfluxDB, Point} = require('@influxdata/influxdb-client');
     const url = "http://localhost:8086"
     const token = "Qc6s7RKI7ZnQpB5ZdesJzEmgd46XLGRmcXv5RJRbhTUc758Ma8g-LQv6_A2p125BZohkhbYnEhVtpeOHJ-BqTw=="
@@ -26,11 +25,6 @@
         labData2: Array,
     },
 
-    // data() {
-    //     return {
-    //         headerData: []
-    //     }
-    // },
 
     methods: {
 
@@ -39,12 +33,11 @@
         
         const labValuesSaved = this.saveLabValuesToInflux(currentTime);
         const labValuesSent =  this.sendSaveLabValuesToOPC();
-        const headerDataSaved = this.saveHeaderDataToInflux(currentTime);
-
         
           
-          if (headerDataSaved && labValuesSaved && labValuesSent) {
+          if (labValuesSaved && labValuesSent) {
             this.$emit("button-clicked");
+            console.log("Save Button succeeded");
           } else {
             console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");
           }
@@ -52,14 +45,11 @@
  
 
   
-
+      // Function to send HeaderData to Influx via Influx-Client
       saveHeaderDataToInflux(currentTime) {
-
-        //console.log(this.headerData)
             
         const writeApi = influxDB.getWriteApi(org, bucket);
         
-
         const point = new Point('HeaderData')
           .timestamp(currentTime)
           .tag('Tester', this.headerData[1].Value)
@@ -72,86 +62,93 @@
           .tag('Comment', this.headerData[8].Value)
           .intField('sample_number', this.sampleNumber)
 
-        console.log(point)
+        console.log(`Saving HeaderData: ${point}`)
+        
 
         writeApi.writePoint(point);
             
         writeApi
         .close()
         .then(() => {
-            console.log("FINISHED");
-            console.log("1234");
+            console.log("Saved HeaderData for LabUI to Influx");
             return true
         })
         .catch((e) => {
             console.error(e);
-            console.log("Finished ERROR");
+            console.log("ERROR while saving HeaderData");
             return false
         });
       },
 
 
+    // Function to send labValues to Influx via Influx-Client
     saveLabValuesToInflux(currentTime){
       this.labValues = this.labData.concat(this.labData2);
             
       const writeApi = influxDB.getWriteApi(org, bucket);
 
+      // Check if all Inputs are valid numbers for savind data via SAVE-button
       for (let i = 0; i < this.labValues.length; i++) {
-
         const correctedValue = this.labValues[i].Value.replace(',', '.');
         if (correctedValue == '' || isNaN(correctedValue)) {
-          console.error(`Error: ${correctedValue} is not a valid number.`);
-          return false; // Verlasse die Funktion, wenn labValue keine Zahl ist
+          console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
+          return false; 
         }
+      }
+
+      // If all inputs are valid => send to Influx
+      for (let i = 0; i < this.labValues.length; i++){
+        const floatValue = this.labValues[i].Value.replace(',', '.');
 
         const point = new Point('LabValues')
           .timestamp(currentTime)
           .tag('sample_number', this.sampleNumber)
           .tag('Unit', this.labValues[i].Unit)
-          .floatField(this.labValues[i].Parameter, parseFloat(correctedValue))
+          .floatField(this.labValues[i].Parameter, parseFloat(floatValue))
 
-          console.log(point)
+          console.log(`Saving LabValues: ${point}`)
           writeApi.writePoint(point);
                 
           writeApi
             .close()
             .then(() => {
-              console.log("FINISHED");
+              console.log("Saved LabValues for LabUI to Influx");
             })
             .catch((e) => {
               console.error(e);
-              console.log("Finished ERROR");
+              console.log("ERROR while saving LabValues");
               return false
             });
       }
+      this.saveHeaderDataToInflux(currentTime);
       return true
       
     },
 
 
-      // Function to send data to OPCUA-Server via REST-API (fastAPI)
+      // Function to send labValues to OPCUA-Server via REST-API (fastAPI)
       async sendSaveLabValuesToOPC() {
-        //console.log('HI')
-        console.log(this.labData)
-        console.log(this.labData2)
-        this.labValues = this.labData.concat(this.labData2);
-        console.log(this.labValues)
 
+        this.labValues = this.labData.concat(this.labData2);
+        
+  
         for (let i = 0; i < this.labValues.length; i++) {
+          this.labValues[i].Value = this.labValues[i].Value.replace(',', '.');
+          // Check if Input is valid number for savind data via SET-button
           if (this.labValues[i].Value == '' || isNaN(this.labValues[i].Value)) {
             console.error(`Error: ${this.labValues[i].Value} is not a valid number.`);
-            return false; // Verlasse die Funktion, wenn labValue keine Zahl ist
+            return false;
           }
         }
 
         try {
+          console.log(`LabValues Save-Button to OPC: ${this.labValues}`)
+          // Send Data to FastAPI
           const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labValues});
-          console.log(response.data);
           console.log(response.data);
           return true
         } catch (error) {
           console.error('Error:', error);
-          //console.error('Response data:', error.response.data);
           return false
         }
       },

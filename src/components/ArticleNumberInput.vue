@@ -56,14 +56,16 @@
       },
   
       filterNames() {
-        if (this.suggest.length === 0) {
-          this.suggestions = this.allArticleNumbers.filter(name => name && name.trim() !== "");
-        } else {
-          this.suggestions = this.allArticleNumbers.filter(name =>
-            name && name.toLowerCase().includes(this.suggest.toLowerCase())
-          );
+        if(this.suggest){
+          if (this.suggest.length === 0) {
+            this.suggestions = this.allArticleNumbers.filter(name => name && name.trim() !== "");
+          } else {
+            this.suggestions = this.allArticleNumbers.filter(name =>
+              name && name.toLowerCase().includes(this.suggest.toLowerCase())
+            );
+          }
+          this.$emit('input-change', 'Article number', this.suggest);
         }
-        this.$emit('input-change', 'Article number', this.suggest);
       },
   
       selectSuggestion(suggest) {

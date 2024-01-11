@@ -61,14 +61,16 @@ export default {
     },
 
     filterNames() {
-      if (this.suggest.length === 0) {
-        this.suggestions = this.allNames.filter(name => name && name.trim() !== "");
-      } else {
-        this.suggestions = this.allNames.filter(name =>
-          name && name.toLowerCase().includes(this.suggest.toLowerCase())
-        );
+      if(this.suggest){
+        if (this.suggest.length === 0) {
+          this.suggestions = this.allNames.filter(name => name && name.trim() !== "");
+        } else {
+          this.suggestions = this.allNames.filter(name =>
+            name && name.toLowerCase().includes(this.suggest.toLowerCase())
+          );
+        }
+        this.$emit('input-change', 'Tester', this.suggest);
       }
-      this.$emit('input-change', 'Tester', this.suggest);
     },
 
     selectSuggestion(suggest) {

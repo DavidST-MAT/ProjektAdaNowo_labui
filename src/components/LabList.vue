@@ -44,10 +44,10 @@
           </tbody>    
         </table>
 
-        <div class="flex">
+        <div class="flex" id="test">
 
           <div class="table-container equal-height-table mt-4">
-            <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
+            <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
               <tbody>
                 <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labData" :key="index">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black w-20">
@@ -69,7 +69,7 @@
           </div>
 
           <div class="table-container equal-height-table mt-4">
-            <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
+            <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table" id="test">
               <tbody>
                 <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labData2" :key="index">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
@@ -293,6 +293,12 @@ input {
 }
 
 @media print {
+
+  #test {
+    width: 50%; /* Set the width of the table container to 100% */
+  }
+
+
   .hidden-print {
     display: none !important;
   }
