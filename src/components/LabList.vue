@@ -69,7 +69,7 @@
           </div>
 
           <div class="table-container equal-height-table mt-4">
-            <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table" id="test">
+            <table class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
               <tbody>
                 <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labData2" :key="index">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
@@ -91,6 +91,38 @@
           </div>
 
         </div>
+
+
+        <div class="table-container equal-height-table mt-4">
+            <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
+
+                     <!-- Table head -->   
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-300 dark:text-gray-800">    
+              <tr>
+                <!-- Headings for each column -->
+                <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
+                  {{ header }}
+                </th>
+              </tr>
+            </thead>
+
+              <tbody>
+                <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labDataTable" :key="index">
+                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black w-20">
+                    {{ item.row }}
+                  </th>
+                  <td class="px-6 py-4 dark:text-black">
+                    <input v-model="item.tensileValue" :disabled="isInputDisabled(item)" type="text"/>
+                    <SetButton :parameter="item.Parameter" :labValue="item.Value" @disable-input="disableInput"/>
+                  </td>
+                  <td class="px-6 py-4 dark:text-black">
+                    <input v-model="item.stretchValue" :disabled="isInputDisabled(item)" type="text"/>
+                    <SetButton :parameter="item.Parameter" :labValue="item.Value" @disable-input="disableInput"/>
+                  </td>
+                </tr>
+              </tbody>    
+            </table>
+          </div>
 
         <div class="buttons-container flex justify-end mt-4">
           <!-- <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button> -->
@@ -133,8 +165,13 @@ export default {
       testerName: '',
       suggest: '',
       labValue: '',
+      headers: [
+        'Sub Sample',
+        'Maximum Tensile Force [N]',
+        'Maximum Stretch [%]'
+        ],
       headerData: [
-        { Parameter: 'Probe Date/Time', Value: '' },
+        { Parameter: 'Sample Date/Time', Value: '' },
         { Parameter: 'Tester', Value: '' },
         { Parameter: 'Test', Value: '' },
         { Parameter: 'Test standard', Value: '' },
@@ -157,6 +194,14 @@ export default {
         { Parameter: 'maximum stretch 3', Value: '', Unit: '%' },
         { Parameter: 'maximum stretch 4', Value: '', Unit: '%' },
         { Parameter: 'maximum stretch 5', Value: '', Unit: '%' },
+      ],
+
+      labDataTable: [
+        { row: '1', tensileValue: '', stretchValue: '' },
+        { row: '2', tensileValue: '', stretchValue: '' },
+        { row: '3', tensileValue: '', stretchValue: '' },
+        { row: '4', tensileValue: '', stretchValue: '' },
+        { row: '5', tensileValue: '', stretchValue: '' },
       ]
     };
   },
@@ -296,7 +341,7 @@ input {
 @media print {
 
   #test {
-    width: 50%; /* Set the width of the table container to 100% */
+    width: max-content; /* Set the width of the table container to 100% */
   }
 
 
