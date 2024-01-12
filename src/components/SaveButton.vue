@@ -23,6 +23,7 @@
         sampleNumber: Number,
         labData: Array,
         labData2: Array,
+        labDataTable: Array
     },
 
 
@@ -31,16 +32,17 @@
       handleButtonClick() {
         const currentTime = new Date();
         
-        const labValuesSaved = this.saveLabValuesToInflux(currentTime);
-        const labValuesSent =  this.sendSaveLabValuesToOPC();
+        // const labValuesSaved = this.saveLabValuesToInflux(currentTime);
+        // const labValuesSent =  this.sendSaveLabValuesToOPC();
+        this.saveHeaderDataToInflux(currentTime);
         
           
-          if (labValuesSaved && labValuesSent) {
+          // if (labValuesSaved && labValuesSent) {
             
-            console.log("Save Button succeeded");
-          } else {
-            console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");
-          }
+          //   console.log("Save Button succeeded");
+          // } else {
+          //   console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");
+          // }
         }, 
  
 
@@ -81,82 +83,113 @@
       },
 
 
-    // Function to send labValues to Influx via Influx-Client
-    saveLabValuesToInflux(currentTime){
-      this.labValues = this.labData.concat(this.labData2);
-            
-      const writeApi = influxDB.getWriteApi(org, bucket);
+    // // Function to send labValues to Influx via Influx-Client
+    // saveLabValuesToInflux(currentTime){
+    //   this.labValues = this.labData.concat(this.labData2);
+    //   console.log(this.labDataTable)
 
-      // Check if all Inputs are valid numbers for savind data via SAVE-button
-      for (let i = 0; i < this.labValues.length; i++) {
-        const correctedValue = this.labValues[i].Value.replace(',', '.');
-        if (correctedValue == '' || isNaN(correctedValue)) {
-          console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
-          return false; 
-        }
-      }
+    //   const labDataTable = {};
 
-      // If all inputs are valid => send to Influx
-      for (let i = 0; i < this.labValues.length; i++){
-        const floatValue = this.labValues[i].Value.replace(',', '.');
-
-        const point = new Point('LabValues')
-          .timestamp(currentTime)
-          .tag('sample_number', this.sampleNumber)
-          .tag('Unit', this.labValues[i].Unit)
-          .floatField(this.labValues[i].Parameter, parseFloat(floatValue))
-
-          console.log(`Saving LabValues: ${point}`)
-          writeApi.writePoint(point);
-                
-          writeApi
-            .close()
-            .then(() => {
-              console.log("Saved LabValues for LabUI to Influx");
-            })
-            .catch((e) => {
-              console.error(e);
-              console.log("ERROR while saving LabValues");
-              return false
-            });
-      }
-      this.saveHeaderDataToInflux(currentTime);
-      return true
-      
-    },
-
-
-      // Function to send labValues to OPCUA-Server via REST-API (fastAPI)
-      async sendSaveLabValuesToOPC() {
-
-        this.labValues = this.labData.concat(this.labData2);
+    //   for (const item of this.labDataTable) {
+    //     const rowNumber = item.row;
         
-  
-        for (let i = 0; i < this.labValues.length; i++) {
-          this.labValues[i].Value = this.labValues[i].Value.replace(',', '.');
-          // Check if Input is valid number for savind data via SET-button
-          if (this.labValues[i].Value == '' || isNaN(this.labValues[i].Value)) {
-            console.error(`Error: ${this.labValues[i].Value} is not a valid number.`);
-            return false;
-          }
-        }
+    //     labDataTable[`maximum_tensile_force_${rowNumber}`] = item.maximum_tensile_force_;
+    //     labDataTable[`maximum_stretch_${rowNumber}`] = item.maximum_stretch_;
+    //   }
 
-        try {
-          console.log(`LabValues Save-Button to OPC: ${this.labValues}`)
-          // Send Data to FastAPI
-          const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: this.labValues});
-          console.log(response.data);
-          return true
-        } catch (error) {
-          console.error('Error:', error);
-          return false
-        }
-      },
+    //   console.log(labDataTable);
+
+    //   for (const key in labDataTable) {
+    //     console.log(`${key}: ${labDataTable[key]}`);
+    //     const correctedValue = labDataTable[key].replace(',', '.');
+    //     console.log(correctedValue);
+    //     if (correctedValue == '' || isNaN(correctedValue)) {
+    //       console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
+    //       return false; 
+    //     }
+    //   }
+
+      
+    //   const writeApi = influxDB.getWriteApi(org, bucket);
+
+
+    //   // If all inputs are valid => send to Influx
+    //   for (const key in labDataTable){
+    //     const floatValue = labDataTable[key].replace(',', '.')
+    //     if (key.includes("stretch"))
+    //     {
+    //       var unit = '%'
+    //     } else if (key.includes("force")) {
+    //       var unit = 'N'
+    //     } else {
+    //         console.log("No Unit is set");
+    //     }
+
+    //     const point = new Point('LabValues')
+    //       .timestamp(currentTime)
+    //       .tag('sample_number', this.sampleNumber)
+    //       .tag('Unit', unit)
+    //       .floatField(key, parseFloat(floatValue))
+
+    //       console.log(`Saving LabValues: ${point}`)
+    //       writeApi.writePoint(point);
+                
+    //       writeApi
+    //         .close()
+    //         .then(() => {
+    //           console.log("Saved LabValues for LabUI to Influx");
+    //         })
+    //         .catch((e) => {
+    //           console.error(e);
+    //           console.log("ERROR while saving LabValues");
+    //           return false
+    //         });
+    //   }
+    //   this.saveHeaderDataToInflux(currentTime);
+    //   return true
+      
+    // },
+
+
+    //   // Function to send labValues to OPCUA-Server via REST-API (fastAPI)
+    //   async sendSaveLabValuesToOPC() {
+    //     const labDataTable = {};
+
+    //     for (const item of this.labDataTable) {
+    //       const rowNumber = item.row;
+          
+    //       labDataTable[`maximum_tensile_force_${rowNumber}`] = item.maximum_tensile_force_;
+    //       labDataTable[`maximum_stretch_${rowNumber}`] = item.maximum_stretch_;
+    //     }
+
+    //     console.log(labDataTable);
+
+    //     for (const key in labDataTable) {
+    //       const correctedValue = labDataTable[key].replace(',', '.');
+    //       if (correctedValue == '' || isNaN(correctedValue)) {
+    //         console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
+    //         return false; 
+    //       }
+    //     }
+
+      
+
+    //     try {
+    //       console.log(`LabValues Save-Button to OPC: ${labDataTable}`)
+    //       // Send Data to FastAPI
+    //       const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: labDataTable});
+    //       //console.log(response.data);
+    //       return true
+    //     } catch (error) {
+    //       console.error('Error:', error);
+    //       return false
+    //     }
+    //   },
 
 
     },
 
-  };
+  }
   </script>
   
   <style scoped>

@@ -46,27 +46,44 @@
     methods: {
       async fetchNames() {
         try {
-          const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
+          const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
           const result = await queryApi.collectRows(fluxQuery);
-          this.allBatchNumbers = [...new Set(result.map(row => row.Batch_Number))];
-          this.suggest = this.allBatchNumbers.length > 0 ? this.allBatchNumbers[0] : "";
-          console.log(this.allBatchNumbers);
+          if (result.length > 0) {
+            
+            this.allBatchNumbers = [...new Set(result.map(row => row.Batch_number).filter(name => name && name.trim() !== ""))];
+            
+            this.suggest = this.allBatchNumbers.length > 0 ? this.allBatchNumbers[0] : "";
+            console.log(this.allBatchNumbers);
+            console.log('hier bin ich');
+          } else {
+            // Handle the case where result is empty
+            this.allBatchNumbers = [];
+            this.suggest = "";
+          }
         } catch (error) {
-            console.error('Error fetching names:', error);
+          console.error('Error fetching names:', error);
+          this.allBatchNumbers = [];
+          this.suggest = "";
         }
-        },
-  
+      },
+
+
       filterNames() {
-        if(this.suggest){
+        console.log('this.allBatchNumbers:', this.allBatchNumbers);
+        console.log('this.suggest:', this.suggest);
+
+        if (!this.allBatchNumbers || this.allBatchNumbers.length === 0) {
+          this.suggestions = [];
+        } else {
           if (this.suggest.length === 0) {
-            this.suggestions = this.allBatchNumbers.filter(name => name && name.trim() !== "");
+            this.suggestions = this.allBatchNumbers;
           } else {
             this.suggestions = this.allBatchNumbers.filter(name =>
-              name && name.toLowerCase().includes(this.suggest.toLowerCase())
+              name.toLowerCase().includes(this.suggest.toLowerCase())
             );
           }
-          this.$emit('input-change', 'Batch number', this.suggest);
         }
+        this.$emit('input-change', 'Batch number', this.suggest);
       },
     
       selectSuggestion(suggest) {

@@ -63,12 +63,12 @@
                     {{ item.row }}
                   </th>
                   <td class="px-6 py-4 dark:text-black">
-                    <input v-model="item.tensileValue" :disabled="isInputDisabled(item)" type="text"/>
-                    <SetButton :row="item.row" :labValue="item.tensileValue" :parameterHeader="tensileHeader" @disable-input="disableInput"/>
+                    <input v-model="item.maximum_tensile_force_" :disabled="item.tensileDisabled" type="text"/>
+                    <SetButton :row="item.row" :labValue="item.maximum_tensile_force_" :parameterHeader="tensileHeader" @disable-input="disableInput('tensile', index)"/>
                   </td>
                   <td class="px-6 py-4 dark:text-black">
-                    <input v-model="item.stretchValue" :disabled="isInputDisabled(item)" type="text"/>
-                    <SetButton :row="item.row" :labValue="item.stretchValue" :parameterHeader="stretchHeader" @disable-input="disableInput"/>
+                    <input v-model="item.maximum_stretch_" :disabled="item.stretchDisabled" type="text"/>
+                    <SetButton :row="item.row" :labValue="item.maximum_stretch_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)"/>
                   </td>
                 </tr>
               </tbody>    
@@ -77,7 +77,7 @@
 
         <div class="buttons-container flex justify-end mt-4">
           <!-- <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button> -->
-          <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labData="labData" :labData2="labData2" @button-clicked="handleSaveButtonClick"/>
+          <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" :labData="labData" :labData2="labData2" @button-clicked="handleSaveButtonClick"/>
           <PrintButton/>
         </div>
 
@@ -150,12 +150,12 @@ export default {
       ],
 
       labDataTable: [
-        { row: '1', tensileValue: '', stretchValue: '' },
-        { row: '2', tensileValue: '', stretchValue: '' },
-        { row: '3', tensileValue: '', stretchValue: '' },
-        { row: '4', tensileValue: '', stretchValue: '' },
-        { row: '5', tensileValue: '', stretchValue: '' },
-      ]
+        { row: '1', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '2', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '3', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '4', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '5', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+      ],
     };
   },
   
@@ -177,7 +177,7 @@ export default {
       const formattedDate = currentDate.toLocaleString(); // You can customize the date format as needed
 
       // Find the "Probe Date/Time" item in the data array and update its value
-      const probeDateTimeItem = this.headerData.find(item => item.Parameter === 'Probe Date/Time');
+      const probeDateTimeItem = this.headerData.find(item => item.Parameter === 'Sample Date/Time');
       if (probeDateTimeItem) {
         probeDateTimeItem.Value = formattedDate;
       }
@@ -197,28 +197,30 @@ export default {
 
     },
 
-    disableInput(parameter) {
-      console.log(parameter)
+    disableInput(type, index) {
+      //console.log(parameter)
+      this.labDataTable[index][`${type}Disabled`] = true;
 
-      if (parameter.includes("stretch")) {
-        const item = this.labDataTable.find((labItem) => labItem.stretchValue === parameter);
-          if (item) {
-            item.isInputDisabled = true;
-          }
-      } else if (parameter.includes("force")) {
-        const item = this.labDataTable.find((labItem) => labItem.Parameter === parameter);
-          if (item) {
-            item.isInputDisabled = true;
-          }
-      } else {
-          console.log("Set invalid");
-      }
+      // if (parameter.includes("stretch")) {
+      //   console.log('Hier')
+      //   const item = this.labDataTable.find((labItem) => labItem.row === parameter);
+      //     if (item) {
+      //       item.isInputDisabled = true;
+      //     }
+      // } else if (parameter.includes("force")) {
+      //   const item = this.labDataTable.find((labItem) => labItem.Parameter === parameter);
+      //     if (item) {
+      //       item.isInputDisabled = true;
+      //     }
+      // } else {
+      //     console.log("Set invalid");
+      // }
 
 
-      const item = this.labData.find((labItem) => labItem.Parameter === parameter);
-      if (item) {
-        item.isInputDisabled = true;
-      }
+      // const item = this.labData.find((labItem) => labItem.Parameter === parameter);
+      // if (item) {
+      //   item.isInputDisabled = true;
+      // }
     },
 
     isInputDisabled(item) {

@@ -1,5 +1,5 @@
 <template>
-    <div class="tester-input" ref="testerInput">
+    <div class="Article-input" ref="ArticleInput">
       <div class="input-container">
         <input
           ref="articleInputField"
@@ -45,29 +45,47 @@
   
     methods: {
       async fetchNames() {
-        try {
-          const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
-          const result = await queryApi.collectRows(fluxQuery);
-          this.allArticels = [...new Set(result.map(row => row.Article))];
+      try {
+        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
+        const result = await queryApi.collectRows(fluxQuery);
+
+        if (result.length > 0) {
+          
+          this.allArticels = [...new Set(result.map(row => row.Article).filter(name => name && name.trim() !== ""))];
+          
           this.suggest = this.allArticels.length > 0 ? this.allArticels[0] : "";
           console.log(this.allArticels);
-        } catch (error) {
-            console.error('Error fetching names:', error);
+          console.log('hier bin ich');
+        } else {
+          // Handle the case where result is empty
+          this.allArticels = [];
+          this.suggest = "";
         }
-      },
-  
-      filterNames() {
-        if(this.suggest){
-          if (this.suggest.length === 0) {
-            this.suggestions = this.allArticels.filter(name => name && name.trim() !== "");
-          } else {
-            this.suggestions = this.allArticels.filter(name =>
-              name && name.toLowerCase().includes(this.suggest.toLowerCase())
-            );
-          }
-          this.$emit('input-change', 'Article', this.suggest);
+      } catch (error) {
+        console.error('Error fetching names:', error);
+        this.allArticels = [];
+        this.suggest = "";
+      }
+    },
+
+
+    filterNames() {
+      console.log('this.allArticels:', this.allArticels);
+      console.log('this.suggest:', this.suggest);
+
+      if (!this.allArticels || this.allArticels.length === 0) {
+        this.suggestions = [];
+      } else {
+        if (this.suggest.length === 0) {
+          this.suggestions = this.allArticels;
+        } else {
+          this.suggestions = this.allArticels.filter(name =>
+            name.toLowerCase().includes(this.suggest.toLowerCase())
+          );
         }
-      },
+      }
+      this.$emit('input-change', 'Article', this.suggest);
+    },
     
       selectSuggestion(suggest) {
         this.suggest = suggest;
@@ -86,13 +104,13 @@
     handleFocus() {
       this.showSuggestions = true;
       this.filterNames();
-      this.testerInput = this.$refs.testerInput; // Hinzugefügt: testerInput setzen
+      this.ArticleInput = this.$refs.ArticleInput; // Hinzugefügt: ArticleInput setzen
       // Hinzugefügt: Event Listener für das Schließen des Menüs bei Klick auf die Seite
       document.addEventListener("click", this.closeSuggestions);
     },
 
     closeSuggestions(event) {
-      if (this.testerInput && !this.testerInput.contains(event.target)) {
+      if (this.ArticleInput && !this.ArticleInput.contains(event.target)) {
         this.showSuggestions = false;
         document.removeEventListener("click", this.closeSuggestions);
       }
@@ -109,7 +127,7 @@
   
     
     <style scoped>
-    .tester-input {
+    .Article-input {
       position: relative;
     }
     

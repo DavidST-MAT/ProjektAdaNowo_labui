@@ -45,27 +45,44 @@
     methods: {
       async fetchNames() {
         try {
-          const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
+          const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
           const result = await queryApi.collectRows(fluxQuery);
-          this.allOrderNumbers = [...new Set(result.map(row => row.Order_Number))];
-          this.suggest = this.allOrderNumbers.length > 0 ? this.allOrderNumbers[0] : "";
-          console.log(this.allOrderNumbers);
+          if (result.length > 0) {
+            
+            this.allOrderNumbers = [...new Set(result.map(row => row.Order_Number).filter(name => name && name.trim() !== ""))];
+            
+            this.suggest = this.allOrderNumbers.length > 0 ? this.allOrderNumbers[0] : "";
+            console.log(this.allOrderNumbers);
+            console.log('hier bin ich');
+          } else {
+            // Handle the case where result is empty
+            this.allOrderNumbers = [];
+            this.suggest = "";
+          }
         } catch (error) {
-            console.error('Error fetching names:', error);
+          console.error('Error fetching names:', error);
+          this.allOrderNumbers = [];
+          this.suggest = "";
         }
       },
-  
+
+
       filterNames() {
-        if(this.suggest){
+        console.log('this.allOrderNumbers:', this.allOrderNumbers);
+        console.log('this.suggest:', this.suggest);
+
+        if (!this.allOrderNumbers || this.allOrderNumbers.length === 0) {
+          this.suggestions = [];
+        } else {
           if (this.suggest.length === 0) {
-            this.suggestions = this.allOrderNumbers.filter(name => name && name.trim() !== "");
+            this.suggestions = this.allOrderNumbers;
           } else {
             this.suggestions = this.allOrderNumbers.filter(name =>
-              name && name.toLowerCase().includes(this.suggest.toLowerCase())
+              name.toLowerCase().includes(this.suggest.toLowerCase())
             );
           }
-          this.$emit('input-change', 'Order number', this.suggest);
         }
+        this.$emit('input-change', 'Order number', this.suggest);
       },
   
       selectSuggestion(suggest) {

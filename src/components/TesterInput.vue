@@ -47,31 +47,52 @@ export default {
     this.fetchNames();
   },
 
+
   methods: {
+
+
     async fetchNames() {
       try {
-        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 5)';
+        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
         const result = await queryApi.collectRows(fluxQuery);
-        this.allNames = [...new Set(result.map(row => row.Tester))];
-        this.suggest = this.allNames.length > 0 ? this.allNames[0] : "";
-        console.log(this.allNames);
+        if (result.length > 0) {
+          
+          this.allNames = [...new Set(result.map(row => row.Tester).filter(name => name && name.trim() !== ""))];
+          
+          this.suggest = this.allNames.length > 0 ? this.allNames[0] : "";
+          console.log(this.allNames);
+          console.log('hier bin ich');
+        } else {
+          // Handle the case where result is empty
+          this.allNames = [];
+          this.suggest = "";
+        }
       } catch (error) {
-          console.error('Error fetching names:', error);
+        console.error('Error fetching names:', error);
+        this.allNames = [];
+        this.suggest = "";
       }
     },
 
+
     filterNames() {
-      if(this.suggest){
+      console.log('this.allNames:', this.allNames);
+      console.log('this.suggest:', this.suggest);
+
+      if (!this.allNames || this.allNames.length === 0) {
+        this.suggestions = [];
+      } else {
         if (this.suggest.length === 0) {
-          this.suggestions = this.allNames.filter(name => name && name.trim() !== "");
+          this.suggestions = this.allNames;
         } else {
           this.suggestions = this.allNames.filter(name =>
-            name && name.toLowerCase().includes(this.suggest.toLowerCase())
+            name.toLowerCase().includes(this.suggest.toLowerCase())
           );
         }
-        this.$emit('input-change', 'Tester', this.suggest);
       }
+      this.$emit('input-change', 'Tester', this.suggest);
     },
+
 
     selectSuggestion(suggest) {
       this.suggest = suggest;
@@ -79,14 +100,17 @@ export default {
 
     },
 
+
     handleInput() {
       this.filterNames();
       
     },
 
+
     selectText() {
       this.$refs.testerInputField.select();
     },
+
 
     handleFocus() {
       this.showSuggestions = true;
@@ -95,6 +119,7 @@ export default {
       // Hinzugefügt: Event Listener für das Schließen des Menüs bei Klick auf die Seite
       document.addEventListener("click", this.closeSuggestions);
     },
+
 
     closeSuggestions(event) {
       if (this.testerInput && !this.testerInput.contains(event.target)) {

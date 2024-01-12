@@ -39,7 +39,7 @@ export default {
             }
 
             try {
-                //const response = await axios.post('http://localhost:8000/send_set_LabValue_to_opc', {data: labValueObject});
+                const response = await axios.post('http://localhost:8000/send_set_LabValue_to_opc', {data: labValueObject});
                 //console.log(labValueObject);
                 console.log('hi');
                 this.$emit("disable-input", this.parameter);
