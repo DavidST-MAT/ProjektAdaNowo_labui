@@ -18,7 +18,13 @@
               </th>
               <td class="px-6 py-4 dark:text-black">
                 <template v-if="item.Parameter === 'Tester'">
-                    <TesterInput @input-change="handleInputChange" />
+                  <TesterInput @input-change="handleInputChange" />
+                </template>
+                <template v-else-if="item.Parameter === 'Test'">
+                  <TestInput @input-change="handleInputChange" />
+                </template>
+                <template v-else-if="item.Parameter === 'Test standard'">
+                    <TestStandardInput @input-change="handleInputChange" />
                 </template>
                 <template v-else-if="item.Parameter === 'Article'">
                   <ArticleInput @input-change="handleInputChange"/>
@@ -98,6 +104,9 @@ import OrderInput from './OrderInput.vue';
 import ArticleNumberInput from './ArticleNumberInput.vue';
 import SaveButton from './SaveButton.vue';
 import SetButton from './SetButton.vue';
+import TestInput from './TestInput.vue';
+import TestStandardInput from './TestStandardInput.vue';
+
 
 
 export default {
@@ -239,7 +248,9 @@ export default {
     OrderInput,
     ArticleNumberInput,
     SaveButton,
-    SetButton
+    SetButton,
+    TestInput,
+    TestStandardInput
   },
 
 };

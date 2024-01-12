@@ -2,7 +2,7 @@
     <div class="tester-input" ref="testerInput">
       <div class="input-container">
         <input
-          ref="batchNumberInputField"
+          ref="testerInputField"
           type="text"
           v-model="suggest"
           @input="handleInput"
@@ -28,13 +28,17 @@
     const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
   
   export default {
+    props: {
+        value: String // oder den entsprechenden Datentyp von item.Value
+    },
+  
     data() {
       return {
         suggest: "",
         suggestions: [],
-        allBatchNumbers: [],
-        allOrderNumbers: [],
-        showSuggestions: false
+        allTestStandards: [],
+        showSuggestions: false,
+        testerInput: null
       };
     },
   
@@ -43,76 +47,87 @@
       this.fetchNames();
     },
   
+  
     methods: {
+  
+  
       async fetchNames() {
         try {
           const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
           const result = await queryApi.collectRows(fluxQuery);
           if (result.length > 0) {
             
-            this.allBatchNumbers = [...new Set(result.map(row => row.Batch_Number).filter(name => name && name.trim() !== ""))];
+            this.allTestStandards = [...new Set(result.map(row => row.Test_Standard).filter(name => name && name.trim() !== ""))];
             
-            this.suggest = this.allBatchNumbers.length > 0 ? this.allBatchNumbers[0] : "";
-            console.log(this.allBatchNumbers);
+            this.suggest = this.allTestStandards.length > 0 ? this.allTestStandards[0] : "";
+            console.log(this.allTestStandards);
             console.log('hier bin ich');
           } else {
             // Handle the case where result is empty
-            this.allBatchNumbers = [];
+            this.allTestStandards = [];
             this.suggest = "";
           }
         } catch (error) {
           console.error('Error fetching names:', error);
-          this.allBatchNumbers = [];
+          this.allTestStandards = [];
           this.suggest = "";
         }
       },
-
-
+  
+  
       filterNames() {
-        console.log('this.allBatchNumbers:', this.allBatchNumbers);
+        console.log('this.allTestStandards:', this.allTestStandards);
         console.log('this.suggest:', this.suggest);
-
-        if (!this.allBatchNumbers || this.allBatchNumbers.length === 0) {
+  
+        if (!this.allTestStandards || this.allTestStandards.length === 0) {
           this.suggestions = [];
         } else {
           if (this.suggest.length === 0) {
-            this.suggestions = this.allBatchNumbers;
+            this.suggestions = this.allTestStandards;
           } else {
-            this.suggestions = this.allBatchNumbers.filter(name =>
+            this.suggestions = this.allTestStandards.filter(name =>
               name.toLowerCase().includes(this.suggest.toLowerCase())
             );
           }
         }
-        this.$emit('input-change', 'Batch number', this.suggest);
+        this.$emit('input-change', 'Test standard', this.suggest);
       },
-    
+  
+  
       selectSuggestion(suggest) {
         this.suggest = suggest;
         this.showSuggestions = false;
+  
       },
+  
   
       handleInput() {
         this.filterNames();
+        
       },
   
+  
       selectText() {
-      this.$refs.batchNumberInputField.select();
-    },
-
-    handleFocus() {
-      this.showSuggestions = true;
-      this.filterNames();
-      this.testerInput = this.$refs.testerInput; // Hinzugefügt: testerInput setzen
-      // Hinzugefügt: Event Listener für das Schließen des Menüs bei Klick auf die Seite
-      document.addEventListener("click", this.closeSuggestions);
-    },
-
-    closeSuggestions(event) {
-      if (this.testerInput && !this.testerInput.contains(event.target)) {
-        this.showSuggestions = false;
-        document.removeEventListener("click", this.closeSuggestions);
+        this.$refs.testerInputField.select();
+      },
+  
+  
+      handleFocus() {
+        this.showSuggestions = true;
+        this.filterNames();
+        this.testerInput = this.$refs.testerInput; // Hinzugefügt: testerInput setzen
+        // Hinzugefügt: Event Listener für das Schließen des Menüs bei Klick auf die Seite
+        document.addEventListener("click", this.closeSuggestions);
+      },
+  
+  
+      closeSuggestions(event) {
+        if (this.testerInput && !this.testerInput.contains(event.target)) {
+          this.showSuggestions = false;
+          document.removeEventListener("click", this.closeSuggestions);
+          
+        }
       }
-    }
     },
   
     watch: {
