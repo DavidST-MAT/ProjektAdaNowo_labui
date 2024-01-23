@@ -1,5 +1,5 @@
 <template>
-  <button type="button" @click="handleButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-900 dark:text-gray-900 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
+  <button type="button" @click="handleButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
     Save
   </button>
     <!-- Error Modal -->
@@ -51,11 +51,11 @@
         
         const labValuesSaved = this.saveLabValuesToInflux(currentTime);
         const labValuesSent =  this.sendSaveLabValuesToOPC();
-        this.saveHeaderDataToInflux(currentTime);
+        
         
           
           if (labValuesSaved && labValuesSent) {
-            
+            this.saveHeaderDataToInflux(currentTime);
             console.log("Save Button succeeded");
           } else {
             console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");
@@ -79,6 +79,7 @@
           .tag('Order_Number', this.headerData[6].Value)
           .tag('Batch_Number', this.headerData[7].Value)
           .tag('Comment', this.headerData[8].Value)
+          .tag('sample_number', this.sampleNumber)
           .intField('sample_number', this.sampleNumber)
 
         console.log(`Saving HeaderData: ${point}`)

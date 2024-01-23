@@ -5,7 +5,7 @@
       <h2 class="sample-number-heading">{{ headerNew }} {{ sampleNumber }}</h2>
       <div class="header flex">
         <NewButton @newButtonClick="handleNewButtonClick" />
-        <button type="button" @click="handleOpenButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-900 dark:text-gray-900 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Open</button>
+        <OpenButton @openButtonClick="handleOpenButtonClick" />
       </div>
 
       <template v-if="isNewButtonClicked || isOpenButtonClicked">
@@ -51,35 +51,39 @@
         </table>
 
         <div class="table-container equal-height-table mt-4">
-            <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
+  <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
 
-                     <!-- Table head -->   
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-300 dark:text-gray-800">    
-              <tr>
-                <!-- Headings for each column -->
-                <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
-                  {{ header }}
-                </th>
-              </tr>
-            </thead>
+    <!-- Table head -->
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-red-300 dark:text-gray-800">
+      <tr class="text-center align-middle">
+        <!-- Headings for each column -->
+        <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
+          {{ header }}
+        </th>
+      </tr>
+    </thead>
 
-              <tbody>
-                <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labDataTable" :key="index">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black w-20">
-                    {{ item.row }}
-                  </th>
-                  <td class="px-6 py-4 dark:text-black">
-                    <input v-model="item.maximum_tensile_force_" :disabled="item.tensileDisabled" type="text"/>
-                    <SetButton :row="item.row" :labValue="item.maximum_tensile_force_" :parameterHeader="tensileHeader" @disable-input="disableInput('tensile', index)"/>
-                  </td>
-                  <td class="px-6 py-4 dark:text-black">
-                    <input v-model="item.maximum_stretch_" :disabled="item.stretchDisabled" type="text"/>
-                    <SetButton :row="item.row" :labValue="item.maximum_stretch_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)"/>
-                  </td>
-                </tr>
-              </tbody>    
-            </table>
+    <tbody>
+      <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labDataTable" :key="index">
+        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black w-20 text-center align-middle">
+          {{ item.row }}
+        </th>
+        <td class="px-6 py-4 dark:text-black">
+          <div class="flex rounded-md overflow-hidden w-full">
+            <input v-model="item.maximum_tensile_force_" :disabled="item.tensileDisabled" type="text" />
+            <SetButton :row="item.row" :labValue="item.maximum_tensile_force_" :parameterHeader="tensileHeader" @disable-input="disableInput('tensile', index)" />
           </div>
+        </td>
+        <td class="px-6 py-4 dark:text-black">
+          <div class="flex rounded-md overflow-hidden">
+            <input v-model="item.maximum_stretch_" :disabled="item.stretchDisabled" type="text" class="w-full rounded-md rounded-r-none" />
+            <SetButton :row="item.row" :labValue="item.maximum_stretch_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)" />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
         <div class="buttons-container flex justify-end mt-4">
           <!-- <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button> -->
@@ -96,6 +100,7 @@
 
 <script>
 import NewButton from './NewButton.vue';
+import OpenButton from './OpenButton.vue';
 import PrintButton from './PrintButton.vue';
 import ArticleInput from './ArticleInput.vue';
 import TesterInput from './TesterInput.vue';
@@ -241,6 +246,7 @@ export default {
 
   components: {
     NewButton,
+    OpenButton,
     PrintButton,
     TesterInput,
     ArticleInput,
