@@ -2,6 +2,13 @@
   <button type="button" @click="handleButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-900 dark:text-gray-900 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
     Save
   </button>
+    <!-- Error Modal -->
+    <div v-if="showErrorModal" class="error-modal">
+      <div class="modal-content">
+        <span class="close" @click="showErrorModal = false">&times;</span>
+        <p>Error: {{errorValue}} is not a valid number.</p>
+      </div>
+    </div>
 </template>
   
   <script>
@@ -18,13 +25,23 @@
   
   export default {
 
+    emits: ['buttonClicked'],
+
     props: {
         headerData: Array,
         sampleNumber: Number,
         labData: Array,
         labData2: Array,
-        labDataTable: Array
+        labDataTable: Array,
     },
+
+    data() {
+        return {
+            showErrorModal: false,
+            errorValue: '',
+        };
+    },
+
 
 
     methods: {
@@ -32,17 +49,17 @@
       handleButtonClick() {
         const currentTime = new Date();
         
-        // const labValuesSaved = this.saveLabValuesToInflux(currentTime);
-        // const labValuesSent =  this.sendSaveLabValuesToOPC();
+        const labValuesSaved = this.saveLabValuesToInflux(currentTime);
+        const labValuesSent =  this.sendSaveLabValuesToOPC();
         this.saveHeaderDataToInflux(currentTime);
         
           
-          // if (labValuesSaved && labValuesSent) {
+          if (labValuesSaved && labValuesSent) {
             
-          //   console.log("Save Button succeeded");
-          // } else {
-          //   console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");
-          // }
+            console.log("Save Button succeeded");
+          } else {
+            console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");
+          }
         }, 
  
 
@@ -105,6 +122,8 @@
         console.log(correctedValue);
         if (correctedValue == '' || isNaN(correctedValue)) {
           console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
+          this.errorValue = correctedValue;
+          this.showErrorModal = true; // Show the error modal
           return false; 
         }
       }
@@ -193,6 +212,41 @@
   </script>
   
   <style scoped>
+
+  .error-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .close:hover,
+
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
   /* Add any styles specific to the NewButton component if needed */
   @media print {
   .hidden-print {
