@@ -71,6 +71,7 @@
         
         const point = new Point('HeaderData')
           .timestamp(currentTime)
+          .tag('Sample_Date', this.headerData[0].Value)
           .tag('Tester', this.headerData[1].Value)
           .tag('Test', this.headerData[2].Value)
           .tag('Test_Standard', this.headerData[3].Value)
@@ -103,7 +104,6 @@
 
     // Function to send labValues to Influx via Influx-Client
     saveLabValuesToInflux(currentTime){
-      this.labValues = this.labData.concat(this.labData2);
       console.log(this.labDataTable)
 
       const labDataTable = {};

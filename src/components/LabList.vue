@@ -5,7 +5,7 @@
       <h2 class="sample-number-heading">{{ headerNew }} {{ sampleNumber }}</h2>
       <div class="header flex">
         <NewButton @newButtonClick="handleNewButtonClick" />
-        <OpenButton @openButtonClick="handleOpenButtonClick" />
+        <OpenButton @openButtonClick="handleOpenButtonClick" @row-clicked="handleRowClick"/>
       </div>
 
       <template v-if="isNewButtonClicked || isOpenButtonClicked">
@@ -17,32 +17,78 @@
                 {{ item.Parameter }}
               </th>
               <td class="px-6 py-4 dark:text-black">
+
+   
+
                 <template v-if="item.Parameter === 'Tester'">
-                  <TesterInput @input-change="handleInputChange" />
+                  <template v-if="isNewButtonClicked">
+                    <TesterInput @input-change="handleInputChange"/>
+                  </template>
+                  <template v-else-if="isOpenButtonClicked">
+                    <div class="text-center align-middle">{{ item.Value }}</div>
+                  </template>
                 </template>
+
                 <template v-else-if="item.Parameter === 'Test'">
-                  <TestInput @input-change="handleInputChange" />
+                  <template v-if="isNewButtonClicked">
+                    <TestInput @input-change="handleInputChange"/>
+                  </template>
+                  <template v-else-if="isOpenButtonClicked">
+                    <div class="text-center align-middle">{{ item.Value }}</div>
+                  </template>
                 </template>
+
                 <template v-else-if="item.Parameter === 'Test standard'">
-                    <TestStandardInput @input-change="handleInputChange" />
+                  <template v-if="isNewButtonClicked">
+                    <TestStandardInput @input-change="handleInputChange"/>
+                  </template>
+                  <template v-else-if="isOpenButtonClicked">
+                    <div class="text-center align-middle">{{ item.Value }}</div>
+                  </template>
                 </template>
+
                 <template v-else-if="item.Parameter === 'Article'">
-                  <ArticleInput @input-change="handleInputChange"/>
+                  <template v-if="isNewButtonClicked">
+                    <ArticleInput @input-change="handleInputChange"/>
+                  </template>
+                  <template v-else-if="isOpenButtonClicked">
+                    <div class="text-center align-middle">{{ item.Value }}</div>
+                  </template>
                 </template>
-                <template v-else-if="item.Parameter === 'Order number'">
-                  <OrderInput @input-change="handleInputChange"/>
-                </template>
-                <template v-else-if="item.Parameter === 'Batch number'">
-                  <BatchInput @input-change="handleInputChange"/>
-                </template>
+
                 <template v-else-if="item.Parameter === 'Article number'">
-                  <ArticleNumberInput @input-change="handleInputChange"/>
+                  <template v-if="isNewButtonClicked">
+                    <ArticleNumberInput @input-change="handleInputChange"/>
+                  </template>
+                  <template v-else-if="isOpenButtonClicked">
+                    <div class="text-center align-middle">{{ item.Value }}</div>
+                  </template>
                 </template>
+
+                <template v-else-if="item.Parameter === 'Order number'">
+                  <template v-if="isNewButtonClicked">
+                    <OrderInput @input-change="handleInputChange"/>
+                  </template>
+                  <template v-else-if="isOpenButtonClicked">
+                    <div class="text-center align-middle">{{ item.Value }}</div>
+                  </template>
+                </template>
+
+                <template v-else-if="item.Parameter === 'Batch number'">
+                  <template v-if="isNewButtonClicked">
+                    <BatchInput @input-change="handleInputChange"/>
+                  </template>
+                  <template v-else-if="isOpenButtonClicked">
+                    <div class="text-center align-middle">{{ item.Value }}</div>
+                  </template>
+                </template>
+
+
                 <template v-else-if="item.Parameter === 'Comment'">
                   <textarea v-model.lazy="item.Value" rows="4" cols="22"></textarea>
                 </template>
                 <template v-else>
-                  <input v-model="item.Value" type="text" />
+                  <div class="text-center align-middle">{{ item.Value }}</div>
                 </template>
               </td>
 
@@ -87,7 +133,7 @@
 
         <div class="buttons-container flex justify-end mt-4">
           <!-- <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button> -->
-          <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" :labData="labData" :labData2="labData2" @button-clicked="handleSaveButtonClick"/>
+          <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" @button-clicked="handleSaveButtonClick"/>
           <PrintButton/>
         </div>
 
@@ -148,21 +194,6 @@ export default {
         { Parameter: 'Batch number', Value: '' },
         { Parameter: 'Comment', Value: '' },
       ],
-      labData: [
-        { Parameter: 'maximum tensile force 1', Value: '', Unit: 'N' },
-        { Parameter: 'maximum tensile force 2', Value: '', Unit: 'N' },
-        { Parameter: 'maximum tensile force 3', Value: '', Unit: 'N' },
-        { Parameter: 'maximum tensile force 4', Value: '', Unit: 'N' },
-        { Parameter: 'maximum tensile force 5', Value: '', Unit: 'N' },
-      ],
-      labData2: [
-        { Parameter: 'maximum stretch 1', Value: '', Unit: '%' },
-        { Parameter: 'maximum stretch 2', Value: '', Unit: '%' },
-        { Parameter: 'maximum stretch 3', Value: '', Unit: '%' },
-        { Parameter: 'maximum stretch 4', Value: '', Unit: '%' },
-        { Parameter: 'maximum stretch 5', Value: '', Unit: '%' },
-      ],
-
       labDataTable: [
         { row: '1', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
         { row: '2', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
@@ -184,9 +215,45 @@ export default {
       this.isOpenButtonClicked = true;
     },
 
+    handleRowClick(item) {
+      this.isOpenButtonClicked = true;
+      this.isNewButtonClicked = false;
+      // Verarbeite die übermittelten Daten, wenn eine Reihe geklickt wird
+      console.log('Row clicked:', item);
+      // Füge hier den Code hinzu, um die Daten in headerData zu aktualisieren oder zu verwenden.
+      for (let i = 0; i < this.headerData.length; i++) {
+        if (this.headerData[i].Parameter === 'Sample Date/Time') {
+          this.headerData[i].Value = item.SampeDate; // oder einen anderen Wert von "item" verwenden
+          console.log(item.SampeDate)
+        } else if (this.headerData[i].Parameter === 'Tester') {
+          this.headerData[i].Value = item.Tester;
+        } // Füge weitere Bedingungen hinzu, um die Werte für andere Parameter zu aktualisieren
+          else if (this.headerData[i].Parameter === 'Test') {
+          this.headerData[i].Value = item.Test;
+        } // Füge weitere Bedingungen hinzu, um die Werte für andere Parameter zu aktualisieren
+          else if (this.headerData[i].Parameter === 'Test standard') {
+          this.headerData[i].Value = item.TestStandard;
+        } // Füge weitere Bedingungen hinzu, um die Werte für andere Parameter zu aktualisieren
+          else if (this.headerData[i].Parameter === 'Article') {
+            this.headerData[i].Value = item.Article;
+          } // 
+          else if (this.headerData[i].Parameter === 'Article number') {
+            this.headerData[i].Value = item.ArticleNumber;
+          } // 
+          else if (this.headerData[i].Parameter === 'Order number') {
+            this.headerData[i].Value = item.OrderNumber;
+          } // 
+          else if (this.headerData[i].Parameter === 'Batch number') {
+            this.headerData[i].Value = item.BatchNumber;
+          } // 
+      }
+    },
+
+
     // Function for clicking button "New"
     handleNewButtonClick(result) {
       this.isNewButtonClicked = true;
+      this.isOpenButtonClicked = false;
       const currentDate = new Date();
       const formattedDate = currentDate.toLocaleString(); // You can customize the date format as needed
 
@@ -214,33 +281,12 @@ export default {
     disableInput(type, index) {
       //console.log(parameter)
       this.labDataTable[index][`${type}Disabled`] = true;
-
-      // if (parameter.includes("stretch")) {
-      //   console.log('Hier')
-      //   const item = this.labDataTable.find((labItem) => labItem.row === parameter);
-      //     if (item) {
-      //       item.isInputDisabled = true;
-      //     }
-      // } else if (parameter.includes("force")) {
-      //   const item = this.labDataTable.find((labItem) => labItem.Parameter === parameter);
-      //     if (item) {
-      //       item.isInputDisabled = true;
-      //     }
-      // } else {
-      //     console.log("Set invalid");
-      // }
-
-
-      // const item = this.labData.find((labItem) => labItem.Parameter === parameter);
-      // if (item) {
-      //   item.isInputDisabled = true;
-      // }
     },
 
     isInputDisabled(item) {
       return item.isInputDisabled || false;
     },
-        // Add other methods as needed
+
   },
 
 

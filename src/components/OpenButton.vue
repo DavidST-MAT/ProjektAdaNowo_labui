@@ -52,11 +52,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"  v-for="(item, index) in this.data" :key="index">
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"  v-for="(item, index) in this.data" :key="index" @click="handleRowClick(item)">
 
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {{item.SampleNumber}}
                 </th>
+                <td class="px-6 py-4">
+                    {{item.SampeDate}}
+                </td>
                 <td class="px-6 py-4">
                     {{item.Tester}}
                 </td>
@@ -105,8 +108,10 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
       return {
         headers: [
         'Sample number',
+        'Sample Date/Time',
         'Tester',
         'Test',
+        'Test standard',
         'Article',
         'Article number',
         'Order  number',
@@ -159,7 +164,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
             for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
               const o = tableMeta.toObject(values);
-              result.push({ SampleNumber: o._value, Tester: o.Tester, Test: o.Test, Article: o.Article, ArticleNumber: o.Article_Number, OrderNumber: o.Order_Number, BatchNumber: o.Batch_Number });
+              result.push({ SampleNumber: o._value, SampeDate: o.Sample_Date, Tester: o.Tester, Test: o.Test, TestStandard: o.Test_Standard, Article: o.Article, ArticleNumber: o.Article_Number, OrderNumber: o.Order_Number, BatchNumber: o.Batch_Number });
               console.log(result)
             }
             return result;
@@ -182,7 +187,16 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
       closeModal() {
         // Methode zum Schließen des Modalfensters
         this.isModalOpen = false;
-      }
+      },
+
+      handleRowClick(item) {
+      // Löse das Custom Event aus und sende die Daten an die übergeordnete Komponente
+      console.log(item)
+      this.$emit('row-clicked', item);
+      this.isModalOpen = false;
+    },
+
+
     }
   };
   </script>
