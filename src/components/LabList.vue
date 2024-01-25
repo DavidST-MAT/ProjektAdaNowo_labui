@@ -85,8 +85,14 @@
 
 
                 <template v-else-if="item.Parameter === 'Comment'">
-                  <textarea v-model.lazy="item.Value" rows="4" cols="22"></textarea>
+                  <template v-if="isNewButtonClicked">
+                    <textarea v-model.lazy="item.Value" rows="4" cols="22"></textarea>
+                  </template>
+                  <template v-else-if="isOpenButtonClicked">
+                    <div class="text-center align-middle">{{ item.Value }}</div>
+                  </template>
                 </template>
+
                 <template v-else>
                   <div class="text-center align-middle">{{ item.Value }}</div>
                 </template>
@@ -96,51 +102,63 @@
           </tbody>    
         </table>
 
-        <div class="table-container equal-height-table mt-4">
-  <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
+        <div class="relative overflow-x-auto sm:rounded-lg">
+          <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
 
-    <!-- Table head -->
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-red-300 dark:text-gray-800">
-      <tr class="text-center align-middle">
-        <!-- Headings for each column -->
-        <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
-          {{ header }}
-        </th>
-      </tr>
-    </thead>
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-red-300 dark:text-gray-800">
+              <tr class="text-center align-middle">
+                <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
+                  {{ header }}
+                </th>
+              </tr>
+            </thead>
 
-    <tbody>
-      <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labDataTable" :key="index">
-        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black w-20 text-center align-middle">
-          {{ item.row }}
-        </th>
-        <td class="px-6 py-4 dark:text-black">
-          <div class="flex rounded-md overflow-hidden w-full">
-            <input v-model="item.maximum_tensile_force_" :disabled="item.tensileDisabled" type="text" />
-            <SetButton :row="item.row" :labValue="item.maximum_tensile_force_" :parameterHeader="tensileHeader" @disable-input="disableInput('tensile', index)" />
-          </div>
-        </td>
-        <td class="px-6 py-4 dark:text-black">
-          <div class="flex rounded-md overflow-hidden">
-            <input v-model="item.maximum_stretch_" :disabled="item.stretchDisabled" type="text" class="w-full rounded-md rounded-r-none" />
-            <SetButton :row="item.row" :labValue="item.maximum_stretch_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)" />
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+            <tbody>
+              <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labDataTable" :key="index">
+                <th scope="row" class="font-medium text-gray-900 dark:text-black text-center align-middle" style="width: 15%;">
+                  {{ item.row }}
+                </th>
+                <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
+                  <div class="flex rounded-md overflow-hidden w-full">
+                    <template v-if="isNewButtonClicked">
+                      <input v-model="item.maximum_tensile_force_" :disabled="item.tensileDisabled" type="text" class="w-full rounded-md rounded-r-none" />
+                      <SetButton :row="item.row" :labValue="item.maximum_tensile_force_" :parameterHeader="tensileHeader" @disable-input="disableInput('tensile', index)" />
+                    </template>
+                  </div>
+                  <template v-if="isOpenButtonClicked">
+                    <div class="flex items-center justify-center">{{ item.maximum_tensile_force_ }}</div>
+                  </template>  
+                </td>
+                <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
+                  <div class="flex rounded-md overflow-hidden">
+                    <template v-if="isNewButtonClicked">
+                      <input v-model="item.maximum_stretch_" :disabled="item.stretchDisabled" type="text" class="w-full rounded-md rounded-r-none" />
+                      <SetButton :row="item.row" :labValue="item.maximum_stretch_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)" />
+                    </template>
+                  </div>
+                  <template v-if="isOpenButtonClicked">
+                    <div class="flex items-center justify-center">{{ item.maximum_stretch_ }}</div>
+                  </template>   
+                </td>
+              </tr>
+            </tbody>
 
-        <div class="buttons-container flex justify-end mt-4">
-          <!-- <button type="button" @click="" class="hidden-print text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2 mr-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Save</button> -->
-          <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" @button-clicked="handleSaveButtonClick"/>
-          <PrintButton/>
+          </table>
         </div>
 
-      </template>
 
-    </div>
-  </div>
+                <div class="buttons-container flex justify-end mt-4">
+                  <template v-if="isNewButtonClicked">
+                    <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" @button-clicked="handleSaveButtonClick"/>
+                  </template>
+                  <PrintButton/>
+                </div>
+
+              </template>
+
+            </div>
+          </div>
+
 </template>
   
 
@@ -178,7 +196,7 @@ export default {
       labValue: '',
       headers: [
         'Sub Sample',
-        'Maximum Tensile Force [N]',
+        'Maximum Tensile Force MD [N]',
         'Maximum Stretch [%]'
         ],
       tensileHeader: 'maximum_tensile_force_',
@@ -215,38 +233,61 @@ export default {
       this.isOpenButtonClicked = true;
     },
 
-    handleRowClick(item) {
+    handleRowClick(item, labValues) {
       this.isOpenButtonClicked = true;
       this.isNewButtonClicked = false;
-      // Verarbeite die übermittelten Daten, wenn eine Reihe geklickt wird
+
       console.log('Row clicked:', item);
-      // Füge hier den Code hinzu, um die Daten in headerData zu aktualisieren oder zu verwenden.
+      console.log('Row clicked:', labValues);
+
       for (let i = 0; i < this.headerData.length; i++) {
         if (this.headerData[i].Parameter === 'Sample Date/Time') {
-          this.headerData[i].Value = item.SampeDate; // oder einen anderen Wert von "item" verwenden
+          this.headerData[i].Value = item.SampeDate; 
           console.log(item.SampeDate)
         } else if (this.headerData[i].Parameter === 'Tester') {
           this.headerData[i].Value = item.Tester;
-        } // Füge weitere Bedingungen hinzu, um die Werte für andere Parameter zu aktualisieren
+        } 
           else if (this.headerData[i].Parameter === 'Test') {
           this.headerData[i].Value = item.Test;
-        } // Füge weitere Bedingungen hinzu, um die Werte für andere Parameter zu aktualisieren
+        } 
           else if (this.headerData[i].Parameter === 'Test standard') {
           this.headerData[i].Value = item.TestStandard;
-        } // Füge weitere Bedingungen hinzu, um die Werte für andere Parameter zu aktualisieren
+        } 
           else if (this.headerData[i].Parameter === 'Article') {
             this.headerData[i].Value = item.Article;
-          } // 
+          } 
           else if (this.headerData[i].Parameter === 'Article number') {
             this.headerData[i].Value = item.ArticleNumber;
-          } // 
+          } 
           else if (this.headerData[i].Parameter === 'Order number') {
             this.headerData[i].Value = item.OrderNumber;
-          } // 
+          } 
           else if (this.headerData[i].Parameter === 'Batch number') {
             this.headerData[i].Value = item.BatchNumber;
-          } // 
+          }
+          else if (this.headerData[i].Parameter === 'Comment') {
+            this.headerData[i].Value = item.Comment;
+            this.headerData[i].Value= this.headerData[i].Value.replace('\\n', '\n')
+          }  
       }
+
+      console.log(this.labDataTable);
+
+      this.labDataTable.forEach((row, index) => {
+        const stretchParameter = `maximum_stretch_${index + 1}`;
+        const tensileForceParameter = `maximum_tensile_force_${index + 1}`;
+
+        // Finde die entsprechenden Werte im dataFromAPI-Array
+        const stretchValue = String(labValues.find(item => item.Parameter === stretchParameter)?.Value || '');
+        const tensileForceValue = String(labValues.find(item => item.Parameter === tensileForceParameter)?.Value || '');
+
+        // Aktualisiere die Werte direkt im labDataTable-Array
+        row.maximum_stretch_ = stretchValue;
+        row.maximum_tensile_force_ = tensileForceValue;
+      });
+
+      console.log(this.labDataTable);
+      console.log(labValues);
     },
 
 
@@ -254,6 +295,19 @@ export default {
     handleNewButtonClick(result) {
       this.isNewButtonClicked = true;
       this.isOpenButtonClicked = false;
+
+      // Set the default values for labDataTable
+      this.labDataTable = [
+        { row: '1', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '2', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '3', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '4', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '5', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+      ];
+
+      var commentEntry = this.headerData.find(item => item.Parameter === 'Comment');
+      commentEntry.Value = '';
+      
       const currentDate = new Date();
       const formattedDate = currentDate.toLocaleString(); // You can customize the date format as needed
 
@@ -335,6 +389,11 @@ export default {
 
 input {
   text-align: center;
+}
+
+.center {
+  text-align: center;
+  align-items: center;
 }
 
 .sample-number-heading {

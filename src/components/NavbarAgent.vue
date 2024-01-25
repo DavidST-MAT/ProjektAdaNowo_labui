@@ -24,23 +24,24 @@
 </script>
   
 <style>
-    .title{
-      font-weight: 600;
-      color: rgb(0, 0, 0);
-      padding-right: 20px;
-    }
+  .title {
+    font-weight: bold;
+    font-size: 24px;
+    color: rgb(0, 0, 0);
+    padding-right: 40px;
+  }
   
-    #logo {
-      padding-top: -20px;
-      padding-left: 30px;
-      width: 125px;
-      height: 50px;
-    }
-  
-    #MAT {
-        padding-top: 0px;
-        padding-right: 30px;
-        width: 80px;
-        height: 40px;
-    }
+  #logo {
+    padding-top: -20px;
+    padding-left: 30px;
+    width: 125px;
+    height: 50px;
+  }
+
+  #MAT {
+      padding-top: 0px;
+      padding-right: 30px;
+      width: 80px;
+      height: 40px;
+  }
 </style>

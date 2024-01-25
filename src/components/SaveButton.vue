@@ -55,7 +55,7 @@
         
           
           if (labValuesSaved && labValuesSent) {
-            this.saveHeaderDataToInflux(currentTime);
+            //this.saveHeaderDataToInflux(currentTime);
             console.log("Save Button succeeded");
           } else {
             console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");
