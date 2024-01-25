@@ -8,6 +8,7 @@
         @input="handleInput"
         @focus="handleFocus"
         @click="selectText"
+        class="custom-input"
       />
       <div v-if="showSuggestions" class="suggestions-container" @click.stop="">
         <ul>
@@ -146,6 +147,12 @@ export default {
   
   .input-container {
     position: relative;
+  }
+
+  .custom-input {
+    border: 2px solid black; /* Schwarzer Rand */
+    border-radius: 8px; /* Abgerundete Ecken mit 8px Radius */
+    padding: 8px; /* Optional: Fügen Sie Padding hinzu, um den Text vom Rand zu trennen */
   }
   
   .suggestions-container {

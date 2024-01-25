@@ -86,10 +86,10 @@
 
                 <template v-else-if="item.Parameter === 'Comment'">
                   <template v-if="isNewButtonClicked">
-                    <textarea v-model.lazy="item.Value" rows="4" cols="22"></textarea>
+                    <textarea v-model.lazy="item.Value" rows="4" cols="22" class="custom-input"></textarea>
                   </template>
                   <template v-else-if="isOpenButtonClicked">
-                    <div class="text-center align-middle">{{ item.Value }}</div>
+                    <div class="text-center align-middle" >{{ item.Value }}</div>
                   </template>
                 </template>
 
@@ -102,62 +102,62 @@
           </tbody>    
         </table>
 
-        <div class="relative overflow-x-auto sm:rounded-lg">
-          <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
+        <div class="relative overflow-x-auto  sm:rounded-lg">
+  <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
 
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-red-300 dark:text-gray-800">
-              <tr class="text-center align-middle">
-                <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
-                  {{ header }}
-                </th>
-              </tr>
-            </thead>
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-red-700 dark:text-white">
+      <tr class="text-center align-middle">
+        <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
+          {{ header }}
+        </th>
+      </tr>
+    </thead>
 
-            <tbody>
-              <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labDataTable" :key="index">
-                <th scope="row" class="font-medium text-gray-900 dark:text-black text-center align-middle" style="width: 15%;">
-                  {{ item.row }}
-                </th>
-                <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
-                  <div class="flex rounded-md overflow-hidden w-full">
-                    <template v-if="isNewButtonClicked">
-                      <input v-model="item.maximum_tensile_force_" :disabled="item.tensileDisabled" type="text" class="w-full rounded-md rounded-r-none" />
-                      <SetButton :row="item.row" :labValue="item.maximum_tensile_force_" :parameterHeader="tensileHeader" @disable-input="disableInput('tensile', index)" />
-                    </template>
-                  </div>
-                  <template v-if="isOpenButtonClicked">
-                    <div class="flex items-center justify-center">{{ item.maximum_tensile_force_ }}</div>
-                  </template>  
-                </td>
-                <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
-                  <div class="flex rounded-md overflow-hidden">
-                    <template v-if="isNewButtonClicked">
-                      <input v-model="item.maximum_stretch_" :disabled="item.stretchDisabled" type="text" class="w-full rounded-md rounded-r-none" />
-                      <SetButton :row="item.row" :labValue="item.maximum_stretch_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)" />
-                    </template>
-                  </div>
-                  <template v-if="isOpenButtonClicked">
-                    <div class="flex items-center justify-center">{{ item.maximum_stretch_ }}</div>
-                  </template>   
-                </td>
-              </tr>
-            </tbody>
+    <tbody>
+      <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labDataTable" :key="index">
+        <th scope="row" class="font-medium text-gray-900 dark:text-black text-center align-middle" style="width: 15%;">
+          {{ item.row }}
+        </th>
+        <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
+          <div class="flex rounded-md overflow-hidden w-full">
+            <template v-if="isNewButtonClicked">
+              <input v-model="item.maximum_tensile_force_" :disabled="item.tensileDisabled" type="text" class="custom-input2" />
+              <SetButton :row="item.row" :labValue="item.maximum_tensile_force_" :parameterHeader="tensileHeader" @disable-input="disableInput('tensile', index)" />
+            </template>
+          </div>
+          <template v-if="isOpenButtonClicked">
+            <div class="flex items-center justify-center">{{ item.maximum_tensile_force_ }}</div>
+          </template>  
+        </td>
+        <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
+          <div class="flex rounded-md overflow-hidden">
+            <template v-if="isNewButtonClicked">
+              <input v-model="item.maximum_stretch_" :disabled="item.stretchDisabled" type="text" class="custom-input2" />
+              <SetButton :row="item.row" :labValue="item.maximum_stretch_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)" />
+            </template>
+          </div>
+          <template v-if="isOpenButtonClicked">
+            <div class="flex items-center justify-center">{{ item.maximum_stretch_ }}</div>
+          </template>   
+        </td>
+      </tr>
+    </tbody>
 
-          </table>
+  </table>
+</div>
+
+
+        <div class="buttons-container flex justify-end mt-4">
+          <template v-if="isNewButtonClicked">
+            <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" @button-clicked="handleSaveButtonClick"/>
+          </template>
+          <PrintButton/>
         </div>
 
+      </template>
 
-                <div class="buttons-container flex justify-end mt-4">
-                  <template v-if="isNewButtonClicked">
-                    <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" @button-clicked="handleSaveButtonClick"/>
-                  </template>
-                  <PrintButton/>
-                </div>
-
-              </template>
-
-            </div>
-          </div>
+    </div>
+  </div>
 
 </template>
   
@@ -196,7 +196,7 @@ export default {
       labValue: '',
       headers: [
         'Sub Sample',
-        'Maximum Tensile Force MD [N]',
+        'Maximum Tensile Force [N]',
         'Maximum Stretch [%]'
         ],
       tensileHeader: 'maximum_tensile_force_',
@@ -365,6 +365,18 @@ export default {
 
 
 <style>
+
+.custom-input {
+    border: 2px solid black; /* Schwarzer Rand */
+    border-radius: 8px; /* Abgerundete Ecken mit 8px Radius */
+    padding: 8px; /* Optional: Fügen Sie Padding hinzu, um den Text vom Rand zu trennen */
+  }
+  
+  .custom-input2 {
+  border: 2px solid black;
+  border-radius: 8px 0 0 8px; /* Obere linke Ecke abgerundet, obere rechte Ecke eckig */
+  padding: 8px;
+}
 
 .buttons-container {
   display: flex;

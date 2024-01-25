@@ -5,7 +5,7 @@
       @click="sendSetLabValueToOPC"
       :disabled="isSetButtonDisabled2"
       :class="{ 'disabled-button': isSetButtonDisabled2 }"
-      class="hidden-print bg-black text-white px-2 py-1"
+      class="hidden-print bg-white text-black px-3 py-3 custom-button"
     >
       Set
     </button>
@@ -66,6 +66,13 @@ export default {
 </script>
 
 <style>
+
+.custom-button {
+  border: 2px solid black; /* Schwarze Umrandung mit 2px Breite */
+  border-radius: 0 8px 8px 0; /* Linke Ecke eckig, rechte obere und untere Ecken abgerundet */
+  /* Weitere Stilregeln nach Bedarf */
+}
+
 .error-modal {
   display: flex;
   align-items: center;

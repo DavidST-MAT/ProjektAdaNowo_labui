@@ -2,7 +2,6 @@
     <div class="header flex">
       <button @click="handleOpenButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Open</button>
       
-      <!-- Modalfenster -->
       <div v-if="isModalOpen" class="modal">
         <div class="modal-content">
       
@@ -10,7 +9,7 @@
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
           <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
               <div>
-                  <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+                  <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-red-700  dark:text-white dark:border-gray-600 dark:hover:bg-red-800 dark:hover:border-red-800" type="button">
                       <svg class="w-3 h-3 text-gray-500 dark:text-gray-400 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
                           </svg>
@@ -44,8 +43,8 @@
 
     </div>
     
-    <table class="text-sm text-left rtl:text-right dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="text-sm text-left rtl:text-right dark:text-black-300">
+        <thead class="text-xs text-white-700 uppercase bg-gray-50 dark:bg-red-700 dark:text-white">
             <tr>
                 <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
           {{ header }}
@@ -53,9 +52,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"  v-for="(item, index) in this.data" :key="index" @click="handleRowClick(item)">
+            <tr class="bg-white border-b dark:bg-white dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 dark:hover:text-white"  v-for="(item, index) in this.data" :key="index" @click="handleRowClick(item)">
 
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <th scope="row" class="px-6 py-4">
                     {{item.SampleNumber}}
                 </th>
                 <td class="px-6 py-4">
@@ -236,6 +235,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
   }
   
   .modal-content {
@@ -244,6 +244,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    border-radius: 10px;
   }
   
   .close {
