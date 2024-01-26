@@ -10,9 +10,9 @@
 
       <template v-if="isNewButtonClicked || isOpenButtonClicked">
       
-        <table  class="mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 text-gray-500 dark:text-gray-100 mt-100">
+        <table  class="mx-auto my-4 border border-slate-200 text-sm text-left dark:bg-gray-100 dark:border-black text-gray-100 dark:text-white mt-100">
           <tbody id="labUIdata">
-            <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.headerData" :key="index">
+            <tr class="bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.headerData" :key="index">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
                 {{ item.Parameter }}
               </th>
@@ -86,7 +86,7 @@
 
                 <template v-else-if="item.Parameter === 'Comment'">
                   <template v-if="isNewButtonClicked">
-                    <textarea v-model.lazy="item.Value" rows="4" cols="22" class="custom-input"></textarea>
+                    <textarea v-model.lazy="item.Value" rows="3" cols="22" class="custom-input"></textarea>
                   </template>
                   <template v-else-if="isOpenButtonClicked">
                     <div class="text-center align-middle" >{{ item.Value }}</div>
@@ -103,9 +103,9 @@
         </table>
 
         <div class="relative overflow-x-auto  sm:rounded-lg">
-  <table class="test mx-auto my-4 border-separate border-spacing-2 border border-slate-500 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table">
+  <table class="test mx-auto my-4 border border-slate-100 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table dark:border-black">
 
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-red-700 dark:text-white">
+    <thead class="text-xs text-gray-700 uppercase dark:bg-red-700 dark:text-white">
       <tr class="text-center align-middle">
         <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
           {{ header }}
@@ -114,33 +114,63 @@
     </thead>
 
     <tbody>
-      <tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-300" v-for="(item, index) in this.labDataTable" :key="index">
+
+      <tr class="bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.labDataTable" :key="index">
+
         <th scope="row" class="font-medium text-gray-900 dark:text-black text-center align-middle" style="width: 15%;">
           {{ item.row }}
         </th>
+
         <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
           <div class="flex rounded-md overflow-hidden w-full">
             <template v-if="isNewButtonClicked">
-              <input v-model="item.maximum_tensile_force_" :disabled="item.tensileDisabled" type="text" class="custom-input2" />
-              <SetButton :row="item.row" :labValue="item.maximum_tensile_force_" :parameterHeader="tensileHeader" @disable-input="disableInput('tensile', index)" />
+              <input v-model="item.maximum_tensile_force_md_" :disabled="item.tensileDisabled" type="text" class="custom-input2" />
+              <SetButton :row="item.row" :labValue="item.maximum_tensile_force_md_" :parameterHeader="tensileHeaderMD" @disable-input="disableInput('tensile', index)" />
             </template>
           </div>
           <template v-if="isOpenButtonClicked">
-            <div class="flex items-center justify-center">{{ item.maximum_tensile_force_ }}</div>
+            <div class="flex items-center justify-center">{{ item.maximum_tensile_force_md_ }}</div>
           </template>  
         </td>
+
+        <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
+          <div class="flex rounded-md overflow-hidden w-full">
+            <template v-if="isNewButtonClicked">
+              <input v-model="item.maximum_tensile_force_cd_" :disabled="item.stretchDisabled" type="text" class="custom-input2" />
+              <SetButton :row="item.row" :labValue="item.maximum_tensile_force_cd_" :parameterHeader="tensileHeaderCD" @disable-input="disableInput('stretch', index)" />
+            </template>
+          </div>
+          <template v-if="isOpenButtonClicked">
+            <div class="flex items-center justify-center">{{ item.maximum_tensile_force_cd_ }}</div>
+          </template>  
+        </td>
+
         <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
           <div class="flex rounded-md overflow-hidden">
             <template v-if="isNewButtonClicked">
-              <input v-model="item.maximum_stretch_" :disabled="item.stretchDisabled" type="text" class="custom-input2" />
-              <SetButton :row="item.row" :labValue="item.maximum_stretch_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)" />
+              <input v-model="item.maximum_stretch_md_" type="text" class="custom-input3" />
+              <!-- <SetButton :row="item.row" :labValue="item.maximum_stretch_md_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)" /> -->
             </template>
           </div>
           <template v-if="isOpenButtonClicked">
-            <div class="flex items-center justify-center">{{ item.maximum_stretch_ }}</div>
+            <div class="flex items-center justify-center">{{ item.maximum_stretch_md_ }}</div>
           </template>   
         </td>
+
+        <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
+          <div class="flex rounded-md overflow-hidden">
+            <template v-if="isNewButtonClicked">
+              <input v-model="item.maximum_stretch_cd_" type="text" class="custom-input3" />
+              <!-- <SetButton :row="item.row" :labValue="item.maximum_stretch_cd_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)" /> -->
+            </template>
+          </div>
+          <template v-if="isOpenButtonClicked">
+            <div class="flex items-center justify-center">{{ item.maximum_stretch_cd_ }}</div>
+          </template>   
+        </td>
+
       </tr>
+
     </tbody>
 
   </table>
@@ -196,11 +226,15 @@ export default {
       labValue: '',
       headers: [
         'Sub Sample',
-        'Maximum Tensile Force [N]',
-        'Maximum Stretch [%]'
+        'Maximum Tensile Force MD [N]',
+        'Maximum Tensile Force CD [N]',
+        'Maximum Stretch MD [%]',
+        'Maximum Stretch CD [%]'
         ],
-      tensileHeader: 'maximum_tensile_force_',
-      stretchHeader: 'maximum_stretch_',
+      tensileHeaderMD: 'maximum_tensile_force_md_',
+      tensileHeaderCD: 'maximum_tensile_force_cd_',
+      stretchHeaderMD: 'maximum_stretch_md_',
+      stretchHeaderCD: 'maximum_stretch_cd_',
       headerData: [
         { Parameter: 'Sample Date/Time', Value: '' },
         { Parameter: 'Tester', Value: '' },
@@ -213,11 +247,11 @@ export default {
         { Parameter: 'Comment', Value: '' },
       ],
       labDataTable: [
-        { row: '1', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '2', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '3', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '4', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '5', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '3', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '4', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '5', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
       ],
     };
   },
@@ -268,23 +302,36 @@ export default {
           else if (this.headerData[i].Parameter === 'Comment') {
             this.headerData[i].Value = item.Comment;
             this.headerData[i].Value= this.headerData[i].Value.replace('\\n', '\n')
+          }
+          else if (this.headerData[i].Parameter === 'Comment') {
+            this.headerData[i].Value = item.Comment;
+            this.headerData[i].Value= this.headerData[i].Value.replace('\\n', '\n')
           }  
       }
 
       console.log(this.labDataTable);
 
       this.labDataTable.forEach((row, index) => {
-        const stretchParameter = `maximum_stretch_${index + 1}`;
-        const tensileForceParameter = `maximum_tensile_force_${index + 1}`;
+        const stretchParameterMD = `maximum_stretch_md_${index + 1}`;
+        const stretchParameterCD = `maximum_stretch_cd_${index + 1}`;
+        const tensileForceParameterMD = `maximum_tensile_force_md_${index + 1}`;
+        const tensileForceParameterCD = `maximum_tensile_force_cd_${index + 1}`;
 
         // Finde die entsprechenden Werte im dataFromAPI-Array
-        const stretchValue = String(labValues.find(item => item.Parameter === stretchParameter)?.Value || '');
-        const tensileForceValue = String(labValues.find(item => item.Parameter === tensileForceParameter)?.Value || '');
+        const stretchValueMD = String(labValues.find(item => item.Parameter === stretchParameterMD)?.Value || '');
+        const stretchValueCD = String(labValues.find(item => item.Parameter === stretchParameterCD)?.Value || '');
+        const tensileForceValueMD = String(labValues.find(item => item.Parameter === tensileForceParameterMD)?.Value || '');
+        const tensileForceValueCD = String(labValues.find(item => item.Parameter === tensileForceParameterCD)?.Value || '');
 
         // Aktualisiere die Werte direkt im labDataTable-Array
-        row.maximum_stretch_ = stretchValue;
-        row.maximum_tensile_force_ = tensileForceValue;
+        row.maximum_stretch_md_ = stretchValueMD;
+        row.maximum_stretch_cd_ = stretchValueCD;
+        row.maximum_tensile_force_md_ = tensileForceValueMD;
+        row.maximum_tensile_force_cd_ = tensileForceValueCD;
       });
+
+      this.sampleNumber = item.SampleNumber
+      this.headerNew = 'sample number';
 
       console.log(this.labDataTable);
       console.log(labValues);
@@ -298,11 +345,11 @@ export default {
 
       // Set the default values for labDataTable
       this.labDataTable = [
-        { row: '1', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '2', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '3', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '4', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '5', maximum_tensile_force_: '', maximum_stretch_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '3', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '4', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '5', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
       ];
 
       var commentEntry = this.headerData.find(item => item.Parameter === 'Comment');
@@ -326,14 +373,14 @@ export default {
     },
 
     handleSaveButtonClick() {
-      
       this.isNewButtonClicked = false;
       this.isOpenButtonClicked = false;
-
+      console.log('fdfdsfsd')
     },
 
     disableInput(type, index) {
-      //console.log(parameter)
+      console.log(type)
+      console.log(index)
       this.labDataTable[index][`${type}Disabled`] = true;
     },
 
@@ -366,16 +413,26 @@ export default {
 
 <style>
 
+.modal-content {
+  border: none;
+}
+
 .custom-input {
-    border: 2px solid black; /* Schwarzer Rand */
-    border-radius: 8px; /* Abgerundete Ecken mit 8px Radius */
-    padding: 8px; /* Optional: Fügen Sie Padding hinzu, um den Text vom Rand zu trennen */
-  }
+  border: 2px solid black; /* Schwarzer Rand */
+  border-radius: 8px; /* Abgerundete Ecken mit 8px Radius */
+  padding: 4px 8px; /* Adjust the top and bottom padding */
+}
   
-  .custom-input2 {
+.custom-input2 {
   border: 2px solid black;
   border-radius: 8px 0 0 8px; /* Obere linke Ecke abgerundet, obere rechte Ecke eckig */
-  padding: 8px;
+  padding: 3px 8px; /* Adjust the top and bottom padding */
+}
+
+.custom-input3 {
+  border: 2px solid black;
+  border-radius: 8px; /* Obere linke Ecke abgerundet, obere rechte Ecke eckig */
+  padding: 3px 8px; /* Adjust the top and bottom padding */
 }
 
 .buttons-container {

@@ -3,33 +3,30 @@
       <button @click="handleOpenButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Open</button>
       
       <div v-if="isModalOpen" class="modal">
-        <div class="modal-content">
+        <div class="modal-content flex flex-col items-center">
       
-          
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-              <div>
-                  <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-red-700  dark:text-white dark:border-gray-600 dark:hover:bg-red-800 dark:hover:border-red-800" type="button">
-                      <svg class="w-3 h-3 text-gray-500 dark:text-gray-400 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
-                          </svg>
-                      Last 30 days
-                      <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                      </svg>
-                  </button>
-                  <!-- Dropdown menu -->
-                  <div id="dropdownRadio" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="top" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate3d(522.5px, 3847.5px, 0px);">
-                      <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioButton">
-                          <li>
-                              <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                  <input id="filter-radio-example-1" type="radio" value="" name="filter-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                  <label for="filter-radio-example-1" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last day</label>
-                              </div>
-                          </li>
-                      </ul>
-                  </div>
-          </div>
+          <div id="app" class="relative overflow-x-auto shadow-md sm:rounded-lg">
+
+            
+            <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+              <div class="dropdown-container">
+                <button @click="toggleDropdown" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-red-700 dark:text-white" type="button">
+                  {{ selectedOption }}
+                </button>
+
+                <!-- Dropdown menu -->
+                <div v-if="isDropdownVisible" class="dropdown-menu rounded-lg shadow dark:bg-red-200 border">
+                  <ul class="text-sm text-black dark:text-black" aria-labelledby="dropdownRadioButton">
+                    <li v-for="(option, index) in dropdownOptions" :key="index">
+                      <div class="flex items-center p-2 rounded dark:hover:bg-gray-600 dark:hover:bg-gray-600" @click="selectOption(index)">
+                        <input :id="'filter-radio-example-' + index" type="radio" :value="option.value" name="filter-radio" :class="option.radioClass">
+                        <label :for="'filter-radio-example-' + index" class="w-full ms-2 text-sm font-medium text-white rounded dark:text-black">{{ option.label }}</label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
 
 
 
@@ -120,7 +117,14 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
         'Batch  number',
         ],
         data: [],
-        isModalOpen: false
+        isModalOpen: false,
+        isDropdownVisible: false,
+        selectedOption: 'Last 30 days',
+      dropdownOptions: [
+        { label: 'Last 30 days', value: 'last30Days' },
+        { label: 'Last day', value: 'lastDay'},
+        { label: 'Last 1 hour', value: 'last1Hour' },
+      ],
       };
     },
 
@@ -135,7 +139,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
             |> filter(fn: (r) => r["_measurement"] == "HeaderData") 
             |> group(columns: ["_field"]) 
             |> sort(columns: ["_time"], desc: true) 
-            |> limit(n: 5)`
+            |> limit(n:5)`
           
           const myQuery = async () => {
             const result = [];
@@ -218,15 +222,25 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
     },
 
+    toggleDropdown() {
+        this.isDropdownVisible = !this.isDropdownVisible;
+      },
+
+      selectOption(index) {
+        this.selectedOption = this.dropdownOptions[index].label;
+        this.isDropdownVisible = false;
+        // Add logic to handle the selected option
+        // You can emit an event, make an API call, or perform any other action here
+        console.log('Selected option:', this.dropdownOptions[index].value);
+      },
 
     }
   };
   </script>
   
   <style scoped>
-  /* Stil für das Modalfenster */
   .modal {
-    display: block; /* Ändern Sie dies zu 'none', wenn das Modal standardmäßig ausgeblendet sein soll */
+    display: block; 
     position: fixed;
     z-index: 1;
     left: 0;
@@ -260,6 +274,23 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
     text-decoration: none;
     cursor: pointer;
   }
+
+  .dropdown-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 10;
+      display: none;
+    }
+
+    .dropdown-container:hover .dropdown-menu {
+      display: block;
+    }
   </style>
   
 

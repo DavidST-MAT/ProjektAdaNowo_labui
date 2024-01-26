@@ -5,7 +5,7 @@
       @click="sendSetLabValueToOPC"
       :disabled="isSetButtonDisabled2"
       :class="{ 'disabled-button': isSetButtonDisabled2 }"
-      class="hidden-print bg-white text-black px-3 py-3 custom-button"
+      class="hidden-print bg-white text-black custom-button"
     >
       Set
     </button>
@@ -54,6 +54,7 @@ export default {
           'http://localhost:8000/send_set_LabValue_to_opc',
           { data: labValueObject }
         );
+        console.log(this.parameter)
         this.$emit('disable-input', this.parameter);
       } catch (error) {
         console.error('Error:', error);
@@ -70,7 +71,7 @@ export default {
 .custom-button {
   border: 2px solid black; /* Schwarze Umrandung mit 2px Breite */
   border-radius: 0 8px 8px 0; /* Linke Ecke eckig, rechte obere und untere Ecken abgerundet */
-  /* Weitere Stilregeln nach Bedarf */
+  padding: 3px 8px; /* Adjust the top and bottom padding */
 }
 
 .error-modal {

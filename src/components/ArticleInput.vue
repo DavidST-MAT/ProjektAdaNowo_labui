@@ -131,7 +131,7 @@
     .custom-input {
     border: 2px solid black; /* Schwarzer Rand */
     border-radius: 8px; /* Abgerundete Ecken mit 8px Radius */
-    padding: 8px; /* Optional: Fügen Sie Padding hinzu, um den Text vom Rand zu trennen */
+    padding: 3px 8px; /* Adjust the top and bottom padding */
   }
     .Article-input {
       position: relative;

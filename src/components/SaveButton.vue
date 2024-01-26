@@ -26,12 +26,11 @@
   export default {
 
     emits: ['buttonClicked'],
+ 
 
     props: {
         headerData: Array,
         sampleNumber: Number,
-        labData: Array,
-        labData2: Array,
         labDataTable: Array,
     },
 
@@ -55,7 +54,6 @@
         
           
           if (labValuesSaved && labValuesSent) {
-            //this.saveHeaderDataToInflux(currentTime);
             console.log("Save Button succeeded");
           } else {
             console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");
@@ -99,6 +97,8 @@
             console.log("ERROR while saving HeaderData");
             return false
         });
+
+        this.$emit('buttonClicked')
       },
 
 
@@ -111,8 +111,10 @@
       for (const item of this.labDataTable) {
         const rowNumber = item.row;
         
-        labDataTable[`maximum_tensile_force_${rowNumber}`] = item.maximum_tensile_force_;
-        labDataTable[`maximum_stretch_${rowNumber}`] = item.maximum_stretch_;
+        labDataTable[`maximum_tensile_force_md_${rowNumber}`] = item.maximum_tensile_force_md_;
+        labDataTable[`maximum_tensile_force_cd_${rowNumber}`] = item.maximum_tensile_force_cd_;
+        labDataTable[`maximum_stretch_md_${rowNumber}`] = item.maximum_stretch_md_;
+        labDataTable[`maximum_stretch_cd_${rowNumber}`] = item.maximum_stretch_cd_;
       }
 
       console.log(labDataTable);
@@ -121,7 +123,7 @@
         console.log(`${key}: ${labDataTable[key]}`);
         const correctedValue = labDataTable[key].replace(',', '.');
         console.log(correctedValue);
-        if (correctedValue == '' || isNaN(correctedValue)) {
+        if (isNaN(correctedValue)) {
           console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
           this.errorValue = correctedValue;
           this.showErrorModal = true; // Show the error modal
@@ -135,6 +137,11 @@
 
       // If all inputs are valid => send to Influx
       for (const key in labDataTable){
+
+        if (labDataTable[key] === '') {
+        continue;
+        }
+
         const floatValue = labDataTable[key].replace(',', '.')
         if (key.includes("stretch"))
         {
@@ -174,19 +181,22 @@
       // Function to send labValues to OPCUA-Server via REST-API (fastAPI)
       async sendSaveLabValuesToOPC() {
         const labDataTable = {};
+        console.log(labDataTable)
 
         for (const item of this.labDataTable) {
           const rowNumber = item.row;
           
-          labDataTable[`maximum_tensile_force_${rowNumber}`] = item.maximum_tensile_force_;
-          labDataTable[`maximum_stretch_${rowNumber}`] = item.maximum_stretch_;
+          labDataTable[`maximum_tensile_force_md_${rowNumber}`] = item.maximum_tensile_force_md_;
+          labDataTable[`maximum_tensile_force_cd_${rowNumber}`] = item.maximum_tensile_force_cd_;
         }
 
         console.log(labDataTable);
 
         for (const key in labDataTable) {
-          const correctedValue = labDataTable[key].replace(',', '.');
-          if (correctedValue == '' || isNaN(correctedValue)) {
+          
+            const correctedValue = labDataTable[key].replace(',', '.');
+          
+          if (isNaN(correctedValue)) {
             console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
             return false; 
           }
