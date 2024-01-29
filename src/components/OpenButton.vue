@@ -1,4 +1,5 @@
 <template>
+  
     <div class="header flex">
       <button @click="handleOpenButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Open</button>
       
@@ -41,13 +42,96 @@
     </div>
     
     <table class="text-sm text-left rtl:text-right dark:text-black-300">
+
+
+
         <thead class="text-xs text-white-700 uppercase bg-gray-50 dark:bg-red-700 dark:text-white">
             <tr>
                 <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
-          {{ header }}
-        </th>
+                  {{ header }}
+
+                  <span class="ml-1 cursor-pointer">
+                    <div class="dropdown-container">
+                      <button @click="toggleFilter" class="fas fa-filter"></button>                
+
+                      <!-- Dropdown menu -->
+                      <div v-if="showFilter" class="dropdown-menu rounded-lg shadow dark:bg-white border">
+                        <ul class="p-3 space-y-3 text-sm text-gray-700 dark:text-black" aria-labelledby="dropdownCheckboxButton">
+                          <li>
+
+                            <template v-if="header === 'Sample number'">
+                              <div class="flex items-center" v-for="(item, index) in this.sampleNumber" :key="index">
+                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
+                                <label>{{ item }}</label>
+                              </div>
+                            </template>
+
+                            <template v-else-if="header === 'Sample Date/Time'">
+                              <div class="flex items-center" v-for="(item, index) in this.sampeDate" :key="index">
+                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
+                                <label>{{ item }}</label>
+                              </div>
+                            </template>
+
+                            <template v-else-if="header === 'Tester'">
+                              <div class="flex items-center" v-for="(item, index) in this.tester" :key="index">
+                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
+                                <label>{{ item }}</label>
+                              </div>
+                            </template>
+
+                            <template v-else-if="header === 'Test standard'">
+                              <div class="flex items-center" v-for="(item, index) in this.testStandard" :key="index">
+                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
+                                <label>{{ item }}</label>
+                              </div>
+                            </template>
+
+                            <template v-else-if="header === 'Article'">
+                              <div class="flex items-center" v-for="(item, index) in this.article" :key="index">
+                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
+                                <label>{{ item }}</label>
+                              </div>
+                            </template>
+
+                            <template v-else-if="header === 'Article number'">
+                              <div class="flex items-center" v-for="(item, index) in this.articleNumber" :key="index">
+                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
+                                <label>{{ item }}</label>
+                              </div>
+                            </template>
+
+                            <template v-else-if="header === 'Order number'">
+                              <div class="flex items-center" v-for="(item, index) in this.orderNumber" :key="index">
+                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
+                                <label>{{ item }}</label>
+                              </div>
+                            </template>
+
+                            <template v-else-if="header === 'Batch number'">
+                              <div class="flex items-center" v-for="(item, index) in this.batchNumber" :key="index">
+                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
+                                <label>{{ item }}</label>
+                              </div>
+                            </template>
+
+                          </li>
+                        </ul>
+                      
+                      
+                      </div>
+
+
+                    </div>
+                  </span>
+                </th>
             </tr>
-        </thead>
+          </thead>
+
+
+
+
+
         <tbody>
             <tr class="bg-white border-b dark:bg-white dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 dark:hover:text-white"  v-for="(item, index) in this.data" :key="index" @click="handleRowClick(item)">
 
@@ -89,7 +173,7 @@
         </div>
       </div>
     </div>
-  </template>
+</template>
   
   
 <script>
@@ -105,6 +189,15 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
     data() {
       return {
+        sampleNumber: [],
+        sampeDate: [],
+        tester: [],
+        test: [],
+        testStandard: [],
+        article: [],
+        articleNumber: [],
+        orderNumber: [],
+        batchNumber: [],
         headers: [
         'Sample number',
         'Sample Date/Time',
@@ -113,14 +206,15 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
         'Test standard',
         'Article',
         'Article number',
-        'Order  number',
-        'Batch  number',
+        'Order number',
+        'Batch number',
         ],
         data: [],
         isModalOpen: false,
         isDropdownVisible: false,
+        showFilter: false,
         selectedOption: 'Last 30 days',
-      dropdownOptions: [
+        dropdownOptions: [
         { label: 'Last 30 days', value: 'last30Days' },
         { label: 'Last day', value: 'lastDay'},
         { label: 'Last 1 hour', value: 'last1Hour' },
@@ -139,7 +233,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
             |> filter(fn: (r) => r["_measurement"] == "HeaderData") 
             |> group(columns: ["_field"]) 
             |> sort(columns: ["_time"], desc: true) 
-            |> limit(n:5)`
+            |> limit(n:10)`
           
           const myQuery = async () => {
             const result = [];
@@ -158,7 +252,17 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
               BatchNumber: o.Batch_Number,
               Comment: o.Comment 
               });
+              
             }
+            this.sampleNumber = [...new Set(result.map(row => row.SampleNumber))]
+            this.sampeDate = [...new Set(result.map(row => row.SampeDate))]
+            this.tester = [...new Set(result.map(row => row.Tester))]
+            this.test = [...new Set(result.map(row => row.Test))]
+            this.testStandard = [...new Set(result.map(row => row.TestStandard))]
+            this.article = [...new Set(result.map(row => row.Article))]
+            this.articleNumber = [...new Set(result.map(row => row.ArticleNumber))]
+            this.orderNumber = [...new Set(result.map(row => row.OrderNumber))]
+            this.batchNumber = [...new Set(result.map(row => row.BatchNumber))]
             return result;
           };
 
@@ -233,6 +337,18 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
         // You can emit an event, make an API call, or perform any other action here
         console.log('Selected option:', this.dropdownOptions[index].value);
       },
+
+
+      toggleFilter() {
+        this.showFilter = !this.showFilter;
+        console.log('ich werde filtern')
+        console.log(this.tester)
+      },
+
+
+      filterHeader() {
+        console.log('ich werde filtern')
+      }
 
     }
   };

@@ -121,7 +121,7 @@
           {{ item.row }}
         </th>
 
-        <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
+        <td class="px-6 py-4 dark:text-black">
           <div class="flex rounded-md overflow-hidden w-full">
             <template v-if="isNewButtonClicked">
               <input v-model="item.maximum_tensile_force_md_" :disabled="item.tensileDisabled" type="text" class="custom-input2" />
@@ -133,7 +133,7 @@
           </template>  
         </td>
 
-        <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
+        <td class="px-6 py-4 dark:text-black">
           <div class="flex rounded-md overflow-hidden w-full">
             <template v-if="isNewButtonClicked">
               <input v-model="item.maximum_tensile_force_cd_" :disabled="item.stretchDisabled" type="text" class="custom-input2" />
@@ -145,7 +145,7 @@
           </template>  
         </td>
 
-        <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
+        <td class="px-6 py-4 dark:text-black">
           <div class="flex rounded-md overflow-hidden">
             <template v-if="isNewButtonClicked">
               <input v-model="item.maximum_stretch_md_" type="text" class="custom-input3" />
@@ -157,7 +157,7 @@
           </template>   
         </td>
 
-        <td class="px-6 py-4 dark:text-black"> <!-- Ändere die Breite nach Bedarf -->
+        <td class="px-6 py-4 dark:text-black">
           <div class="flex rounded-md overflow-hidden">
             <template v-if="isNewButtonClicked">
               <input v-model="item.maximum_stretch_cd_" type="text" class="custom-input3" />
