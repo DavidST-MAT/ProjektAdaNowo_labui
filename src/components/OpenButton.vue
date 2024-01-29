@@ -41,6 +41,7 @@
 
     </div>
     
+    <div>
     <table class="text-sm text-left rtl:text-right dark:text-black-300">
 
 
@@ -75,7 +76,7 @@
 
                             <template v-else-if="header === 'Tester'">
                               <div class="flex items-center" v-for="(item, index) in this.tester" :key="index">
-                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
+                                <input type="checkbox" :id="'checkbox_' + index" v-model="checkedNames"  @change="handleCheckboxChange(item)" class="w-4 h-4 text-blue-600 dark:border-gray-500"/>
                                 <label>{{ item }}</label>
                               </div>
                             </template>
@@ -132,7 +133,7 @@
 
 
 
-        <tbody>
+        <tbody style="height: 600px;" class="overflow-y-auto ...">
             <tr class="bg-white border-b dark:bg-white dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 dark:hover:text-white"  v-for="(item, index) in this.data" :key="index" @click="handleRowClick(item)">
 
                 <th scope="row" class="px-6 py-4">
@@ -166,6 +167,7 @@
 
         </tbody>
     </table>
+  </div>
 </div>
 
 
@@ -189,6 +191,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
     data() {
       return {
+        checkedNames: [],
         sampleNumber: [],
         sampeDate: [],
         tester: [],
@@ -233,7 +236,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
             |> filter(fn: (r) => r["_measurement"] == "HeaderData") 
             |> group(columns: ["_field"]) 
             |> sort(columns: ["_time"], desc: true) 
-            |> limit(n:10)`
+            |> limit(n:20)`
           
           const myQuery = async () => {
             const result = [];
@@ -348,6 +351,17 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
       filterHeader() {
         console.log('ich werde filtern')
+      },
+
+      handleCheckboxChange(selectedItem) {
+        // Hier kannst du auf das ausgewählte "item" zugreifen
+        console.log(selectedItem);
+        console.log(this.data),
+
+        this.data = this.data.filter(entry => entry.Tester === 'David');
+
+        // Wenn du die ausgewählten Items benötigst, kannst du auf this.checkedNames zugreifen
+        console.log(this.checkedNames);
       }
 
     }

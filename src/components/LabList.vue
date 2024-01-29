@@ -124,8 +124,8 @@
         <td class="px-6 py-4 dark:text-black">
           <div class="flex rounded-md overflow-hidden w-full">
             <template v-if="isNewButtonClicked">
-              <input v-model="item.maximum_tensile_force_md_" :disabled="item.tensileDisabled" type="text" class="custom-input2" />
-              <SetButton :row="item.row" :labValue="item.maximum_tensile_force_md_" :parameterHeader="tensileHeaderMD" @disable-input="disableInput('tensile', index)" />
+              <input v-model="item.maximum_tensile_force_md_" :disabled="item.tensileMDDisabled" type="text" class="custom-input2" />
+              <SetButton :row="item.row" :labValue="item.maximum_tensile_force_md_" :parameterHeader="tensileHeaderMD" @disable-input="disableInput('tensileMD', index)" />
             </template>
           </div>
           <template v-if="isOpenButtonClicked">
@@ -136,8 +136,8 @@
         <td class="px-6 py-4 dark:text-black">
           <div class="flex rounded-md overflow-hidden w-full">
             <template v-if="isNewButtonClicked">
-              <input v-model="item.maximum_tensile_force_cd_" :disabled="item.stretchDisabled" type="text" class="custom-input2" />
-              <SetButton :row="item.row" :labValue="item.maximum_tensile_force_cd_" :parameterHeader="tensileHeaderCD" @disable-input="disableInput('stretch', index)" />
+              <input v-model="item.maximum_tensile_force_cd_" :disabled="item.tensileCDDisabled" type="text" class="custom-input2" />
+              <SetButton :row="item.row" :labValue="item.maximum_tensile_force_cd_" :parameterHeader="tensileHeaderCD" @disable-input="disableInput('tensileCD', index)" />
             </template>
           </div>
           <template v-if="isOpenButtonClicked">
@@ -148,8 +148,8 @@
         <td class="px-6 py-4 dark:text-black">
           <div class="flex rounded-md overflow-hidden">
             <template v-if="isNewButtonClicked">
-              <input v-model="item.maximum_stretch_md_" type="text" class="custom-input3" />
-              <!-- <SetButton :row="item.row" :labValue="item.maximum_stretch_md_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)" /> -->
+              <input v-model="item.maximum_stretch_md_" :disabled="item.stretchMDDisabled" type="text" class="custom-input2" />
+              <SetButton :row="item.row" :labValue="item.maximum_stretch_md_" :parameterHeader="stretchHeaderMD" @disable-input="disableInput('stretchMD', index)" /> 
             </template>
           </div>
           <template v-if="isOpenButtonClicked">
@@ -160,8 +160,8 @@
         <td class="px-6 py-4 dark:text-black">
           <div class="flex rounded-md overflow-hidden">
             <template v-if="isNewButtonClicked">
-              <input v-model="item.maximum_stretch_cd_" type="text" class="custom-input3" />
-              <!-- <SetButton :row="item.row" :labValue="item.maximum_stretch_cd_" :parameterHeader="stretchHeader" @disable-input="disableInput('stretch', index)" /> -->
+              <input v-model="item.maximum_stretch_cd_" :disabled="item.stretchCDDisabled" type="text" class="custom-input2" />
+              <SetButton :row="item.row" :labValue="item.maximum_stretch_cd_" :parameterHeader="stretchHeaderCD" @disable-input="disableInput('stretchCD', index)" />
             </template>
           </div>
           <template v-if="isOpenButtonClicked">
@@ -247,11 +247,11 @@ export default {
         { Parameter: 'Comment', Value: '' },
       ],
       labDataTable: [
-        { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '3', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '4', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '5', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
+        { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
+        { row: '3', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
+        { row: '4', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
+        { row: '5', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
       ],
     };
   },
@@ -345,11 +345,11 @@ export default {
 
       // Set the default values for labDataTable
       this.labDataTable = [
-        { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '3', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '4', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
-        { row: '5', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileDisabled: false, stretchDisabled: false },
+        { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
+        { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
+        { row: '3', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
+        { row: '4', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
+        { row: '5', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
       ];
 
       var commentEntry = this.headerData.find(item => item.Parameter === 'Comment');
@@ -379,6 +379,7 @@ export default {
     },
 
     disableInput(type, index) {
+      console.log('#########################################')
       console.log(type)
       console.log(index)
       this.labDataTable[index][`${type}Disabled`] = true;

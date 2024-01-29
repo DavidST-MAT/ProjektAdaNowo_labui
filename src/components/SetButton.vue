@@ -54,7 +54,9 @@ export default {
           'http://localhost:8000/send_set_LabValue_to_opc',
           { data: labValueObject }
         );
+        console.log('#########################################')
         console.log(this.parameter)
+        console.log('#########################################')
         this.$emit('disable-input', this.parameter);
       } catch (error) {
         console.error('Error:', error);
