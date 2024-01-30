@@ -16,12 +16,12 @@
                 </button>          
             </div>
     
-    <div>
-    <table class="text-sm text-left rtl:text-right dark:text-black-300">
+        <div>
+        <table class="text-sm text-left rtl:text-right dark:text-black-300">
 
 
 
-        <thead class="text-xs text-white-700 bg-gray-50 dark:bg-red-700 dark:text-white">
+          <thead class="text-xs text-white-700 bg-gray-50 dark:bg-red-700 dark:text-white">
             <tr>
                 <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3 uppercase">
                   {{ header }}
@@ -40,7 +40,7 @@
 
                             <template v-if="header === 'Sample number'">
                               <form class="max-w-xs mx-auto">
-    <input v-model="inputValue" type="text" id="quantity-input" data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+    <input v-model="inputValue" type="number" id="quantity-input" aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
 
     <button type="button" @click="searchSample(inputValue)">Search</button>
   </form>
@@ -61,7 +61,7 @@
 
                             <!-- ERSTER FILTER -->
                             <template v-else-if="header === 'Tester'">
-                              <div v-for="item in this.tester" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                              <div v-for="item in this.tester" @click="toggleCheckbox(item, 'selectedTesters')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedTesters" :value="item"  class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
                                 {{ item }}
                               </div>
@@ -69,7 +69,7 @@
 
 
                             <template v-else-if="header === 'Test'">
-                              <div v-for="item in this.test" :key="item" class=" p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                              <div v-for="item in this.test" :key="item" @click="toggleCheckbox(item, 'selectedTest')" class=" p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedTest" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
                                 {{ item }}
                               </div>
@@ -77,7 +77,7 @@
                             
                             
                             <template v-else-if="header === 'Test standard'">
-                              <div v-for="item in this.testStandard" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                              <div v-for="item in this.testStandard" @click="toggleCheckbox(item, 'selectedTestStandard')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedTestStandard" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
                                 {{ item }}
                               </div>
@@ -85,7 +85,7 @@
 
                         
                             <template v-else-if="header === 'Article'">
-                              <div v-for="item in this.article" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                              <div v-for="item in this.article" @click="toggleCheckbox(item, 'selectedArticle')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedArticle" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
                                 {{ item }}
                               </div>
@@ -93,7 +93,7 @@
 
 
                             <template v-else-if="header === 'Article number'">
-                              <div v-for="item in this.articleNumber" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                              <div v-for="item in this.articleNumber" @click="toggleCheckbox(item, 'selectedArticleNumber')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedArticleNumber" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
                                 {{ item }}
                               </div>
@@ -101,14 +101,14 @@
 
 
                             <template v-else-if="header === 'Order number'">
-                              <div v-for="item in this.orderNumber" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                              <div v-for="item in this.orderNumber" @click="toggleCheckbox(item, 'selectedOrderNumber')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedOrderNumber" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
                                 {{ item }}
                               </div>
                             </template>
 
                             <template v-else-if="header === 'Batch number'">
-                              <div v-for="item in this.batchNumber" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                              <div v-for="item in this.batchNumber" @click="toggleCheckbox(item, 'selectedBatchNumber')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedBatchNumber" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
                                {{ item }}
                               </div>
@@ -189,7 +189,8 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
     data() {
       return {
-        inputValue: '',
+        inputValue: [],
+        selectedSampleNumber: [],
         selectedTesters: [],
         selectedTest: [],
         selectedTestStandard: [],
@@ -228,13 +229,11 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
     computed: {
 
       filteredData() {
-        if (this.selectedTesters.length === 0 && this.selectedTest.length === 0 && this.selectedTestStandard.length === 0 && this.selectedArticle.length === 0 && this.selectedArticleNumber.length === 0 && this.selectedOrderNumber.length === 0 && this.selectedBatchNumber.length === 0) {
-          // Wenn weder selectedTesters noch selectedTest ausgewählt sind, gib die gesamten Daten zurück
+        if (this.selectedTesters.length === 0 && this.selectedTest.length === 0 && this.selectedTestStandard.length === 0 && this.selectedArticle.length === 0 && this.selectedArticleNumber.length === 0 && this.selectedOrderNumber.length === 0 && this.selectedBatchNumber.length === 0 && this.selectedSampleNumber.length === 0) {
           return this.data;
         } else {
-          // Überprüfe, ob die Tester in selectedTesters oder selectedTest enthalten sind
           return this.data.filter(item => 
-            this.selectedTesters.includes(item.Tester) || this.selectedTest.includes(item.Test) || this.selectedTestStandard.includes(item.TestStandard) || this.selectedArticle.includes(item.Article) || this.selectedArticleNumber.includes(item.ArticleNumber) || this.selectedOrderNumber.includes(item.OrderNumber) || this.selectedBatchNumber.includes(item.BatchNumber)
+            this.selectedTesters.includes(item.Tester) || this.selectedTest.includes(item.Test) || this.selectedTestStandard.includes(item.TestStandard) || this.selectedArticle.includes(item.Article) || this.selectedArticleNumber.includes(item.ArticleNumber) || this.selectedOrderNumber.includes(item.OrderNumber) || this.selectedBatchNumber.includes(item.BatchNumber) || this.selectedSampleNumber == item.SampleNumber
           );
         }
         
@@ -266,7 +265,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
             |> filter(fn: (r) => r["_measurement"] == "HeaderData") 
             |> group(columns: ["_field"]) 
             |> sort(columns: ["_time"], desc: true) 
-            |> limit(n:10)`
+            |> limit(n:30)`
           
           const myQuery = async () => {
             const result = [];
@@ -389,21 +388,26 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
       console.log(this.filteredNames)
     },
 
+
     searchSample(inputValue) {
-      console.log(inputValue) 
-        // Find the sample with the matching SampleNumber
-        console.log(this.filteredData)
-   
-        this.filteredData = this.data.filter(entry => entry.sampleNumber === inputValue);
-        console.log(this.filteredData)
-       
 
-      },
+      this.selectedSampleNumber = inputValue;
+      console.log(this.selectedSampleNumber)
+    },
 
+    // Toggles the Checkbox by clicking the div tag
+    toggleCheckbox(item, key) {
+      const index = this[key].indexOf(item);
 
-
+      if (index !== -1) {
+        this[key].splice(index, 1);
+      } else {
+        this[key].push(item);
+      }
     }
-  };
+
+  }
+};
   </script>
   
   <style scoped>
@@ -461,6 +465,11 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
   font-family: 'Arial', sans-serif;
   max-height: 300px;
   overflow-y: auto; 
+}
+
+.dropdown-menu.left {
+  left: auto;
+  right: 0;
 }
 
     .dropdown-container:hover .dropdown-menu {
