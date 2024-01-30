@@ -10,45 +10,20 @@
 
             
             <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-              <div class="dropdown-container">
+        
                 <button @click="toggleDropdown" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-red-700 dark:text-white" type="button">
-                  {{ selectedOption }}
-                </button>
-
-                <!-- Dropdown menu -->
-                <div v-if="isDropdownVisible" class="dropdown-menu rounded-lg shadow dark:bg-red-200 border">
-                  <ul class="text-sm text-black dark:text-black" aria-labelledby="dropdownRadioButton">
-                    <li v-for="(option, index) in dropdownOptions" :key="index">
-                      <div class="flex items-center p-2 rounded dark:hover:bg-gray-600 dark:hover:bg-gray-600" @click="selectOption(index)">
-                        <input :id="'filter-radio-example-' + index" type="radio" :value="option.value" name="filter-radio" :class="option.radioClass">
-                        <label :for="'filter-radio-example-' + index" class="w-full ms-2 text-sm font-medium text-white rounded dark:text-black">{{ option.label }}</label>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              
-
-
-
-        <!-- <label for="table-search" class="sr-only">Search</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
-                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                  Clear Filter
+                </button>          
             </div>
-            <input type="text" id="table-search" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items">
-        </div> -->
-
-    </div>
     
     <div>
     <table class="text-sm text-left rtl:text-right dark:text-black-300">
 
 
 
-        <thead class="text-xs text-white-700 uppercase bg-gray-50 dark:bg-red-700 dark:text-white">
+        <thead class="text-xs text-white-700 bg-gray-50 dark:bg-red-700 dark:text-white">
             <tr>
-                <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
+                <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3 uppercase">
                   {{ header }}
 
                   <span class="ml-1 cursor-pointer">
@@ -56,63 +31,86 @@
                       <button @click="toggleFilter" class="fas fa-filter"></button>                
 
                       <!-- Dropdown menu -->
-                      <div v-if="showFilter" class="dropdown-menu rounded-lg shadow dark:bg-white border">
-                        <ul class="p-3 space-y-3 text-sm text-gray-700 dark:text-black" aria-labelledby="dropdownCheckboxButton">
+                      <div v-if="showFilter" class="dropdown-menu w-48 bg-white rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 no-uppercase">
+                        <ul class="p-3 text-sm text-gray-700 dark:text-black" aria-labelledby="dropdownCheckboxButton">
                           <li>
 
+
+
+
                             <template v-if="header === 'Sample number'">
-                              <div class="flex items-center" v-for="(item, index) in this.sampleNumber" :key="index">
-                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
-                                <label>{{ item }}</label>
-                              </div>
+                              <form class="max-w-xs mx-auto">
+    <input v-model="inputValue" type="text" id="quantity-input" data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+
+    <button type="button" @click="searchSample(inputValue)">Search</button>
+  </form>
                             </template>
+
+
+
 
                             <template v-else-if="header === 'Sample Date/Time'">
-                              <div class="flex items-center" v-for="(item, index) in this.sampeDate" :key="index">
-                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
-                                <label>{{ item }}</label>
+                              <div v-for="(item, index) in this.sampeDate" :key="index">
+                                <input type="checkbox" value="">
+                                {{ item }}
                               </div>
                             </template>
 
+
+
+
+                            <!-- ERSTER FILTER -->
                             <template v-else-if="header === 'Tester'">
-                              <div class="flex items-center" v-for="(item, index) in this.tester" :key="index">
-                                <input type="checkbox" :id="'checkbox_' + index" v-model="checkedNames"  @change="handleCheckboxChange(item)" class="w-4 h-4 text-blue-600 dark:border-gray-500"/>
-                                <label>{{ item }}</label>
+                              <div v-for="item in this.tester" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                                <input type="checkbox" v-model="selectedTesters" :value="item"  class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
+                                {{ item }}
                               </div>
                             </template>
 
+
+                            <template v-else-if="header === 'Test'">
+                              <div v-for="item in this.test" :key="item" class=" p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                                <input type="checkbox" v-model="selectedTest" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
+                                {{ item }}
+                              </div>
+                            </template>
+                            
+                            
                             <template v-else-if="header === 'Test standard'">
-                              <div class="flex items-center" v-for="(item, index) in this.testStandard" :key="index">
-                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
-                                <label>{{ item }}</label>
+                              <div v-for="item in this.testStandard" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                                <input type="checkbox" v-model="selectedTestStandard" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
+                                {{ item }}
                               </div>
                             </template>
 
+                        
                             <template v-else-if="header === 'Article'">
-                              <div class="flex items-center" v-for="(item, index) in this.article" :key="index">
-                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
-                                <label>{{ item }}</label>
+                              <div v-for="item in this.article" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                                <input type="checkbox" v-model="selectedArticle" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
+                                {{ item }}
                               </div>
                             </template>
+
 
                             <template v-else-if="header === 'Article number'">
-                              <div class="flex items-center" v-for="(item, index) in this.articleNumber" :key="index">
-                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
-                                <label>{{ item }}</label>
+                              <div v-for="item in this.articleNumber" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                                <input type="checkbox" v-model="selectedArticleNumber" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
+                                {{ item }}
                               </div>
                             </template>
 
+
                             <template v-else-if="header === 'Order number'">
-                              <div class="flex items-center" v-for="(item, index) in this.orderNumber" :key="index">
-                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
-                                <label>{{ item }}</label>
+                              <div v-for="item in this.orderNumber" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                                <input type="checkbox" v-model="selectedOrderNumber" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
+                                {{ item }}
                               </div>
                             </template>
 
                             <template v-else-if="header === 'Batch number'">
-                              <div class="flex items-center" v-for="(item, index) in this.batchNumber" :key="index">
-                                <input type="checkbox" value="" class="w-4 h-4 text-blue-600 dark:border-gray-500">
-                                <label>{{ item }}</label>
+                              <div v-for="item in this.batchNumber" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
+                                <input type="checkbox" v-model="selectedBatchNumber" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
+                               {{ item }}
                               </div>
                             </template>
 
@@ -133,8 +131,8 @@
 
 
 
-        <tbody style="height: 600px;" class="overflow-y-auto ...">
-            <tr class="bg-white border-b dark:bg-white dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 dark:hover:text-white"  v-for="(item, index) in this.data" :key="index" @click="handleRowClick(item)">
+        <tbody>
+            <tr class="bg-white border-b dark:bg-white dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 dark:hover:text-white"  v-for="(item, index) in this.filteredData" :key="index" @click="handleRowClick(item)">
 
                 <th scope="row" class="px-6 py-4">
                     {{item.SampleNumber}}
@@ -191,6 +189,14 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
     data() {
       return {
+        inputValue: '',
+        selectedTesters: [],
+        selectedTest: [],
+        selectedTestStandard: [],
+        selectedArticle: [],
+        selectedArticleNumber: [],
+        selectedOrderNumber: [],
+        selectedBatchNumber: [],
         checkedNames: [],
         sampleNumber: [],
         sampeDate: [],
@@ -216,14 +222,38 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
         isModalOpen: false,
         isDropdownVisible: false,
         showFilter: false,
-        selectedOption: 'Last 30 days',
-        dropdownOptions: [
-        { label: 'Last 30 days', value: 'last30Days' },
-        { label: 'Last day', value: 'lastDay'},
-        { label: 'Last 1 hour', value: 'last1Hour' },
-      ],
       };
     },
+
+    computed: {
+
+      filteredData() {
+        if (this.selectedTesters.length === 0 && this.selectedTest.length === 0 && this.selectedTestStandard.length === 0 && this.selectedArticle.length === 0 && this.selectedArticleNumber.length === 0 && this.selectedOrderNumber.length === 0 && this.selectedBatchNumber.length === 0) {
+          // Wenn weder selectedTesters noch selectedTest ausgewählt sind, gib die gesamten Daten zurück
+          return this.data;
+        } else {
+          // Überprüfe, ob die Tester in selectedTesters oder selectedTest enthalten sind
+          return this.data.filter(item => 
+            this.selectedTesters.includes(item.Tester) || this.selectedTest.includes(item.Test) || this.selectedTestStandard.includes(item.TestStandard) || this.selectedArticle.includes(item.Article) || this.selectedArticleNumber.includes(item.ArticleNumber) || this.selectedOrderNumber.includes(item.OrderNumber) || this.selectedBatchNumber.includes(item.BatchNumber)
+          );
+        }
+        
+      },
+
+
+
+
+
+
+      // uniqueTesters() {
+      // // Entferne Duplikate aus this.filteredData
+      // const uniqueTesters = Array.from(new Set(this.filteredData.map(item => item.Tester)));
+      // return uniqueTesters;
+    
+
+
+    },
+
 
     methods: {
       handleOpenButtonClick() {
@@ -236,7 +266,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
             |> filter(fn: (r) => r["_measurement"] == "HeaderData") 
             |> group(columns: ["_field"]) 
             |> sort(columns: ["_time"], desc: true) 
-            |> limit(n:20)`
+            |> limit(n:10)`
           
           const myQuery = async () => {
             const result = [];
@@ -272,6 +302,8 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
             // Execute query and populate data for html table
           myQuery().then((result) => {
             this.data = result
+            this.selectedNames = result
+            this.filterNames()
             }
           );
 
@@ -282,12 +314,11 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
       },
 
 
-
-
+      // Function for closing the Open-Modal-Window
       closeModal() {
-        // Methode zum Schließen des Modalfensters
         this.isModalOpen = false;
       },
+
 
       handleRowClick(item) {
 
@@ -336,16 +367,12 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
       selectOption(index) {
         this.selectedOption = this.dropdownOptions[index].label;
         this.isDropdownVisible = false;
-        // Add logic to handle the selected option
-        // You can emit an event, make an API call, or perform any other action here
         console.log('Selected option:', this.dropdownOptions[index].value);
       },
 
 
       toggleFilter() {
         this.showFilter = !this.showFilter;
-        console.log('ich werde filtern')
-        console.log(this.tester)
       },
 
 
@@ -353,16 +380,27 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
         console.log('ich werde filtern')
       },
 
-      handleCheckboxChange(selectedItem) {
-        // Hier kannst du auf das ausgewählte "item" zugreifen
-        console.log(selectedItem);
-        console.log(this.data),
 
-        this.data = this.data.filter(entry => entry.Tester === 'David');
 
-        // Wenn du die ausgewählten Items benötigst, kannst du auf this.checkedNames zugreifen
-        console.log(this.checkedNames);
-      }
+      filterNames() {
+      // Filtert die Namen basierend auf der Auswahl im Dropdown-Menü
+      console.log(this.selectedNames)
+      this.filteredNames = this.data.filter(name => this.selectedNames.includes(name));
+      console.log(this.filteredNames)
+    },
+
+    searchSample(inputValue) {
+      console.log(inputValue) 
+        // Find the sample with the matching SampleNumber
+        console.log(this.filteredData)
+   
+        this.filteredData = this.data.filter(entry => entry.sampleNumber === inputValue);
+        console.log(this.filteredData)
+       
+
+      },
+
+
 
     }
   };
@@ -411,16 +449,28 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
     }
 
     .dropdown-menu {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: 10;
-      display: none;
-    }
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  display: none;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-family: 'Arial', sans-serif;
+  max-height: 300px;
+  overflow-y: auto; 
+}
 
     .dropdown-container:hover .dropdown-menu {
       display: block;
     }
+
+
+    .no-uppercase {
+  text-transform: none;
+}
   </style>
   
 

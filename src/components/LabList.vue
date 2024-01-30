@@ -2,7 +2,8 @@
   <div class="modal">
     <div class="modal-content flex flex-col items-center">
 
-      <h2 class="sample-number-heading">{{ headerNew }} {{ sampleNumber }}</h2>
+      <h2 class="sample-number-heading">{{ headerNew }}</h2>
+      <h3 class="sample-number-heading"> {{ sampleNumber }} </h3> 
       <div class="header flex">
         <NewButton @newButtonClick="handleNewButtonClick" />
         <OpenButton @openButtonClick="handleOpenButtonClick" @row-clicked="handleRowClick"/>
@@ -331,7 +332,7 @@ export default {
       });
 
       this.sampleNumber = item.SampleNumber
-      this.headerNew = 'sample number';
+      this.headerNew = 'SAMPLE NUMBER';
 
       console.log(this.labDataTable);
       console.log(labValues);
@@ -369,7 +370,7 @@ export default {
       this.sampleNumber++
       console.log(this.sampleNumber)
 
-      this.headerNew = 'sample number';
+      this.headerNew = 'SAMPLE NUMBER';
     },
 
     handleSaveButtonClick() {
@@ -468,7 +469,7 @@ input {
 
 .sample-number-heading {
   /* Styles for the sample number heading */
-  font-size: 24px; /* Adjust the size as needed */
+  font-size: 20px; /* Adjust the size as needed */
   font-weight: bold; /* Adjust the weight as needed */
 }
 
