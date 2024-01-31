@@ -1,26 +1,31 @@
 <template>
+  <!-- Modal container -->
   <div class="modal">
     <div class="modal-content flex flex-col items-center">
-
       <h2 class="sample-number-heading">{{ headerNew }}</h2>
-      <h3 class="sample-number-heading"> {{ sampleNumber }} </h3> 
+      <h3 class="sample-number-heading"> {{ sampleNumber }} </h3>
+
+      <!-- Header Buttons -->
       <div class="header flex">
         <NewButton @newButtonClick="handleNewButtonClick" />
         <OpenButton @openButtonClick="handleOpenButtonClick" @row-clicked="handleRowClick"/>
       </div>
 
+      <!-- Display Table if New or Open Button Clicked -->
       <template v-if="isNewButtonClicked || isOpenButtonClicked">
       
         <table  class="mx-auto my-4 border border-slate-200 text-sm text-left dark:bg-gray-100 dark:border-black text-gray-100 dark:text-white mt-100">
           <tbody id="labUIdata">
+
+            <!-- Iterate over headerData for table -->
             <tr class="bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.headerData" :key="index">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                {{ item.Parameter }}
+                {{ item.Parameter }} <!-- Display Parameter Name -->
               </th>
+
               <td class="px-6 py-4 dark:text-black">
 
-   
-
+                <!-- Input or Display Value based on New/Open Button Click -->
                 <template v-if="item.Parameter === 'Tester'">
                   <template v-if="isNewButtonClicked">
                     <TesterInput @input-change="handleInputChange"/>
@@ -84,7 +89,6 @@
                   </template>
                 </template>
 
-
                 <template v-else-if="item.Parameter === 'Comment'">
                   <template v-if="isNewButtonClicked">
                     <textarea v-model.lazy="item.Value" rows="3" cols="22" class="custom-input"></textarea>
@@ -97,87 +101,94 @@
                 <template v-else>
                   <div class="text-center align-middle">{{ item.Value }}</div>
                 </template>
+
               </td>
 
             </tr>
+
           </tbody>    
         </table>
 
-        <div class="relative overflow-x-auto  sm:rounded-lg">
-  <table class="test mx-auto my-4 border border-slate-100 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table dark:border-black">
+        <!-- Table for Lab Data -->
+        <div class="relative overflow-x-auto sm:rounded-lg">
 
-    <thead class="text-xs text-gray-700 uppercase dark:bg-red-700 dark:text-white">
-      <tr class="text-center align-middle">
-        <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
-          {{ header }}
-        </th>
-      </tr>
-    </thead>
+          <table class="test mx-auto my-4 border border-slate-100 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table dark:border-black">
 
-    <tbody>
+            <!-- Table Headers -->
+            <thead class="text-xs text-gray-700 uppercase dark:bg-red-700 dark:text-white">
+              <tr class="text-center align-middle">
+                <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
+                  {{ header }}
+                </th>
+              </tr>
+            </thead>
 
-      <tr class="bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.labDataTable" :key="index">
+            <tbody>
+              <!-- Rows for Lab Data -->
+              <tr class="bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.labDataTable" :key="index">
 
-        <th scope="row" class="font-medium text-gray-900 dark:text-black text-center align-middle" style="width: 15%;">
-          {{ item.row }}
-        </th>
+                <th scope="row" class="font-medium text-gray-900 dark:text-black text-center align-middle" style="width: 15%;">
+                  {{ item.row }}
+                </th>
+    
+                <!--Rows and columns with input-field and set button-->
+                <td class="px-6 py-4 dark:text-black">
+                  <div class="flex rounded-md overflow-hidden w-full">
+                    <template v-if="isNewButtonClicked">
+                      <input v-model="item.maximum_tensile_force_md_" :disabled="item.tensileMDDisabled" type="text" class="custom-input2" />
+                      <SetButton :row="item.row" :labValue="item.maximum_tensile_force_md_" :parameterHeader="tensileHeaderMD" @disable-input="disableInput('tensileMD', index)" />
+                    </template>
+                  </div>
+                  <template v-if="isOpenButtonClicked">
+                    <div class="flex items-center justify-center">{{ item.maximum_tensile_force_md_ }}</div>
+                  </template>  
+                </td>
 
-        <td class="px-6 py-4 dark:text-black">
-          <div class="flex rounded-md overflow-hidden w-full">
-            <template v-if="isNewButtonClicked">
-              <input v-model="item.maximum_tensile_force_md_" :disabled="item.tensileMDDisabled" type="text" class="custom-input2" />
-              <SetButton :row="item.row" :labValue="item.maximum_tensile_force_md_" :parameterHeader="tensileHeaderMD" @disable-input="disableInput('tensileMD', index)" />
-            </template>
-          </div>
-          <template v-if="isOpenButtonClicked">
-            <div class="flex items-center justify-center">{{ item.maximum_tensile_force_md_ }}</div>
-          </template>  
-        </td>
+                <td class="px-6 py-4 dark:text-black">
+                  <div class="flex rounded-md overflow-hidden w-full">
+                    <template v-if="isNewButtonClicked">
+                      <input v-model="item.maximum_tensile_force_cd_" :disabled="item.tensileCDDisabled" type="text" class="custom-input2" />
+                      <SetButton :row="item.row" :labValue="item.maximum_tensile_force_cd_" :parameterHeader="tensileHeaderCD" @disable-input="disableInput('tensileCD', index)" />
+                    </template>
+                  </div>
+                  <template v-if="isOpenButtonClicked">
+                    <div class="flex items-center justify-center">{{ item.maximum_tensile_force_cd_ }}</div>
+                  </template>  
+                </td>
 
-        <td class="px-6 py-4 dark:text-black">
-          <div class="flex rounded-md overflow-hidden w-full">
-            <template v-if="isNewButtonClicked">
-              <input v-model="item.maximum_tensile_force_cd_" :disabled="item.tensileCDDisabled" type="text" class="custom-input2" />
-              <SetButton :row="item.row" :labValue="item.maximum_tensile_force_cd_" :parameterHeader="tensileHeaderCD" @disable-input="disableInput('tensileCD', index)" />
-            </template>
-          </div>
-          <template v-if="isOpenButtonClicked">
-            <div class="flex items-center justify-center">{{ item.maximum_tensile_force_cd_ }}</div>
-          </template>  
-        </td>
+                <td class="px-6 py-4 dark:text-black">
+                  <div class="flex rounded-md overflow-hidden">
+                    <template v-if="isNewButtonClicked">
+                      <input v-model="item.maximum_stretch_md_" :disabled="item.stretchMDDisabled" type="text" class="custom-input2" />
+                      <SetButton :row="item.row" :labValue="item.maximum_stretch_md_" :parameterHeader="stretchHeaderMD" @disable-input="disableInput('stretchMD', index)" /> 
+                    </template>
+                  </div>
+                  <template v-if="isOpenButtonClicked">
+                    <div class="flex items-center justify-center">{{ item.maximum_stretch_md_ }}</div>
+                  </template>   
+                </td>
 
-        <td class="px-6 py-4 dark:text-black">
-          <div class="flex rounded-md overflow-hidden">
-            <template v-if="isNewButtonClicked">
-              <input v-model="item.maximum_stretch_md_" :disabled="item.stretchMDDisabled" type="text" class="custom-input2" />
-              <SetButton :row="item.row" :labValue="item.maximum_stretch_md_" :parameterHeader="stretchHeaderMD" @disable-input="disableInput('stretchMD', index)" /> 
-            </template>
-          </div>
-          <template v-if="isOpenButtonClicked">
-            <div class="flex items-center justify-center">{{ item.maximum_stretch_md_ }}</div>
-          </template>   
-        </td>
+                <td class="px-6 py-4 dark:text-black">
+                  <div class="flex rounded-md overflow-hidden">
+                    <template v-if="isNewButtonClicked">
+                      <input v-model="item.maximum_stretch_cd_" :disabled="item.stretchCDDisabled" type="text" class="custom-input2" />
+                      <SetButton :row="item.row" :labValue="item.maximum_stretch_cd_" :parameterHeader="stretchHeaderCD" @disable-input="disableInput('stretchCD', index)" />
+                    </template>
+                  </div>
+                  <template v-if="isOpenButtonClicked">
+                    <div class="flex items-center justify-center">{{ item.maximum_stretch_cd_ }}</div>
+                  </template>   
+                </td>
 
-        <td class="px-6 py-4 dark:text-black">
-          <div class="flex rounded-md overflow-hidden">
-            <template v-if="isNewButtonClicked">
-              <input v-model="item.maximum_stretch_cd_" :disabled="item.stretchCDDisabled" type="text" class="custom-input2" />
-              <SetButton :row="item.row" :labValue="item.maximum_stretch_cd_" :parameterHeader="stretchHeaderCD" @disable-input="disableInput('stretchCD', index)" />
-            </template>
-          </div>
-          <template v-if="isOpenButtonClicked">
-            <div class="flex items-center justify-center">{{ item.maximum_stretch_cd_ }}</div>
-          </template>   
-        </td>
+              </tr>
 
-      </tr>
+            </tbody>
 
-    </tbody>
+          </table>
 
-  </table>
-</div>
+        </div>
 
-
+        <!-- Buttons Container -->
         <div class="buttons-container flex justify-end mt-4">
           <template v-if="isNewButtonClicked">
             <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" @button-clicked="handleSaveButtonClick"/>
@@ -194,6 +205,7 @@
   
 
 <script>
+// Importing Vue Components
 import NewButton from './NewButton.vue';
 import OpenButton from './OpenButton.vue';
 import PrintButton from './PrintButton.vue';
@@ -260,82 +272,77 @@ export default {
 
   methods: {
 
+    // Handling input change for different parameters and updating the value in the headerData array
     handleInputChange(paramterName, value) {
       this.headerData.find(item => item.Parameter === paramterName).Value = value;
     },
 
+    // Handling Open Button Click
     handleOpenButtonClick() {
       this.isOpenButtonClicked = true;
     },
 
+    // Event handler for when a row is clicked in Open-Modal
     handleRowClick(item, labValues) {
       this.isOpenButtonClicked = true;
       this.isNewButtonClicked = false;
 
+      // Log details of the clicked row and associated lab values
       console.log('Row clicked:', item);
       console.log('Row clicked:', labValues);
 
+      // Update headerData based on the clicked row values
       for (let i = 0; i < this.headerData.length; i++) {
+        // Check each parameter in headerData and update its value based on the clicked row's data
         if (this.headerData[i].Parameter === 'Sample Date/Time') {
           this.headerData[i].Value = item.SampeDate; 
           console.log(item.SampeDate)
         } else if (this.headerData[i].Parameter === 'Tester') {
-          this.headerData[i].Value = item.Tester;
-        } 
-          else if (this.headerData[i].Parameter === 'Test') {
-          this.headerData[i].Value = item.Test;
-        } 
-          else if (this.headerData[i].Parameter === 'Test standard') {
-          this.headerData[i].Value = item.TestStandard;
-        } 
-          else if (this.headerData[i].Parameter === 'Article') {
+            this.headerData[i].Value = item.Tester;
+        } else if (this.headerData[i].Parameter === 'Test') {
+            this.headerData[i].Value = item.Test;
+        } else if (this.headerData[i].Parameter === 'Test standard') {
+            this.headerData[i].Value = item.TestStandard;
+        } else if (this.headerData[i].Parameter === 'Article') {
             this.headerData[i].Value = item.Article;
-          } 
-          else if (this.headerData[i].Parameter === 'Article number') {
+        } else if (this.headerData[i].Parameter === 'Article number') {
             this.headerData[i].Value = item.ArticleNumber;
-          } 
-          else if (this.headerData[i].Parameter === 'Order number') {
+        } else if (this.headerData[i].Parameter === 'Order number') {
             this.headerData[i].Value = item.OrderNumber;
-          } 
-          else if (this.headerData[i].Parameter === 'Batch number') {
+        } else if (this.headerData[i].Parameter === 'Batch number') {
             this.headerData[i].Value = item.BatchNumber;
-          }
-          else if (this.headerData[i].Parameter === 'Comment') {
-            this.headerData[i].Value = item.Comment;
-            this.headerData[i].Value= this.headerData[i].Value.replace('\\n', '\n')
-          }
-          else if (this.headerData[i].Parameter === 'Comment') {
-            this.headerData[i].Value = item.Comment;
-            this.headerData[i].Value= this.headerData[i].Value.replace('\\n', '\n')
-          }  
+        } else if (this.headerData[i].Parameter === 'Comment') {
+            this.headerData[i].Value= item.Comment.replace('\\n', '\n')
+        }
+
       }
 
+      // Log labDataTable before updating
       console.log(this.labDataTable);
 
+      // Update labDataTable based on the labValues associated with the clicked row
       this.labDataTable.forEach((row, index) => {
         const stretchParameterMD = `maximum_stretch_md_${index + 1}`;
         const stretchParameterCD = `maximum_stretch_cd_${index + 1}`;
         const tensileForceParameterMD = `maximum_tensile_force_md_${index + 1}`;
         const tensileForceParameterCD = `maximum_tensile_force_cd_${index + 1}`;
 
-        // Finde die entsprechenden Werte im dataFromAPI-Array
+        // Find corresponding values in labValues array and update the labDataTable
         const stretchValueMD = String(labValues.find(item => item.Parameter === stretchParameterMD)?.Value || '');
         const stretchValueCD = String(labValues.find(item => item.Parameter === stretchParameterCD)?.Value || '');
         const tensileForceValueMD = String(labValues.find(item => item.Parameter === tensileForceParameterMD)?.Value || '');
         const tensileForceValueCD = String(labValues.find(item => item.Parameter === tensileForceParameterCD)?.Value || '');
 
-        // Aktualisiere die Werte direkt im labDataTable-Array
+        // Update the values in the labDataTable row
         row.maximum_stretch_md_ = stretchValueMD;
         row.maximum_stretch_cd_ = stretchValueCD;
         row.maximum_tensile_force_md_ = tensileForceValueMD;
         row.maximum_tensile_force_cd_ = tensileForceValueCD;
       });
 
+      // Set sampleNumber and headerNew based on the clicked row's SampleNumber
       this.sampleNumber = item.SampleNumber
       this.headerNew = 'SAMPLE NUMBER';
-
-      console.log(this.labDataTable);
-      console.log(labValues);
     },
 
 
@@ -356,10 +363,10 @@ export default {
       var commentEntry = this.headerData.find(item => item.Parameter === 'Comment');
       commentEntry.Value = '';
       
+      // Set Date for Sample Date/Time
       const currentDate = new Date();
-      const formattedDate = currentDate.toLocaleString(); // You can customize the date format as needed
+      const formattedDate = currentDate.toLocaleString(); 
 
-      // Find the "Probe Date/Time" item in the data array and update its value
       const probeDateTimeItem = this.headerData.find(item => item.Parameter === 'Sample Date/Time');
       if (probeDateTimeItem) {
         probeDateTimeItem.Value = formattedDate;
@@ -373,16 +380,14 @@ export default {
       this.headerNew = 'SAMPLE NUMBER';
     },
 
+    // Disable New and Open Modal
     handleSaveButtonClick() {
       this.isNewButtonClicked = false;
       this.isOpenButtonClicked = false;
-      console.log('fdfdsfsd')
     },
 
+    // Parent function for SetButton.vue. Getting the index of Set Button and disbale InputField
     disableInput(type, index) {
-      console.log('#########################################')
-      console.log(type)
-      console.log(index)
       this.labDataTable[index][`${type}Disabled`] = true;
     },
 
@@ -391,7 +396,6 @@ export default {
     },
 
   },
-
 
   components: {
     NewButton,
@@ -415,24 +419,30 @@ export default {
 
 <style>
 
+/* Styles for the sample number heading */
+.sample-number-heading {
+  font-size: 20px; 
+  font-weight: bold; 
+}
+
 .modal-content {
   border: none;
 }
 
 .custom-input {
-  border: 2px solid black; /* Schwarzer Rand */
+  border: 1px solid black; /* Schwarzer Rand */
   border-radius: 8px; /* Abgerundete Ecken mit 8px Radius */
   padding: 4px 8px; /* Adjust the top and bottom padding */
 }
   
 .custom-input2 {
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius: 8px 0 0 8px; /* Obere linke Ecke abgerundet, obere rechte Ecke eckig */
   padding: 3px 8px; /* Adjust the top and bottom padding */
 }
 
 .custom-input3 {
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius: 8px; /* Obere linke Ecke abgerundet, obere rechte Ecke eckig */
   padding: 3px 8px; /* Adjust the top and bottom padding */
 }
@@ -467,11 +477,7 @@ input {
   align-items: center;
 }
 
-.sample-number-heading {
-  /* Styles for the sample number heading */
-  font-size: 20px; /* Adjust the size as needed */
-  font-weight: bold; /* Adjust the weight as needed */
-}
+
 
 .flex {
   display: flex;
@@ -489,7 +495,8 @@ input {
 @media print {
 
   #test {
-    width: max-content; /* Set the width of the table container to 100% */
+    width: 80%; /* Set the width of the table container to 100% */
+    height: 80%;
   }
 
 

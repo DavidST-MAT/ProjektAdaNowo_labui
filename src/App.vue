@@ -39,6 +39,6 @@ export default {
 }
 
 .footer-spacing {
-  margin-top: 30px; /* Hier können Sie den gewünschten Abstand anpassen */
+  margin-top: 30px; 
 }
 </style>

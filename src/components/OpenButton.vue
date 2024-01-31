@@ -4,49 +4,47 @@
       <button @click="handleOpenButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Open</button>
       
       <div v-if="isModalOpen" class="modal">
-        <div class="modal-content flex flex-col items-center">
+        <div class="modal-content">
       
-          <div id="app" class="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <div id="app">
 
             
             <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-        
-                <button @click="toggleDropdown" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-red-700 dark:text-white" type="button">
-                  Clear Filter
-                </button>          
+                <button @click="deleteFilter" class="rounded-lg text-sm px-3 py-1.5 dark:bg-red-600 dark:hover:bg-red-700 dark:text-white" type="button">
+                  Reset Filter
+                </button>
+                <button @click="closeModal"><i class="fa-solid fa-x"></i></button>          
             </div>
     
-        <div>
-        <table class="text-sm text-left rtl:text-right dark:text-black-300">
+          <div>
 
-
+          <table class="text-sm text-left rtl:text-right dark:text-black-300">
 
           <thead class="text-xs text-white-700 bg-gray-50 dark:bg-red-700 dark:text-white">
             <tr>
                 <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3 uppercase">
-                  {{ header }}
+                  
 
+                {{ header }}
                   <span class="ml-1 cursor-pointer">
+                    
                     <div class="dropdown-container">
-                      <button @click="toggleFilter" class="fas fa-filter"></button>                
-
+                      <button @click="toggleFilter" class="filter-button dark:hover:bg-red-900">
+                        <i class="fas fa-filter "></i>
+                    </button>
+                                          
+                      
                       <!-- Dropdown menu -->
                       <div v-if="showFilter" class="dropdown-menu w-48 bg-white rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 no-uppercase">
                         <ul class="p-3 text-sm text-gray-700 dark:text-black" aria-labelledby="dropdownCheckboxButton">
                           <li>
 
-
-
-
                             <template v-if="header === 'Sample number'">
                               <form class="max-w-xs mx-auto">
-    <input v-model="inputValue" type="number" id="quantity-input" aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-
-    <button type="button" @click="searchSample(inputValue)">Search</button>
-  </form>
+                                <input v-model="inputValue" type="number" id="quantity-input" aria-describedby="helper-text-explanation" class="custom-input" required>
+                                <button type="button" @click="searchSample(inputValue)">Search</button>
+                              </form>
                             </template>
-
-
 
 
                             <template v-else-if="header === 'Sample Date/Time'">
@@ -57,9 +55,6 @@
                             </template>
 
 
-
-
-                            <!-- ERSTER FILTER -->
                             <template v-else-if="header === 'Tester'">
                               <div v-for="item in this.tester" @click="toggleCheckbox(item, 'selectedTesters')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedTesters" :value="item"  class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
@@ -67,23 +62,20 @@
                               </div>
                             </template>
 
-
                             <template v-else-if="header === 'Test'">
                               <div v-for="item in this.test" :key="item" @click="toggleCheckbox(item, 'selectedTest')" class=" p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedTest" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
                                 {{ item }}
                               </div>
                             </template>
-                            
-                            
+                                                
                             <template v-else-if="header === 'Test standard'">
                               <div v-for="item in this.testStandard" @click="toggleCheckbox(item, 'selectedTestStandard')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedTestStandard" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
                                 {{ item }}
                               </div>
                             </template>
-
-                        
+                       
                             <template v-else-if="header === 'Article'">
                               <div v-for="item in this.article" @click="toggleCheckbox(item, 'selectedArticle')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedArticle" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
@@ -91,14 +83,12 @@
                               </div>
                             </template>
 
-
                             <template v-else-if="header === 'Article number'">
                               <div v-for="item in this.articleNumber" @click="toggleCheckbox(item, 'selectedArticleNumber')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
                                 <input type="checkbox" v-model="selectedArticleNumber" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
                                 {{ item }}
                               </div>
                             </template>
-
 
                             <template v-else-if="header === 'Order number'">
                               <div v-for="item in this.orderNumber" @click="toggleCheckbox(item, 'selectedOrderNumber')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
@@ -123,6 +113,7 @@
 
                     </div>
                   </span>
+              
                 </th>
             </tr>
           </thead>
@@ -169,7 +160,7 @@
 </div>
 
 
-          <button @click="closeModal" class="hidden-print mt-4 hover:text-white border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Close</button>
+        
         </div>
       </div>
     </div>
@@ -265,7 +256,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
             |> filter(fn: (r) => r["_measurement"] == "HeaderData") 
             |> group(columns: ["_field"]) 
             |> sort(columns: ["_time"], desc: true) 
-            |> limit(n:30)`
+            |> limit(n:50)`
           
           const myQuery = async () => {
             const result = [];
@@ -359,7 +350,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
     },
 
-    toggleDropdown() {
+    deleteFilter() {
         this.isDropdownVisible = !this.isDropdownVisible;
       },
 
@@ -404,34 +395,61 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
       } else {
         this[key].push(item);
       }
+    },
+
+    deleteFilter() {
+      this.selectedTesters = []
+      this.selectedTest = []
+      this.selectedTestStandard = []
+      this.selectedArticle = []
+      this.selectedArticleNumber = []
+      this.selectedOrderNumber = []
+      this.selectedBatchNumber = []
+      this.selectedSampleNumber = ''
     }
+
 
   }
 };
   </script>
   
   <style scoped>
-  .modal {
-    display: block; 
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-  }
+.modal {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  align-items: center; 
+  justify-content: center; 
+}
   
   .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    border-radius: 10px;
-  }
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  height: 80%;
+  min-height: 50%;  
+  overflow-y: scroll; 
+  border-radius: 10px;
+  flex-direction: column;
+}
+
+#app {
+  flex: 1;
+}
+
+table {
+  width: 100%;
+  height: 100%;
+}
   
   .close {
     color: #aaa;
@@ -450,21 +468,22 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
   .dropdown-container {
       position: relative;
       display: inline-block;
+      
     }
 
     .dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 10;
-  display: none;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ccc;
-  padding: 10px;
-  font-family: 'Arial', sans-serif;
-  max-height: 300px;
-  overflow-y: auto; 
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    display: none;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    font-family: 'Arial', sans-serif;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid black; /* Schwarzer Rand */
 }
 
 .dropdown-menu.left {
@@ -480,6 +499,25 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
     .no-uppercase {
   text-transform: none;
 }
+
+
+
+.custom-input {
+  border: 1px solid black; /* Schwarzer Rand */
+  border-radius: 8px; /* Abgerundete Ecken mit 8px Radius */
+  padding: 3px; /* Einheitlicher Padding-Wert für alle Seiten */
+  width: 100px; /* Anpassen der Breite des Inputs */
+  height: 30px; /* Anpassen der Höhe des Inputs */
+  box-sizing: border-box; /* Berücksichtigen Sie das Padding und die Border in der Gesamtbreite und -höhe */
+}
+
+.filter-button {
+    position: relative;
+  
+    /* Additional styling if necessary */
+}
+
+
   </style>
   
 

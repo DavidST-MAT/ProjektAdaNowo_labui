@@ -71,7 +71,7 @@ export default {
 <style>
 
 .custom-button {
-  border: 2px solid black; /* Schwarze Umrandung mit 2px Breite */
+  border: 1px solid black; /* Schwarze Umrandung mit 2px Breite */
   border-radius: 0 8px 8px 0; /* Linke Ecke eckig, rechte obere und untere Ecken abgerundet */
   padding: 3px 8px; /* Adjust the top and bottom padding */
 }
@@ -111,7 +111,7 @@ export default {
 }
 
 .disabled-button {
-  opacity: 0.5; /* Oder eine andere visuelle Darstellung für deaktivierte Buttons */
+  opacity: 0.1; /* Oder eine andere visuelle Darstellung für deaktivierte Buttons */
   cursor: not-allowed;
 }
 </style>

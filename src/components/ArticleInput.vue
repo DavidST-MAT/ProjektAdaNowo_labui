@@ -129,7 +129,7 @@
     
     <style scoped>
     .custom-input {
-    border: 2px solid black; /* Schwarzer Rand */
+    border: 1px solid black; /* Schwarzer Rand */
     border-radius: 8px; /* Abgerundete Ecken mit 8px Radius */
     padding: 3px 8px; /* Adjust the top and bottom padding */
   }
