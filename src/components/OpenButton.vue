@@ -22,7 +22,7 @@
 
           <thead class="text-xs text-white-700 bg-gray-50 dark:bg-red-700 dark:text-white">
             <tr>
-                <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3 uppercase">
+                <th v-for="header in headers" :key="header" scope="col" class="px-4 py-3 uppercase">
                   
 
                 {{ header }}
@@ -35,14 +35,14 @@
                                           
                       
                       <!-- Dropdown menu -->
-                      <div v-if="showFilter" class="dropdown-menu w-48 bg-white rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 no-uppercase">
-                        <ul class="p-3 text-sm text-gray-700 dark:text-black" aria-labelledby="dropdownCheckboxButton">
+                      <div v-if="showFilter" class="dropdown-menu w-48 bg-white rounded-lg shadow  no-uppercase" :style="{ right: (header === 'Sample number') ? 'auto' : '0' }">
+                        <ul class="px-5 py-3 text-xs text-gray-700 dark:text-black" aria-labelledby="dropdownCheckboxButton">
                           <li>
 
                             <template v-if="header === 'Sample number'">
                               <form class="max-w-xs mx-auto">
                                 <input v-model="inputValue" type="number" id="quantity-input" aria-describedby="helper-text-explanation" class="custom-input" required>
-                                <button type="button" @click="searchSample(inputValue)">Search</button>
+                                <button type="button" @click="searchSample(inputValue)" class="py-2">Search</button>
                               </form>
                             </template>
 
@@ -125,31 +125,31 @@
         <tbody>
             <tr class="bg-white border-b dark:bg-white dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 dark:hover:text-white"  v-for="(item, index) in this.filteredData" :key="index" @click="handleRowClick(item)">
 
-                <th scope="row" class="px-6 py-4">
+                <th scope="row" class="px-5 py-3">
                     {{item.SampleNumber}}
                 </th>
-                <td class="px-6 py-4">
+                <td class="px-5 py-3">
                     {{item.SampeDate}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-5 py-3">
                     {{item.Tester}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-5 py-3">
                     {{item.Test}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-5 py-3">
                     {{item.TestStandard}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-5 py-3">
                     {{item.Article}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-5 py-3">
                     {{item.ArticleNumber}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-5 py-3">
                     {{item.OrderNumber}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-5 py-3">
                     {{item.BatchNumber}}
                 </td>
             </tr>
@@ -439,7 +439,7 @@ const queryApi = new InfluxDB({url, token}).getQueryApi(org)
   min-height: 50%;  
   overflow-y: scroll; 
   border-radius: 10px;
-  flex-direction: column;
+
 }
 
 #app {
@@ -466,30 +466,25 @@ table {
   }
 
   .dropdown-container {
-      position: relative;
-      display: inline-block;
-      
+      position: absolute ;
+      display: inline-block; 
     }
 
     .dropdown-menu {
     position: absolute;
     top: 100%;
-    left: 0;
     z-index: 10;
     display: none;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: 1px solid #ccc;
     font-family: 'Arial', sans-serif;
-    max-height: 300px;
+    max-height: 200px;
     overflow-y: auto;
     border: 1px solid black; /* Schwarzer Rand */
 }
 
-.dropdown-menu.left {
-  left: auto;
-  right: 0;
-}
+
 
     .dropdown-container:hover .dropdown-menu {
       display: block;
@@ -511,11 +506,6 @@ table {
   box-sizing: border-box; /* Berücksichtigen Sie das Padding und die Border in der Gesamtbreite und -höhe */
 }
 
-.filter-button {
-    position: relative;
-  
-    /* Additional styling if necessary */
-}
 
 
   </style>
