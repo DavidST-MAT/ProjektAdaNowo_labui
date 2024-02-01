@@ -10,53 +10,59 @@
 // Import required modules
 const { InfluxDB} = require('@influxdata/influxdb-client');
 
-
 // InfluxDB configuration
-const url = "http://localhost:8086"
-const token = "Qc6s7RKI7ZnQpB5ZdesJzEmgd46XLGRmcXv5RJRbhTUc758Ma8g-LQv6_A2p125BZohkhbYnEhVtpeOHJ-BqTw=="
-const org = "MAT"
+const url = process.env.VUE_APP_INFLUX_URL;
+const token = process.env.VUE_APP_INFLUX_TOKEN;
+const org = process.env.VUE_APP_INFLUX_ORG;
 const queryApi = new InfluxDB({url, token}).getQueryApi(org)
 
 
-  export default {
+export default {
 
     methods: {
 
-      async handleNewButtonClick() {
-        try {
-          const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "LabValues") |> group(columns: ["_measurement"]) |> last()';
+    // Getting the last sample number from InfluxDB and sending it to parent-function
+    async handleNewButtonClick() {
+      try {
+        // Query for last database entry
+        const fluxQuery = `from(bucket: "LabData") 
+          |> range(start: 0, stop: now()) 
+          |> filter(fn: (r) => r["_measurement"] == "LabValues") 
+          |> group(columns: ["_measurement"]) |> last()`;
 
-          const myQuery = async () => {
-            const result = [];
+        const myQuery = async () => {
+          const result = [];
 
-            for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
-              const o = tableMeta.toObject(values);
-              result.push({ SampleNumber: o.sample_number });
-              console.log(result)
-            }
-            return result;
-            };
+          for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
+            const o = tableMeta.toObject(values);
+            result.push({ SampleNumber: o.sample_number });
+            console.log(result)
+          }
+          return result;
+          };
 
-            // Execute query and populate data for html table
-            myQuery().then((result) => {
-              if (result.length > 0) {
-                this.sampleNumber = result[0].SampleNumber;
-                console.log(result[0].SampleNumber)
-              } else {
+          // Call the asynchronous function and then proceed..
+          myQuery().then((result) => {
+            if (result.length > 0) {
+              // If the result array contains elements, assign the SampleNumber from the first element to "this.sampleNumber"
+              this.sampleNumber = result[0].SampleNumber;
+              console.log(result[0].SampleNumber)
+            } else {
               // Set a default value of 0 if the result array is empty
-                this.sampleNumber = 0;
-              }
-
-            console.log(this.sampleNumber);
-            this.$emit('newButtonClick', this.sampleNumber);
+              this.sampleNumber = 0;
             }
-          );
+          console.log(this.sampleNumber);
 
-        } catch (error) {
-        console.error(error); // Fix the typo here (consol -> console)
-        }
+          // Trigger a custom event 'newButtonClick' in parent component and pass "this.sampleNumber" as a data parameter
+          this.$emit('newButtonClick', this.sampleNumber);
+          }
+        )
+
+      } catch (error) {
+      console.error(error)
       }
     }
+  }
 };
 
 </script>

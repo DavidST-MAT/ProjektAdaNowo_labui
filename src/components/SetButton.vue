@@ -24,19 +24,23 @@
 import axios from 'axios';
 
 export default {
+
   emits: ['disable-input'],
+
   props: {
     row: String,
     labValue: String,
     isSetButtonDisabled: Boolean,
     parameterHeader: String,
   },
+
   data() {
     return {
       isSetButtonDisabled2: false,
       showErrorModal: false,
     };
   },
+
   methods: {
     async sendSetLabValueToOPC() {
       this.parameter = this.parameterHeader.concat(this.row);
@@ -45,7 +49,7 @@ export default {
 
       if (labValue == '' || isNaN(labValue)) {
         console.error(`Error: ${labValue} is not a valid number.`);
-        this.showErrorModal = true; // Show the error modal
+        this.showErrorModal = true; 
         return;
       }
 
@@ -54,9 +58,6 @@ export default {
           'http://localhost:8000/send_set_LabValue_to_opc',
           { data: labValueObject }
         );
-        console.log('#########################################')
-        console.log(this.parameter)
-        console.log('#########################################')
         this.$emit('disable-input', this.parameter);
       } catch (error) {
         console.error('Error:', error);
@@ -69,11 +70,10 @@ export default {
 </script>
 
 <style>
-
 .custom-button {
-  border: 1px solid black; /* Schwarze Umrandung mit 2px Breite */
-  border-radius: 0 8px 8px 0; /* Linke Ecke eckig, rechte obere und untere Ecken abgerundet */
-  padding: 3px 8px; /* Adjust the top and bottom padding */
+  border: 1px solid black; 
+  border-radius: 0 8px 8px 0; 
+  padding: 3px 8px; 
 }
 
 .error-modal {
@@ -111,7 +111,7 @@ export default {
 }
 
 .disabled-button {
-  opacity: 0.1; /* Oder eine andere visuelle Darstellung für deaktivierte Buttons */
+  opacity: 0.1; 
   cursor: not-allowed;
 }
 </style>

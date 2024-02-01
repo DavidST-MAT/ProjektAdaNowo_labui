@@ -14,16 +14,16 @@
       <!-- Display Table if New or Open Button Clicked -->
       <template v-if="isNewButtonClicked || isOpenButtonClicked">
       
-        <table  class="mx-auto my-4 border border-slate-200 text-sm text-left dark:bg-gray-100 dark:border-black text-gray-100 dark:text-white mt-100">
+        <table  class="sizeme1 mx-auto my-4 border border-slate-200 text-sm text-left dark:bg-gray-100 dark:border-black text-gray-100 dark:text-white mt-100">
           <tbody id="labUIdata">
 
             <!-- Iterate over headerData for table -->
             <tr class="bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.headerData" :key="index">
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
+              <th scope="row" class="sizemeTD px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
                 {{ item.Parameter }} <!-- Display Parameter Name -->
               </th>
 
-              <td class="px-6 py-4 dark:text-black">
+              <td class="sizemeTD px-6 py-4 dark:text-black">
 
                 <!-- Input or Display Value based on New/Open Button Click -->
                 <template v-if="item.Parameter === 'Tester'">
@@ -110,14 +110,14 @@
         </table>
 
         <!-- Table for Lab Data -->
-        <div class="relative overflow-x-auto sm:rounded-lg">
+        <div class="sizeme relative flex-grow sm:rounded-lg">
 
-          <table class="test mx-auto my-4 border border-slate-100 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table dark:border-black">
+          <table class="sizeme mx-auto my-4 border border-slate-100 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table dark:border-black">
 
             <!-- Table Headers -->
-            <thead class="text-xs text-gray-700 uppercase dark:bg-red-700 dark:text-white">
-              <tr class="text-center align-middle">
-                <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3">
+            <thead class="sizemeTD text-xs text-gray-700 uppercase dark:bg-red-700 dark:text-white">
+              <tr class="sizemeTD text-center align-middle">
+                <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3 sizemeTD">
                   {{ header }}
                 </th>
               </tr>
@@ -125,14 +125,14 @@
 
             <tbody>
               <!-- Rows for Lab Data -->
-              <tr class="bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.labDataTable" :key="index">
+              <tr class="sizemeTD bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.labDataTable" :key="index">
 
                 <th scope="row" class="font-medium text-gray-900 dark:text-black text-center align-middle" style="width: 15%;">
                   {{ item.row }}
                 </th>
     
                 <!--Rows and columns with input-field and set button-->
-                <td class="px-6 py-4 dark:text-black">
+                <td class="sizemeTD px-6 py-4 dark:text-black">
                   <div class="flex rounded-md overflow-hidden w-full">
                     <template v-if="isNewButtonClicked">
                       <input v-model="item.maximum_tensile_force_md_" :disabled="item.tensileMDDisabled" type="text" class="custom-input2" />
@@ -171,7 +171,7 @@
                 <td class="px-6 py-4 dark:text-black">
                   <div class="flex rounded-md overflow-hidden">
                     <template v-if="isNewButtonClicked">
-                      <input v-model="item.maximum_stretch_cd_" :disabled="item.stretchCDDisabled" type="text" class="custom-input2" />
+                      <input v-model="item.maximum_stretch_cd_" :disabled="item.stretchCDDisabled" type="text" class="custom-input2 custom-input2-print-value" />
                       <SetButton :row="item.row" :labValue="item.maximum_stretch_cd_" :parameterHeader="stretchHeaderCD" @disable-input="disableInput('stretchCD', index)" />
                     </template>
                   </div>
@@ -346,12 +346,12 @@ export default {
     },
 
 
-    // Function for clicking button "New"
+    // Function for clicking button "New", gets called from NewButton.vue 
     handleNewButtonClick(result) {
       this.isNewButtonClicked = true;
       this.isOpenButtonClicked = false;
 
-      // Set the default values for labDataTable
+      // Set the default values for "labDataTable", needs to be assigned again if array is populated
       this.labDataTable = [
         { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
         { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
@@ -363,7 +363,7 @@ export default {
       var commentEntry = this.headerData.find(item => item.Parameter === 'Comment');
       commentEntry.Value = '';
       
-      // Set Date for Sample Date/Time
+      // Set date for "Sample Date/Time"
       const currentDate = new Date();
       const formattedDate = currentDate.toLocaleString(); 
 
@@ -372,11 +372,12 @@ export default {
         probeDateTimeItem.Value = formattedDate;
       }
 
-      // Increment the sample number
+      // Increment the sample number for new sample number
       this.sampleNumber = result
       this.sampleNumber++
       console.log(this.sampleNumber)
 
+      // Switch header
       this.headerNew = 'SAMPLE NUMBER';
     },
 
@@ -494,10 +495,10 @@ input {
 
 @media print {
 
-  #test {
-    width: 80%; /* Set the width of the table container to 100% */
-    height: 80%;
-  }
+
+  body {
+      margin: 0; /* Rand entfernen, um Platz zu sparen */
+    }
 
 
   .hidden-print {
@@ -511,6 +512,56 @@ input {
   header, footer {
     display: none;
   }
-}
+
+  .sizeme1 {
+    width: 50% !important; /* Beispiel: Ändere die Breite der Tabelle auf 80% des Seiteninhalts */
+      margin: auto !important; /* Zentriere die Tabelle auf der Seite */
+      border-collapse: collapse !important;
+      font-size: 7px !important; /* Beispiel: Schriftgröße reduzieren */
+    }
+
+    .sizeme {
+    width: 70% !important; /* Beispiel: Ändere die Breite der Tabelle auf 80% des Seiteninhalts */
+      margin: auto !important; /* Zentriere die Tabelle auf der Seite */
+      border-collapse: collapse !important;
+      font-size: 7px !important; /* Beispiel: Schriftgröße reduzieren */
+    }
+
+    .sizemeTD {
+      font-size: 7px !important;
+    }
+
+    th, td {
+    font-size: 8px !important;
+  }
+
+  th, td {
+    padding: 0.5px !important;; /* Adjust as needed */
+  }
+
+    .custom-input2 {
+      padding: 2px 1px 1px 2px !important;
+  }
+  
+
+    .sample-number-heading {
+      font-size: 12px; /* Beispiel: Schriftgröße für Überschrift reduzieren */
+    }
+
+    .header {
+      font-size: 5px; /* Beispiel: Schriftgröße für Header reduzieren */
+    }
+
+    @media print {
+      .custom-input {
+      border: none;
+    }
+  }
+
+
+  }
+
+
+
 
 </style>
