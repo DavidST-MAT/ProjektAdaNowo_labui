@@ -38,7 +38,4 @@ export default {
   color: #2c3e50;
 }
 
-.footer-spacing {
-  margin-top: 30px; 
-}
 </style>
