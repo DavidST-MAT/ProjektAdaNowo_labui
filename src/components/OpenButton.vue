@@ -9,10 +9,15 @@
           <div id="app">
 
             <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-                <button @click="deleteFilter" class="rounded-lg text-sm px-3 py-1.5 dark:bg-red-600 dark:hover:bg-red-700 dark:text-white" type="button">
-                  Reset Filter
-                </button>
-                <button @click="closeModal"><i class="fa-solid fa-x"></i></button>          
+              <button @click="deleteFilter" class="rounded-lg text-sm px-3 py-1.5 dark:bg-red-600 dark:hover:bg-red-700 dark:text-white" type="button">
+                Reset Filter
+              </button>
+              <button @click="closeModal">                          
+                <img
+                  src="@/assets/x-solid.svg"
+                  id="x"
+                />
+              </button>          
             </div>
     
           <div>
@@ -26,8 +31,11 @@
                     {{ header }}
                     <span class="ml-1 cursor-pointer">
                       <div class="dropdown-container">
-                        <button @click="toggleFilter" class="filter-button dark:hover:bg-red-900">
-                          <i class="fas fa-filter "></i>
+                        <button @click="toggleFilter" class="filter-button dark:hover:bg-white">
+                          <img
+                            src="@/assets/filter-solid.svg"
+                            id="filter"
+                          />
                         </button>
                                                                 
                         <!-- Dropdown menu -->
@@ -212,11 +220,11 @@ export default {
   computed: {
 
     filteredData() {
-      if (this.selectedTesters.length === 0 && this.selectedSampleDate-length === 0 && this.selectedTest.length === 0 && this.selectedTestStandard.length === 0 && this.selectedArticle.length === 0 && this.selectedArticleNumber.length === 0 && this.selectedOrderNumber.length === 0 && this.selectedBatchNumber.length === 0 && this.selectedSampleNumber.length === 0) {
+      if (this.selectedTesters.length === 0 && this.selectedSampleDate.length === 0 && this.selectedTest.length === 0 && this.selectedTestStandard.length === 0 && this.selectedArticle.length === 0 && this.selectedArticleNumber.length === 0 && this.selectedOrderNumber.length === 0 && this.selectedBatchNumber.length === 0 && this.selectedSampleNumber.length === 0) {
         return this.data;
       } else {
         return this.data.filter(item => 
-          this.selectedTesters.includes(item.Tester) || this.selectedSampleDate.includes(item.SampeDate) || this.selectedTest.includes(item.Test) || this.selectedTestStandard.includes(item.TestStandard) || this.selectedArticle.includes(item.Article) || this.selectedArticleNumber.includes(item.ArticleNumber) || this.selectedOrderNumber === item.OrderNumber || this.selectedBatchNumber.includes(item.BatchNumber) || this.selectedSampleNumber == item.SampleNumber
+          this.selectedTesters.includes(item.Tester) || this.selectedSampleDate.includes(item.SampeDate) || this.selectedTest.includes(item.Test) || this.selectedTestStandard.includes(item.TestStandard) || this.selectedArticle.includes(item.Article) || this.selectedArticleNumber.includes(item.ArticleNumber) || this.selectedOrderNumber === item.OrderNumber || this.selectedBatchNumber.includes(item.BatchNumber) || this.selectedSampleNumber === item.SampleNumber
         );
       } 
     },
@@ -383,13 +391,14 @@ export default {
 
   deleteFilter() {
     this.selectedTesters = []
+    this.selectedSampleDate = []
     this.selectedTest = []
     this.selectedTestStandard = []
     this.selectedArticle = []
     this.selectedArticleNumber = []
-    this.selectedOrderNumber = ''
+    this.selectedOrderNumber = []
     this.selectedBatchNumber = []
-    this.selectedSampleNumber = ''
+    this.selectedSampleNumber = []
   }
 
   }
@@ -483,6 +492,16 @@ table {
   width: 100px; 
   height: 30px; 
   box-sizing: border-box; 
+}
+
+#filter {
+  width: 10px;
+  height: 10px;
+}
+
+#x {
+  width: 15px;
+  height: 15px;
 }
 
 </style>
