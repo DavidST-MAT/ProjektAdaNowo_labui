@@ -53,7 +53,7 @@ export default {
 
     async fetchNames() {
       try {
-        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
+        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"]) |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
         const result = await queryApi.collectRows(fluxQuery);
         if (result.length > 0) {
           
@@ -61,7 +61,6 @@ export default {
           
           this.suggest = this.allTests.length > 0 ? this.allTests[0] : "";
           console.log(this.allTests);
-          console.log('hier bin ich');
         } else {
           this.allTests = [];
           this.suggest = "";

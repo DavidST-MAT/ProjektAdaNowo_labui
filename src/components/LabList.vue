@@ -159,26 +159,15 @@
                 <td class="px-6 py-4 dark:text-black">
                   <div class="flex rounded-md overflow-hidden">
                     <template v-if="isNewButtonClicked">
-                      <input v-model="item.maximum_stretch_md_" :disabled="item.stretchMDDisabled" type="text" class="custom-input2" />
-                      <SetButton :row="item.row" :labValue="item.maximum_stretch_md_" :parameterHeader="stretchHeaderMD" @disable-input="disableInput('stretchMD', index)" /> 
+                      <input v-model="item.area_weight_" :disabled="item.areaWeightDisabled" type="text" class="custom-input2" />
+                      <SetButton :row="item.row" :labValue="item.area_weight_" :parameterHeader="areaWeight" @disable-input="disableInput('areaWeight', index)" /> 
                     </template>
                   </div>
                   <template v-if="isOpenButtonClicked">
-                    <div class="flex items-center justify-center">{{ item.maximum_stretch_md_ }}</div>
+                    <div class="flex items-center justify-center">{{ item.area_weight_ }}</div>
                   </template>   
                 </td>
 
-                <td class="px-6 py-4 dark:text-black">
-                  <div class="flex rounded-md overflow-hidden">
-                    <template v-if="isNewButtonClicked">
-                      <input v-model="item.maximum_stretch_cd_" :disabled="item.stretchCDDisabled" type="text" class="custom-input2 custom-input2-print-value" />
-                      <SetButton :row="item.row" :labValue="item.maximum_stretch_cd_" :parameterHeader="stretchHeaderCD" @disable-input="disableInput('stretchCD', index)" />
-                    </template>
-                  </div>
-                  <template v-if="isOpenButtonClicked">
-                    <div class="flex items-center justify-center">{{ item.maximum_stretch_cd_ }}</div>
-                  </template>   
-                </td>
 
               </tr>
 
@@ -241,13 +230,11 @@ export default {
         'Sub Sample',
         'Maximum Tensile Force MD [N]',
         'Maximum Tensile Force CD [N]',
-        'Maximum Stretch MD [%]',
-        'Maximum Stretch CD [%]'
+        'Area Weight [g/m^2]'
         ],
       tensileHeaderMD: 'maximum_tensile_force_md_',
       tensileHeaderCD: 'maximum_tensile_force_cd_',
-      stretchHeaderMD: 'maximum_stretch_md_',
-      stretchHeaderCD: 'maximum_stretch_cd_',
+      areaWeight: 'area_weight_',
       headerData: [
         { Parameter: 'Sample Date/Time', Value: '' },
         { Parameter: 'Tester', Value: '' },
@@ -260,11 +247,9 @@ export default {
         { Parameter: 'Comment', Value: '' },
       ],
       labDataTable: [
-        { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
-        { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
-        { row: '3', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
-        { row: '4', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
-        { row: '5', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
+        { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', area_weight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', area_weight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: '3', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', area_weight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
       ],
     };
   },
@@ -322,20 +307,17 @@ export default {
 
       // Update labDataTable based on the labValues associated with the clicked row
       this.labDataTable.forEach((row, index) => {
-        const stretchParameterMD = `maximum_stretch_md_${index + 1}`;
-        const stretchParameterCD = `maximum_stretch_cd_${index + 1}`;
+        const areaWeight = `area_weight_${index + 1}`;
         const tensileForceParameterMD = `maximum_tensile_force_md_${index + 1}`;
         const tensileForceParameterCD = `maximum_tensile_force_cd_${index + 1}`;
 
         // Find corresponding values in labValues array and update the labDataTable
-        const stretchValueMD = String(labValues.find(item => item.Parameter === stretchParameterMD)?.Value || '');
-        const stretchValueCD = String(labValues.find(item => item.Parameter === stretchParameterCD)?.Value || '');
+        const areaWeightValue = String(labValues.find(item => item.Parameter === areaWeight)?.Value || '');
         const tensileForceValueMD = String(labValues.find(item => item.Parameter === tensileForceParameterMD)?.Value || '');
         const tensileForceValueCD = String(labValues.find(item => item.Parameter === tensileForceParameterCD)?.Value || '');
 
         // Update the values in the labDataTable row
-        row.maximum_stretch_md_ = stretchValueMD;
-        row.maximum_stretch_cd_ = stretchValueCD;
+        row.area_weight_ = areaWeightValue;
         row.maximum_tensile_force_md_ = tensileForceValueMD;
         row.maximum_tensile_force_cd_ = tensileForceValueCD;
       });
@@ -353,11 +335,9 @@ export default {
 
       // Set the default values for "labDataTable", needs to be assigned again if array is populated
       this.labDataTable = [
-        { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
-        { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
-        { row: '3', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
-        { row: '4', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
-        { row: '5', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', maximum_stretch_md_: '', maximum_stretch_cd_: '', tensileMDDisabled: false, stretchMDDisabled: false, tensileCDDisabled: false, stretchCDDisabled: false },
+        { row: '1', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', area_weight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: '2', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', area_weight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: '3', maximum_tensile_force_md_: '', maximum_tensile_force_cd_: '', area_weight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
       ];
 
       var commentEntry = this.headerData.find(item => item.Parameter === 'Comment');

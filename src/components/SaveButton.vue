@@ -113,8 +113,7 @@ export default {
         
         labDataTable[`maximum_tensile_force_md_${rowNumber}`] = item.maximum_tensile_force_md_;
         labDataTable[`maximum_tensile_force_cd_${rowNumber}`] = item.maximum_tensile_force_cd_;
-        labDataTable[`maximum_stretch_md_${rowNumber}`] = item.maximum_stretch_md_;
-        labDataTable[`maximum_stretch_cd_${rowNumber}`] = item.maximum_stretch_cd_;
+        labDataTable[`area_weight_${rowNumber}`] = item.area_weight_;
       }
 
       console.log(labDataTable);

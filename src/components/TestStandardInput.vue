@@ -61,7 +61,6 @@ export default {
           
           this.suggest = this.allTestStandards.length > 0 ? this.allTestStandards[0] : "";
           console.log(this.allTestStandards);
-          console.log('hier bin ich');
         } else {
           this.allTestStandards = [];
           this.suggest = "";
