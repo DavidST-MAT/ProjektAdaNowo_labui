@@ -56,11 +56,8 @@ export default {
         const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"]) |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
         const result = await queryApi.collectRows(fluxQuery);
         if (result.length > 0) {
-          
           this.allTests = [...new Set(result.map(row => row.Test).filter(name => name && name.trim() !== ""))];
-          
           this.suggest = this.allTests.length > 0 ? this.allTests[0] : "";
-          console.log(this.allTests);
         } else {
           this.allTests = [];
           this.suggest = "";
@@ -72,11 +69,7 @@ export default {
       }
     },
 
-
     filterNames() {
-      console.log('this.allTests:', this.allTests);
-      console.log('this.suggest:', this.suggest);
-
       if (!this.allTests || this.allTests.length === 0) {
         this.suggestions = [];
       } else {
@@ -98,17 +91,14 @@ export default {
 
     },
 
-
     handleInput() {
       this.filterNames();
       
     },
 
-
     selectText() {
       this.$refs.testerInputField.select();
     },
-
 
     handleFocus() {
       this.showSuggestions = true;
@@ -116,7 +106,6 @@ export default {
       this.testerInput = this.$refs.testerInput; 
       document.addEventListener("click", this.closeSuggestions);
     },
-
 
     closeSuggestions(event) {
       if (this.testerInput && !this.testerInput.contains(event.target)) {
@@ -126,6 +115,7 @@ export default {
       }
     }
   },
+
 
   watch: {
     suggest() {
@@ -180,8 +170,8 @@ li:hover {
 
 @media print {
   .custom-input {
-  border: none;
-}
+    border: none;
+  }
 }
 </style>
     

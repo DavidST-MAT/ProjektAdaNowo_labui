@@ -56,11 +56,8 @@ export default {
         const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
         const result = await queryApi.collectRows(fluxQuery);
         if (result.length > 0) {
-          
           this.allTestStandards = [...new Set(result.map(row => row.Test_Standard).filter(name => name && name.trim() !== ""))];
-          
           this.suggest = this.allTestStandards.length > 0 ? this.allTestStandards[0] : "";
-          console.log(this.allTestStandards);
         } else {
           this.allTestStandards = [];
           this.suggest = "";
@@ -74,9 +71,6 @@ export default {
 
 
     filterNames() {
-      console.log('this.allTestStandards:', this.allTestStandards);
-      console.log('this.suggest:', this.suggest);
-
       if (!this.allTestStandards || this.allTestStandards.length === 0) {
         this.suggestions = [];
       } else {
@@ -91,24 +85,18 @@ export default {
       this.$emit('input-change', 'Test standard', this.suggest);
     },
 
-
     selectSuggestion(suggest) {
       this.suggest = suggest;
       this.showSuggestions = false;
-
     },
-
 
     handleInput() {
       this.filterNames();
-      
     },
-
 
     selectText() {
       this.$refs.testerInputField.select();
     },
-
 
     handleFocus() {
       this.showSuggestions = true;
@@ -116,7 +104,6 @@ export default {
       this.testerInput = this.$refs.testerInput; 
       document.addEventListener("click", this.closeSuggestions);
     },
-
 
     closeSuggestions(event) {
       if (this.testerInput && !this.testerInput.contains(event.target)) {
@@ -181,8 +168,8 @@ li:hover {
 
 @media print {
   .custom-input {
-  border: none;
-}
+    border: none;
+  }
 }
 </style>
     

@@ -70,7 +70,6 @@ methods: {
         // Set 'suggest' to the first name in 'allNames' if there is at least one name,
         // otherwise, set it to an empty string.
         this.suggest = this.allNames.length > 0 ? this.allNames[0] : "";
-        console.log(this.allNames);
       } else {
         // Handle the scenario where the 'result' array is empty, reset 'allNames' to an empty array and 'suggest' to an empty string
         this.allNames = [];
@@ -85,9 +84,6 @@ methods: {
 
   // Function to filter names based on user input and update suggestions
   filterNames() {
-    console.log('this.allNames:', this.allNames);
-    console.log('this.suggest:', this.suggest);
-
     if (!this.allNames || this.allNames.length === 0) {
       // If no names available, set 'suggestions' to an empty array
       this.suggestions = [];
@@ -111,32 +107,32 @@ methods: {
     this.showSuggestions = false; // Hide the suggestions dropdown after a suggestion is selected
   },
 
-  // Function to handle user input in the component and calling 'filerNames'
-  handleInput() {
-    this.filterNames(); 
-  },
+    // Function to handle user input in the component and calling 'filerNames'
+    handleInput() {
+      this.filterNames(); 
+    },
 
-  // Function to select all text within the input field
-  selectText() {
-    this.$refs.testerInputField.select();
-  },
+    // Function to select all text within the input field
+    selectText() {
+      this.$refs.testerInputField.select();
+    },
 
-  // Function to handle the focus event on the input field
-  handleFocus() {
-    this.showSuggestions = true;
-    this.filterNames();
-    this.testerInput = this.$refs.testerInput;
-    document.addEventListener("click", this.closeSuggestions);
-  },
+    // Function to handle the focus event on the input field
+    handleFocus() {
+      this.showSuggestions = true;
+      this.filterNames();
+      this.testerInput = this.$refs.testerInput;
+      document.addEventListener("click", this.closeSuggestions);
+    },
 
-  // Function to close the suggestions dropdown when a click occurs outside the input field
-  closeSuggestions(event) {
-    if (this.testerInput && !this.testerInput.contains(event.target)) {
-      this.showSuggestions = false;
-      // Remove the click event listener to prevent further checks
-      document.removeEventListener("click", this.closeSuggestions);
+    // Function to close the suggestions dropdown when a click occurs outside the input field
+    closeSuggestions(event) {
+      if (this.testerInput && !this.testerInput.contains(event.target)) {
+        this.showSuggestions = false;
+        // Remove the click event listener to prevent further checks
+        document.removeEventListener("click", this.closeSuggestions);
+      }
     }
-  }
 
 },
 
@@ -198,7 +194,7 @@ li:hover {
 }
 
 @media print {
-    .custom-input {
+  .custom-input {
     border: none;
   }
 }

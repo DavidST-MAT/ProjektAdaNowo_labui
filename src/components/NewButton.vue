@@ -36,7 +36,6 @@ export default {
           for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
             const o = tableMeta.toObject(values);
             result.push({ SampleNumber: o.sample_number });
-            console.log(result)
           }
           return result;
           };
@@ -51,7 +50,6 @@ export default {
               // Set a default value of 0 if the result array is empty
               this.sampleNumber = 0;
             }
-          console.log(this.sampleNumber);
 
           // Trigger a custom event 'newButtonClick' in parent component and pass "this.sampleNumber" as a data parameter
           this.$emit('newButtonClick', this.sampleNumber);
@@ -68,15 +66,14 @@ export default {
 </script>
 
 <style scoped>
-/* Add any styles specific to the NewButton component if needed */
 @media print {
   .hidden-print {
     display: none !important;
   }
 
   @page {
-    size: auto;   /* auto is the default value */
-    margin: 0mm;  /* zero out the margins */
+    size: auto;   
+    margin: 0mm;  
   }
 
   body::after {

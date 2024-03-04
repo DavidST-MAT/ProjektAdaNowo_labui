@@ -364,7 +364,7 @@ export default {
     console.log(this.selectedNames)
     this.filteredNames = this.data.filter(name => this.selectedNames.includes(name));
     console.log(this.filteredNames)
-    },
+  },
 
 
   searchSample(inputValue) {

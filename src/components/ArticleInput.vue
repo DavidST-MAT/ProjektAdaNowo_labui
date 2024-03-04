@@ -50,12 +50,8 @@ export default {
       const result = await queryApi.collectRows(fluxQuery);
 
       if (result.length > 0) {
-        
         this.allArticels = [...new Set(result.map(row => row.Article).filter(name => name && name.trim() !== ""))];
-        
         this.suggest = this.allArticels.length > 0 ? this.allArticels[0] : "";
-        console.log(this.allArticels);
-        console.log('hier bin ich');
       } else {
         this.allArticels = [];
         this.suggest = "";
@@ -68,23 +64,20 @@ export default {
   },
 
 
-  filterNames() {
-    console.log('this.allArticels:', this.allArticels);
-    console.log('this.suggest:', this.suggest);
-
-    if (!this.allArticels || this.allArticels.length === 0) {
-      this.suggestions = [];
-    } else {
-      if (this.suggest.length === 0) {
-        this.suggestions = this.allArticels;
+    filterNames() {
+      if (!this.allArticels || this.allArticels.length === 0) {
+        this.suggestions = [];
       } else {
-        this.suggestions = this.allArticels.filter(name =>
-          name.toLowerCase().includes(this.suggest.toLowerCase())
-        );
+        if (this.suggest.length === 0) {
+          this.suggestions = this.allArticels;
+        } else {
+          this.suggestions = this.allArticels.filter(name =>
+            name.toLowerCase().includes(this.suggest.toLowerCase())
+          );
+        }
       }
-    }
-    this.$emit('input-change', 'Article', this.suggest);
-  },
+      this.$emit('input-change', 'Article', this.suggest);
+    },
   
     selectSuggestion(suggest) {
       this.suggest = suggest;
@@ -98,22 +91,24 @@ export default {
 
     selectText() {
     this.$refs.articleInputField.select();
-  },
+    },
 
-  handleFocus() {
-    this.showSuggestions = true;
-    this.filterNames();
-    this.ArticleInput = this.$refs.ArticleInput; 
-    document.addEventListener("click", this.closeSuggestions);
-  },
+    handleFocus() {
+      this.showSuggestions = true;
+      this.filterNames();
+      this.ArticleInput = this.$refs.ArticleInput; 
+      document.addEventListener("click", this.closeSuggestions);
+    },
 
-  closeSuggestions(event) {
-    if (this.ArticleInput && !this.ArticleInput.contains(event.target)) {
-      this.showSuggestions = false;
-      document.removeEventListener("click", this.closeSuggestions);
+    closeSuggestions(event) {
+      if (this.ArticleInput && !this.ArticleInput.contains(event.target)) {
+        this.showSuggestions = false;
+        document.removeEventListener("click", this.closeSuggestions);
+      }
     }
-  }
+
   },
+
 
   watch: {
     suggest() {
@@ -121,16 +116,16 @@ export default {
     }
   }
 };
-
 </script>
   
     
 <style scoped>
 .custom-input {
-border: 1px solid black; /* Schwarzer Rand */
-border-radius: 8px; /* Abgerundete Ecken mit 8px Radius */
-padding: 3px 8px; /* Adjust the top and bottom padding */
+  border: 1px solid black; 
+  border-radius: 8px; 
+  padding: 3px 8px;
 }
+
 .Article-input {
   position: relative;
 }
@@ -144,7 +139,7 @@ padding: 3px 8px; /* Adjust the top and bottom padding */
   top: 100%;
   left: 0;
   width: 100%;
-  max-height: 150px; /* Set your desired max height */
+  max-height: 150px; 
   overflow-y: auto;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -169,9 +164,8 @@ li:hover {
 
 @media print {
   .custom-input {
-  border: none;
-}
-
+    border: none;
+  }
 }
 </style>
     

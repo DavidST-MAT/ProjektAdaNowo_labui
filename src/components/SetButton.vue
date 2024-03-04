@@ -46,6 +46,7 @@ export default {
       this.parameter = this.parameterHeader.concat(this.row);
       let labValue = this.labValue.replace(',', '.');
       const labValueObject = { [this.parameter]: this.labValue };
+      console.log(labValueObject)
 
       if (labValue == '' || isNaN(labValue)) {
         console.error(`Error: ${labValue} is not a valid number.`);

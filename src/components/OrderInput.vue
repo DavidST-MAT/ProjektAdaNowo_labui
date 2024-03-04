@@ -48,12 +48,8 @@ export default {
         const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
         const result = await queryApi.collectRows(fluxQuery);
         if (result.length > 0) {
-          
           this.allOrderNumbers = [...new Set(result.map(row => row.Order_Number).filter(name => name && name.trim() !== ""))];
-          
           this.suggest = this.allOrderNumbers.length > 0 ? this.allOrderNumbers[0] : "";
-          console.log(this.allOrderNumbers);
-          console.log('hier bin ich');
         } else {
           this.allOrderNumbers = [];
           this.suggest = "";
@@ -67,9 +63,6 @@ export default {
 
 
     filterNames() {
-      console.log('this.allOrderNumbers:', this.allOrderNumbers);
-      console.log('this.suggest:', this.suggest);
-
       if (!this.allOrderNumbers || this.allOrderNumbers.length === 0) {
         this.suggestions = [];
       } else {
@@ -94,23 +87,24 @@ export default {
     },
 
     selectText() {
-    this.$refs.orderInputField.select();
-  },
+      this.$refs.orderInputField.select();
+    },
 
-  handleFocus() {
-    this.showSuggestions = true;
-    this.filterNames();
-    this.testerInput = this.$refs.testerInput; 
-    document.addEventListener("click", this.closeSuggestions);
-  },
+    handleFocus() {
+      this.showSuggestions = true;
+      this.filterNames();
+      this.testerInput = this.$refs.testerInput; 
+      document.addEventListener("click", this.closeSuggestions);
+    },
 
-  closeSuggestions(event) {
-    if (this.testerInput && !this.testerInput.contains(event.target)) {
-      this.showSuggestions = false;
-      document.removeEventListener("click", this.closeSuggestions);
+    closeSuggestions(event) {
+      if (this.testerInput && !this.testerInput.contains(event.target)) {
+        this.showSuggestions = false;
+        document.removeEventListener("click", this.closeSuggestions);
+      }
     }
-  }
   },
+
 
   watch: {
     suggest() {

@@ -57,7 +57,7 @@ export default {
         if (labValuesSaved && labValuesSent) {
           console.log("Save Button succeeded");
         } else {
-          console.error("Ein oder mehrere Funktionen waren nicht erfolgreich.");
+          console.error("Save Button failed.");
         }
       }, 
 
@@ -111,9 +111,9 @@ export default {
       for (const item of this.labDataTable) {
         const rowNumber = item.row;
         
-        labDataTable[`maximum_tensile_force_md_${rowNumber}`] = item.maximum_tensile_force_md_;
-        labDataTable[`maximum_tensile_force_cd_${rowNumber}`] = item.maximum_tensile_force_cd_;
-        labDataTable[`area_weight_${rowNumber}`] = item.area_weight_;
+        labDataTable[`MaximumTensileForceMD_${rowNumber}`] = item.MaximumTensileForceMD_;
+        labDataTable[`MaximumTensileForceCD_${rowNumber}`] = item.MaximumTensileForceCD_;
+        labDataTable[`AreaWeight_${rowNumber}`] = item.AreaWeight_;
       }
 
       console.log(labDataTable);
@@ -121,7 +121,6 @@ export default {
       for (const key in labDataTable) {
         console.log(`${key}: ${labDataTable[key]}`);
         const correctedValue = labDataTable[key].replace(',', '.');
-        console.log(correctedValue);
         if (isNaN(correctedValue)) {
           console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
           this.errorValue = correctedValue;
@@ -140,10 +139,10 @@ export default {
         }
 
         const floatValue = labDataTable[key].replace(',', '.')
-        if (key.includes("stretch"))
+        if (key.includes("Area"))
         {
-          var unit = '%'
-        } else if (key.includes("force")) {
+          var unit = 'g/m^2'
+        } else if (key.includes("Force")) {
           var unit = 'N'
         } else {
             console.log("No Unit is set");
@@ -178,13 +177,12 @@ export default {
     // Function to send labValues to OPCUA-Server via REST-API (fastAPI)
     async sendSaveLabValuesToOPC() {
       const labDataTable = {};
-      console.log(labDataTable)
 
       for (const item of this.labDataTable) {
         const rowNumber = item.row;
-        
-        labDataTable[`maximum_tensile_force_md_${rowNumber}`] = item.maximum_tensile_force_md_;
-        labDataTable[`maximum_tensile_force_cd_${rowNumber}`] = item.maximum_tensile_force_cd_;
+        labDataTable[`AreaWeight_${rowNumber}`] = item.AreaWeight_;
+        labDataTable[`MaximumTensileForceMD_${rowNumber}`] = item.MaximumTensileForceMD_;
+        labDataTable[`MaximumTensileForceCD_${rowNumber}`] = item.MaximumTensileForceCD_;
       }
 
       console.log(labDataTable);
@@ -254,21 +252,21 @@ export default {
 }
 
 @media print {
-.hidden-print {
-  display: none !important;
-}
+  .hidden-print {
+    display: none !important;
+  }
 
-@page {
-  size: auto;  
-  margin: 0mm;  
-}
+  @page {
+    size: auto;  
+    margin: 0mm;  
+  }
 
-body::after {
-  content: none !important;
-}
+  body::after {
+    content: none !important;
+  }
 
-header, footer {
-  display: none;
-}
+  header, footer {
+    display: none;
+  }
 }
 </style>

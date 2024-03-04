@@ -48,12 +48,8 @@ export default {
       const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
       const result = await queryApi.collectRows(fluxQuery);
       if (result.length > 0) {
-        
         this.allArticleNumbers = [...new Set(result.map(row => row.Article_Number).filter(name => name && name.trim() !== ""))];
-        
         this.suggest = this.allArticleNumbers.length > 0 ? this.allArticleNumbers[0] : "";
-        console.log(this.allArticleNumbers);
-        console.log('hier bin ich');
       } else {
         this.allArticleNumbers = [];
         this.suggest = "";
@@ -66,23 +62,20 @@ export default {
   },
 
 
-  filterNames() {
-    console.log('this.allArticleNumbers:', this.allArticleNumbers);
-    console.log('this.suggest:', this.suggest);
-
-    if (!this.allArticleNumbers || this.allArticleNumbers.length === 0) {
-      this.suggestions = [];
-    } else {
-      if (this.suggest.length === 0) {
-        this.suggestions = this.allArticleNumbers;
+    filterNames() {
+      if (!this.allArticleNumbers || this.allArticleNumbers.length === 0) {
+        this.suggestions = [];
       } else {
-        this.suggestions = this.allArticleNumbers.filter(name =>
-          name.toLowerCase().includes(this.suggest.toLowerCase())
-        );
+        if (this.suggest.length === 0) {
+          this.suggestions = this.allArticleNumbers;
+        } else {
+          this.suggestions = this.allArticleNumbers.filter(name =>
+            name.toLowerCase().includes(this.suggest.toLowerCase())
+          );
+        }
       }
-    }
-    this.$emit('input-change', 'Article number', this.suggest);
-  },
+      this.$emit('input-change', 'Article number', this.suggest);
+    },
 
     selectSuggestion(suggest) {
       this.suggest = suggest;
@@ -97,20 +90,21 @@ export default {
     this.$refs.articleNumberInputField.select();
   },
 
-  handleFocus() {
-    this.showSuggestions = true;
-    this.filterNames();
-    this.Article_NumberInput = this.$refs.Article_NumberInput; 
-    document.addEventListener("click", this.closeSuggestions);
+    handleFocus() {
+      this.showSuggestions = true;
+      this.filterNames();
+      this.Article_NumberInput = this.$refs.Article_NumberInput; 
+      document.addEventListener("click", this.closeSuggestions);
+    },
+
+    closeSuggestions(event) {
+      if (this.Article_NumberInput && !this.Article_NumberInput.contains(event.target)) {
+        this.showSuggestions = false;
+        document.removeEventListener("click", this.closeSuggestions);
+      }
+    }
   },
 
-  closeSuggestions(event) {
-    if (this.Article_NumberInput && !this.Article_NumberInput.contains(event.target)) {
-      this.showSuggestions = false;
-      document.removeEventListener("click", this.closeSuggestions);
-    }
-  }
-  },
 
   watch: {
     suggest() {
@@ -122,11 +116,12 @@ export default {
   
     
 <style scoped>
-  .custom-input {
-border: 1px solid black; 
-border-radius: 8px; 
-padding: 3px 8px; 
+.custom-input {
+  border: 1px solid black; 
+  border-radius: 8px; 
+  padding: 3px 8px; 
 }
+
 .Article_Number-input {
   position: relative;
 }
@@ -165,7 +160,7 @@ li:hover {
 
 @media print {
   .custom-input {
-  border: none;
-}
+    border: none;
+  }
 }
 </style>

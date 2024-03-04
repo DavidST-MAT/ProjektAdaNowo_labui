@@ -49,14 +49,9 @@ export default {
         const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
         const result = await queryApi.collectRows(fluxQuery);
         if (result.length > 0) {
-          
           this.allBatchNumbers = [...new Set(result.map(row => row.Batch_Number).filter(name => name && name.trim() !== ""))];
-          
           this.suggest = this.allBatchNumbers.length > 0 ? this.allBatchNumbers[0] : "";
-          console.log(this.allBatchNumbers);
-          console.log('hier bin ich');
         } else {
-   
           this.allBatchNumbers = [];
           this.suggest = "";
         }
@@ -69,9 +64,6 @@ export default {
 
 
     filterNames() {
-      console.log('this.allBatchNumbers:', this.allBatchNumbers);
-      console.log('this.suggest:', this.suggest);
-
       if (!this.allBatchNumbers || this.allBatchNumbers.length === 0) {
         this.suggestions = [];
       } else {
@@ -99,20 +91,21 @@ export default {
     this.$refs.batchNumberInputField.select();
   },
 
-  handleFocus() {
-    this.showSuggestions = true;
-    this.filterNames();
-    this.testerInput = this.$refs.testerInput; 
-    document.addEventListener("click", this.closeSuggestions);
+    handleFocus() {
+      this.showSuggestions = true;
+      this.filterNames();
+      this.testerInput = this.$refs.testerInput; 
+      document.addEventListener("click", this.closeSuggestions);
+    },
+
+    closeSuggestions(event) {
+      if (this.testerInput && !this.testerInput.contains(event.target)) {
+        this.showSuggestions = false;
+        document.removeEventListener("click", this.closeSuggestions);
+      }
+    }
   },
 
-  closeSuggestions(event) {
-    if (this.testerInput && !this.testerInput.contains(event.target)) {
-      this.showSuggestions = false;
-      document.removeEventListener("click", this.closeSuggestions);
-    }
-  }
-  },
 
   watch: {
     suggest() {
@@ -124,11 +117,12 @@ export default {
 
     
 <style scoped>
-  .custom-input {
-    border: 1px solid black; 
-    border-radius: 8px; 
-    padding: 3px 8px; 
-    }
+.custom-input {
+  border: 1px solid black; 
+  border-radius: 8px; 
+  padding: 3px 8px; 
+}
+
 .tester-input {
   position: relative;
 }
@@ -167,8 +161,8 @@ li:hover {
 
 @media print {
   .custom-input {
-  border: none;
-}
+    border: none;
+  }
 }
 </style>
     
