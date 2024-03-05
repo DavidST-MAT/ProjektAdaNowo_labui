@@ -25,9 +25,9 @@ export default {
     async handleNewButtonClick() {
       try {
         // Query for last database entry
-        const fluxQuery = `from(bucket: "LabData") 
+        const fluxQuery = `from(bucket: "LabValues") 
           |> range(start: 0, stop: now()) 
-          |> filter(fn: (r) => r["_measurement"] == "LabValues") 
+          |> filter(fn: (r) => r["_measurement"] == "LabData") 
           |> group(columns: ["_measurement"]) |> last()`;
 
         const myQuery = async () => {

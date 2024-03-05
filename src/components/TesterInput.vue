@@ -54,7 +54,7 @@ methods: {
   async fetchNames() {
     try {
       // Getting the last Teser from InfluxDB
-      const fluxQuery = `from(bucket: "LabData") 
+      const fluxQuery = `from(bucket: "LabValues") 
       |> range(start: 0, stop: now()) 
       |> filter(fn: (r) => r["_measurement"] == "HeaderData") 
       |> group(columns: ["_field"])   

@@ -46,7 +46,7 @@ export default {
   methods: {
     async fetchNames() {
       try {
-        const fluxQuery = 'from(bucket: "LabData") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
+        const fluxQuery = 'from(bucket: "LabValues") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "HeaderData") |> group(columns: ["_field"])   |> sort(columns: ["_time"], desc: true) |> limit(n: 10)';
         const result = await queryApi.collectRows(fluxQuery);
         if (result.length > 0) {
           this.allBatchNumbers = [...new Set(result.map(row => row.Batch_Number).filter(name => name && name.trim() !== ""))];

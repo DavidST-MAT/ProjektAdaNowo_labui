@@ -241,7 +241,7 @@ export default {
       this.isModalOpen = true;
 
       try {
-          const fluxQueryHeaderData = `from(bucket: "LabData") 
+          const fluxQueryHeaderData = `from(bucket: "LabValues") 
           |> range(start: 0, stop: now()) 
           |> filter(fn: (r) => r["_measurement"] == "HeaderData") 
           |> group(columns: ["_field"]) 
@@ -305,9 +305,9 @@ export default {
       const sample_number = item.SampleNumber
 
       try {
-        const fluxQueryLabValues = `from(bucket: "LabData") 
+        const fluxQueryLabValues = `from(bucket: "LabValues") 
         |> range(start: 0, stop: now())
-        |> filter(fn: (r) => r["_measurement"] == "LabValues" and r["sample_number"] == "${sample_number}")
+        |> filter(fn: (r) => r["_measurement"] == "LabData" and r["sample_number"] == "${sample_number}")
         |> group(columns: ["_field"])
         |> sort(columns: ["_time"], desc: true)`
                 

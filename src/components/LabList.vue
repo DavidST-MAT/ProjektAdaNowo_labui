@@ -470,8 +470,6 @@ input {
 }
 
 @media print {
-
-
   body {
       margin: 0; /* Rand entfernen, um Platz zu sparen */
     }
@@ -515,29 +513,24 @@ input {
     padding: 0.5px !important;; /* Adjust as needed */
   }
 
-    .custom-input2 {
-      padding: 2px 1px 1px 2px !important;
+  .custom-input2 {
+    padding: 2px 1px 1px 2px !important;
   }
   
 
-    .sample-number-heading {
-      font-size: 12px; /* Beispiel: Schriftgröße für Überschrift reduzieren */
-    }
+  .sample-number-heading {
+    font-size: 12px; /* Beispiel: Schriftgröße für Überschrift reduzieren */
+  }
 
-    .header {
-      font-size: 5px; /* Beispiel: Schriftgröße für Header reduzieren */
-    }
+  .header {
+    font-size: 5px; /* Beispiel: Schriftgröße für Header reduzieren */
+  }
 
-    @media print {
-      .custom-input {
+  @media print {
+    .custom-input {
       border: none;
     }
   }
-
-
-  }
-
-
-
+}
 
 </style>

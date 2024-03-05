@@ -19,7 +19,7 @@ const { InfluxDB, Point} = require('@influxdata/influxdb-client');
 const url = process.env.VUE_APP_INFLUX_URL;
 const token = process.env.VUE_APP_INFLUX_TOKEN;
 const org = process.env.VUE_APP_INFLUX_ORG;
-const bucket = "LabData"
+const bucket = "LabValues"
 
 const influxDB = new InfluxDB({url, token})
 
