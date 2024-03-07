@@ -56,7 +56,7 @@ export default {
 
       try {
         const response = await axios.post(
-          'http://localhost:8000/send_set_LabValue_to_opc',
+          `${process.env.VUE_APP_API_BASE_URL}/send_set_LabValue_to_opc`,
           { data: labValueObject }
         );
         this.$emit('disable-input', this.parameter);

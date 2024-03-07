@@ -200,7 +200,7 @@ export default {
       try {
         console.log(`LabValues Save-Button to OPC: ${labDataTable}`)
         // Send Data to FastAPI
-        const response = await axios.post('http://localhost:8000/send_save_LabValues_to_opc', {data: labDataTable});
+        const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/send_save_LabValues_to_opc`, {data: labDataTable});
         return true
       } catch (error) {
         console.error('Error:', error);
