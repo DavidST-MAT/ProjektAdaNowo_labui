@@ -307,7 +307,7 @@ export default {
       try {
         const fluxQueryLabValues = `from(bucket: "LabValues") 
         |> range(start: 0, stop: now())
-        |> filter(fn: (r) => r["_measurement"] == "LabData" and r["sample_number"] == "${sample_number}")
+        |> filter(fn: (r) => r["_measurement"] == "LabValues" and r["sample_number"] == "${sample_number}")
         |> group(columns: ["_field"])
         |> sort(columns: ["_time"], desc: true)`
                 

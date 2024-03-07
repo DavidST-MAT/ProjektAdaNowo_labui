@@ -27,7 +27,7 @@ export default {
         // Query for last database entry
         const fluxQuery = `from(bucket: "LabValues") 
           |> range(start: 0, stop: now()) 
-          |> filter(fn: (r) => r["_measurement"] == "LabData") 
+          |> filter(fn: (r) => r["_measurement"] == "LabValues") 
           |> group(columns: ["_measurement"]) |> last()`;
 
         const myQuery = async () => {
