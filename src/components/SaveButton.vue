@@ -111,9 +111,9 @@ export default {
       for (const item of this.labDataTable) {
         const rowNumber = item.row;
         
-        labDataTable[`MaximumTensileForceMD_${rowNumber}`] = item.MaximumTensileForceMD_;
-        labDataTable[`MaximumTensileForceCD_${rowNumber}`] = item.MaximumTensileForceCD_;
-        labDataTable[`AreaWeight_${rowNumber}`] = item.AreaWeight_;
+        labDataTable[`TensileStrengthMD_${rowNumber}`] = item.TensileStrengthMD_;
+        labDataTable[`TensileStrengthCD_${rowNumber}`] = item.TensileStrengthCD_;
+        labDataTable[`AreaWeightLane${rowNumber}`] = item.AreaWeight_;
       }
 
       console.log(labDataTable);
@@ -142,7 +142,7 @@ export default {
         if (key.includes("Area"))
         {
           var unit = 'g/m^2'
-        } else if (key.includes("Force")) {
+        } else if (key.includes("Strength")) {
           var unit = 'N'
         } else {
             console.log("No Unit is set");
@@ -180,9 +180,12 @@ export default {
 
       for (const item of this.labDataTable) {
         const rowNumber = item.row;
-        labDataTable[`AreaWeight_${rowNumber}`] = item.AreaWeight_;
-        labDataTable[`MaximumTensileForceMD_${rowNumber}`] = item.MaximumTensileForceMD_;
-        labDataTable[`MaximumTensileForceCD_${rowNumber}`] = item.MaximumTensileForceCD_;
+        labDataTable[`AreaWeightLane${rowNumber}`] = item.AreaWeight_;
+        labDataTable[`TensileStrengthMD_${rowNumber}`] = item.TensileStrengthMD_;
+        labDataTable[`TensileStrengthCD_${rowNumber}`] = item.TensileStrengthCD_;
+        console.log(item.TensileStrengthCD_)
+        console.log('!!!!!!!!!!!!!!!!!!!!')
+        
       }
 
       console.log(labDataTable);

@@ -135,24 +135,24 @@
                 <td class="sizemeTD px-6 py-4 dark:text-black">
                   <div class="flex rounded-md overflow-hidden w-full">
                     <template v-if="isNewButtonClicked">
-                      <input v-model="item.MaximumTensileForceMD_" :disabled="item.tensileMDDisabled" type="text" class="custom-input2" />
-                      <SetButton :row="item.row" :labValue="item.MaximumTensileForceMD_" :parameterHeader="tensileHeaderMD" @disable-input="disableInput('tensileMD', index)" />
+                      <input v-model="item.TensileStrengthMD_" :disabled="item.tensileMDDisabled" type="text" class="custom-input2" />
+                      <SetButton :row="item.row" :labValue="item.TensileStrengthMD_" :parameterHeader="tensileHeaderMD" @disable-input="disableInput('tensileMD', index)" />
                     </template>
                   </div>
                   <template v-if="isOpenButtonClicked">
-                    <div class="flex items-center justify-center">{{ item.MaximumTensileForceMD_ }}</div>
+                    <div class="flex items-center justify-center">{{ item.TensileStrengthMD_ }}</div>
                   </template>  
                 </td>
 
                 <td class="px-6 py-4 dark:text-black">
                   <div class="flex rounded-md overflow-hidden w-full">
                     <template v-if="isNewButtonClicked">
-                      <input v-model="item.MaximumTensileForceCD_" :disabled="item.tensileCDDisabled" type="text" class="custom-input2" />
-                      <SetButton :row="item.row" :labValue="item.MaximumTensileForceCD_" :parameterHeader="tensileHeaderCD" @disable-input="disableInput('tensileCD', index)" />
+                      <input v-model="item.TensileStrengthCD_" :disabled="item.tensileCDDisabled" type="text" class="custom-input2" />
+                      <SetButton :row="item.row" :labValue="item.TensileStrengthCD_" :parameterHeader="tensileHeaderCD" @disable-input="disableInput('tensileCD', index)" />
                     </template>
                   </div>
                   <template v-if="isOpenButtonClicked">
-                    <div class="flex items-center justify-center">{{ item.MaximumTensileForceCD_ }}</div>
+                    <div class="flex items-center justify-center">{{ item.TensileStrengthCD_ }}</div>
                   </template>  
                 </td>
 
@@ -228,13 +228,13 @@ export default {
       labValue: '',
       headers: [
         'Sub Sample',
-        'Maximum Tensile Force MD [N]',
-        'Maximum Tensile Force CD [N]',
+        'Tensile Strength MD [N]',
+        'Tensile Strength CD [N]',
         'Area Weight [g/m^2]'
         ],
-      tensileHeaderMD: 'MaximumTensileForceMD_',
-      tensileHeaderCD: 'MaximumTensileForceCD_',
-      areaWeight: 'AreaWeight_',
+      tensileHeaderMD: 'TensileStrengthMD_',
+      tensileHeaderCD: 'TensileStrengthCD_',
+      areaWeight: 'AreaWeightLane',
       headerData: [
         { Parameter: 'Sample Date/Time', Value: '' },
         { Parameter: 'Tester', Value: '' },
@@ -247,9 +247,9 @@ export default {
         { Parameter: 'Comment', Value: '' },
       ],
       labDataTable: [
-        { row: '1', MaximumTensileForceMD_: '', MaximumTensileForceCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
-        { row: '2', MaximumTensileForceMD_: '', MaximumTensileForceCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
-        { row: '3', MaximumTensileForceMD_: '', MaximumTensileForceCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: '1', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: '2', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: '3', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
       ],
     };
   },
@@ -304,19 +304,20 @@ export default {
 
       // Update labDataTable based on the labValues associated with the clicked row
       this.labDataTable.forEach((row, index) => {
-        const areaWeight = `AreaWeight_${index + 1}`;
-        const tensileForceParameterMD = `MaximumTensileForceMD_${index + 1}`;
-        const tensileForceParameterCD = `MaximumTensileForceCD_${index + 1}`;
+        const areaWeight = `AreaWeightLane${index + 1}`;
+        const tensileStrengthParameterMD = `TensileStrengthMD_${index + 1}`;
+        const tensileStrengthParameterCD = `TensileStrengthCD_${index + 1}`;
 
         // Find corresponding values in labValues array and update the labDataTable
         const areaWeightValue = String(labValues.find(item => item.Parameter === areaWeight)?.Value || '');
-        const tensileForceValueMD = String(labValues.find(item => item.Parameter === tensileForceParameterMD)?.Value || '');
-        const tensileForceValueCD = String(labValues.find(item => item.Parameter === tensileForceParameterCD)?.Value || '');
+        const tensileStrengthValueMD = String(labValues.find(item => item.Parameter === tensileStrengthParameterMD)?.Value || '');
+        const tensileStrengthValueCD = String(labValues.find(item => item.Parameter === tensileStrengthParameterCD)?.Value || '');
 
         // Update the values in the labDataTable row
         row.AreaWeight_ = areaWeightValue;
-        row.MaximumTensileForceMD_ = tensileForceValueMD;
-        row.MaximumTensileForceCD_ = tensileForceValueCD;
+        row.TensileStrengthMD_ = tensileStrengthValueMD;
+        row.TensileStrengthCD_ = tensileStrengthValueCD;
+        console.log(areaWeightValue)
       });
 
       // Set sampleNumber and headerNew based on the clicked row's SampleNumber
@@ -332,9 +333,9 @@ export default {
 
       // Set the default values for "labDataTable", needs to be assigned again if array is populated
       this.labDataTable = [
-        { row: '1', MaximumTensileForceMD_: '', MaximumTensileForceCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
-        { row: '2', MaximumTensileForceMD_: '', MaximumTensileForceCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
-        { row: '3', MaximumTensileForceMD_: '', MaximumTensileForceCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: '1', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: '2', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: '3', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
       ];
 
       var commentEntry = this.headerData.find(item => item.Parameter === 'Comment');
