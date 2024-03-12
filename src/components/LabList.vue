@@ -135,39 +135,24 @@
                 <td class="sizemeTD px-6 py-4 dark:text-black">
                   <div class="flex rounded-md overflow-hidden w-full">
                     <template v-if="isNewButtonClicked">
-                      <input v-model="item.TensileStrengthMD_" :disabled="item.tensileMDDisabled" type="text" class="custom-input2" />
-                      <SetButton :row="item.row" :labValue="item.TensileStrengthMD_" :parameterHeader="tensileHeaderMD" @disable-input="disableInput('tensileMD', index)" />
+                      <input v-model="item.TensileStrength_" type="text" class="custom-input2" />
                     </template>
                   </div>
                   <template v-if="isOpenButtonClicked">
-                    <div class="flex items-center justify-center">{{ item.TensileStrengthMD_ }}</div>
+                    <div class="flex items-center justify-center">{{ item.TensileStrength_ }}</div>
                   </template>  
                 </td>
 
                 <td class="px-6 py-4 dark:text-black">
                   <div class="flex rounded-md overflow-hidden w-full">
                     <template v-if="isNewButtonClicked">
-                      <input v-model="item.TensileStrengthCD_" :disabled="item.tensileCDDisabled" type="text" class="custom-input2" />
-                      <SetButton :row="item.row" :labValue="item.TensileStrengthCD_" :parameterHeader="tensileHeaderCD" @disable-input="disableInput('tensileCD', index)" />
+                      <input v-model="item.TearLength_" type="text" class="custom-input2" />
                     </template>
                   </div>
                   <template v-if="isOpenButtonClicked">
-                    <div class="flex items-center justify-center">{{ item.TensileStrengthCD_ }}</div>
+                    <div class="flex items-center justify-center">{{ item.TearLength_ }}</div>
                   </template>  
                 </td>
-
-                <td class="px-6 py-4 dark:text-black">
-                  <div class="flex rounded-md overflow-hidden">
-                    <template v-if="isNewButtonClicked">
-                      <input v-model="item.AreaWeight_" :disabled="item.areaWeightDisabled" type="text" class="custom-input2" />
-                      <SetButton :row="item.row" :labValue="item.AreaWeight_" :parameterHeader="areaWeight" @disable-input="disableInput('areaWeight', index)" /> 
-                    </template>
-                  </div>
-                  <template v-if="isOpenButtonClicked">
-                    <div class="flex items-center justify-center">{{ item.AreaWeight_ }}</div>
-                  </template>   
-                </td>
-
 
               </tr>
 
@@ -175,12 +160,57 @@
 
           </table>
 
+          
+
         </div>
+
+
+                <!-- Table for Lab Data -->
+                <div class="sizeme relative flex-grow sm:rounded-lg">
+
+                  <table class="sizeme mx-auto my-4 border border-slate-100 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table dark:border-black">
+
+                    <!-- Table Headers -->
+                    <thead class="sizemeTD text-xs text-gray-700 uppercase dark:bg-red-700 dark:text-white">
+                      <tr class="sizemeTD text-center align-middle">
+                        <th v-for="header in headers2" :key="header" scope="col" class="px-6 py-3 sizemeTD">
+                          {{ header }}
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <!-- Rows for Lab Data -->
+                      <tr class="sizemeTD bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.labDataTable2" :key="index">
+
+                        <th scope="row" class="font-medium text-gray-900 dark:text-black text-center align-middle" style="width: 15%;">
+                          {{ item.row }}
+                        </th>
+
+                        <!--Rows and columns with input-field and set button-->
+                        <td class="sizemeTD px-6 py-4 dark:text-black">
+                          <div class="flex rounded-md overflow-hidden w-full">
+                            <template v-if="isNewButtonClicked">
+                              <input v-model="item.AreaWeight_" type="text" class="custom-input2" />
+
+                            </template>
+                          </div>
+                          <template v-if="isOpenButtonClicked">
+                            <div class="flex items-center justify-center">{{ item.AreaWeight_ }}</div>
+                          </template>  
+                        </td>
+                      </tr>
+
+                    </tbody>
+
+                  </table>
+
+                </div>
 
         <!-- Buttons Container -->
         <div class="buttons-container flex justify-end mt-4">
           <template v-if="isNewButtonClicked">
-            <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" @button-clicked="handleSaveButtonClick"/>
+            <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" :labDataTable2="labDataTable2" @button-clicked="handleSaveButtonClick"/>
           </template>
           <PrintButton/>
         </div>
@@ -228,12 +258,15 @@ export default {
       labValue: '',
       headers: [
         'Sub Sample',
-        'Tensile Strength MD [N]',
-        'Tensile Strength CD [N]',
-        'Area Weight [g/m^2]'
-        ],
-      tensileHeaderMD: 'TensileStrengthMD_',
-      tensileHeaderCD: 'TensileStrengthCD_',
+        'Tensile Strength [Fmax]',
+        'Tear Length [%]',
+      ],
+      headers2: [
+        'Sub Sample',
+        'Area Weight[g/m^2]',
+      ],
+      tensileHeader: 'TensileStrength_',
+      tearHeader: 'TearLength_',
       areaWeight: 'AreaWeightLane',
       headerData: [
         { Parameter: 'Sample Date/Time', Value: '' },
@@ -244,12 +277,24 @@ export default {
         { Parameter: 'Article number', Value: '' },
         { Parameter: 'Order number', Value: '' },
         { Parameter: 'Batch number', Value: '' },
-        { Parameter: 'Comment', Value: '' },
+        { Parameter: 'Comment', Value: ' ' },
       ],
       labDataTable: [
-        { row: '1', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
-        { row: '2', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
-        { row: '3', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: 'MD 1', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD 2', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD 3', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD 4', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD 5', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD 1', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD 2', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD 3', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD 4', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD 5', TensileStrength_: '', TearLength_: ''}
+      ],
+      labDataTable2: [
+        { row: 'AW 1', AreaWeight_: ''},
+        { row: 'AW 2', AreaWeight_: ''},
+        { row: 'AW 3', AreaWeight_: ''}
       ],
     };
   },
@@ -304,20 +349,27 @@ export default {
 
       // Update labDataTable based on the labValues associated with the clicked row
       this.labDataTable.forEach((row, index) => {
-        const areaWeight = `AreaWeightLane${index + 1}`;
-        const tensileStrengthParameterMD = `TensileStrengthMD_${index + 1}`;
-        const tensileStrengthParameterCD = `TensileStrengthCD_${index + 1}`;
+        const tensileStrengthParameter = `TensileStrength_MD${index + 1}`;
+        const tensileStrengthParameterCD = `TensileStrength_CD${index + 1}`;
+        const tearLengthParameter = `TearLength_MD${index + 1}`;
+        console.log(tensileStrengthParameter)
+        // Find corresponding values in labValues array and update the labDataTable
+        const tensileStrengthValue = String(labValues.find(item => item.Parameter === tensileStrengthParameter || item.Parameter === tensileStrengthParameterCD)?.Value || '');
+        const tearLengthValue = String(labValues.find(item => item.Parameter === tearLengthParameter)?.Value || '');
 
+        // Update the values in the labDataTable row
+        row.TensileStrength_ = tensileStrengthValue;
+        row.TearLength_ = tearLengthValue;
+      });
+
+      // Update labDataTable based on the labValues associated with the clicked row
+      this.labDataTable2.forEach((row, index) => {
+        const areaWeight  = `AreaWeight_AW${index + 1}`;
         // Find corresponding values in labValues array and update the labDataTable
         const areaWeightValue = String(labValues.find(item => item.Parameter === areaWeight)?.Value || '');
-        const tensileStrengthValueMD = String(labValues.find(item => item.Parameter === tensileStrengthParameterMD)?.Value || '');
-        const tensileStrengthValueCD = String(labValues.find(item => item.Parameter === tensileStrengthParameterCD)?.Value || '');
 
         // Update the values in the labDataTable row
         row.AreaWeight_ = areaWeightValue;
-        row.TensileStrengthMD_ = tensileStrengthValueMD;
-        row.TensileStrengthCD_ = tensileStrengthValueCD;
-        console.log(areaWeightValue)
       });
 
       // Set sampleNumber and headerNew based on the clicked row's SampleNumber
@@ -333,9 +385,22 @@ export default {
 
       // Set the default values for "labDataTable", needs to be assigned again if array is populated
       this.labDataTable = [
-        { row: '1', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
-        { row: '2', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
-        { row: '3', TensileStrengthMD_: '', TensileStrengthCD_: '', AreaWeight_: '', tensileMDDisabled: false, tensileCDDisabled: false, areaWeightDisabled: false },
+        { row: 'MD1', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD2', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD3', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD4', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD5', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD1', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD2', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD3', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD4', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD5', TensileStrength_: '', TearLength_: ''}
+      ];
+
+      this.labDataTable2 = [
+        { row: 'AW1', AreaWeight_: ''},
+        { row: 'AW2', AreaWeight_: ''},
+        { row: 'AW3', AreaWeight_: ''}
       ];
 
       var commentEntry = this.headerData.find(item => item.Parameter === 'Comment');
@@ -415,7 +480,7 @@ export default {
   
 .custom-input2 {
   border: 1px solid black;
-  border-radius: 8px 0 0 8px; /* Obere linke Ecke abgerundet, obere rechte Ecke eckig */
+  border-radius: 8px; /* Obere linke Ecke abgerundet, obere rechte Ecke eckig */
   padding: 3px 8px; /* Adjust the top and bottom padding */
 }
 

@@ -33,6 +33,7 @@ export default {
       headerData: Array,
       sampleNumber: Number,
       labDataTable: Array,
+      labDataTable2: Array,
   },
 
   data() {
@@ -49,16 +50,16 @@ export default {
     handleButtonClick() {
       const currentTime = new Date();
       
-      const labValuesSaved = this.saveLabValuesToInflux(currentTime);
+      //const labValuesSaved = this.saveLabValuesToInflux(currentTime);
       const labValuesSent =  this.sendSaveLabValuesToOPC();
       
       
         
-        if (labValuesSaved && labValuesSent) {
-          console.log("Save Button succeeded");
-        } else {
-          console.error("Save Button failed.");
-        }
+        // if (labValuesSaved && labValuesSent) {
+        //   console.log("Save Button succeeded");
+        // } else {
+        //   console.error("Save Button failed.");
+        // }
       }, 
 
 
@@ -105,15 +106,21 @@ export default {
     // Function to send labValues to Influx via Influx-Client
     saveLabValuesToInflux(currentTime){
       console.log(this.labDataTable)
+      console.log(this.labDataTable2)
 
       const labDataTable = {};
 
       for (const item of this.labDataTable) {
         const rowNumber = item.row;
         
-        labDataTable[`TensileStrengthMD_${rowNumber}`] = item.TensileStrengthMD_;
-        labDataTable[`TensileStrengthCD_${rowNumber}`] = item.TensileStrengthCD_;
-        labDataTable[`AreaWeightLane${rowNumber}`] = item.AreaWeight_;
+        labDataTable[`TensileStrength_${rowNumber}`] = item.TensileStrength_;
+        labDataTable[`TearLength_${rowNumber}`] = item.TearLength_;
+      }
+
+      for (const item of this.labDataTable2) {
+        const rowNumber = item.row;
+        
+        labDataTable[`AreaWeight_${rowNumber}`] = item.AreaWeight_;
       }
 
       console.log(labDataTable);
@@ -139,12 +146,14 @@ export default {
         }
 
         const floatValue = labDataTable[key].replace(',', '.')
-        if (key.includes("Area"))
+        if (key.includes("Tear"))
         {
-          var unit = 'g/m^2'
-        } else if (key.includes("Strength")) {
+          var unit = '%'
+        } else if (key.includes("Tensile")) {
           var unit = 'N'
-        } else {
+        } else if (key.includes("Area")) {
+          var unit = 'g/m^2'
+        }else {
             console.log("No Unit is set");
         }
 
@@ -180,14 +189,16 @@ export default {
 
       for (const item of this.labDataTable) {
         const rowNumber = item.row;
-        labDataTable[`AreaWeightLane${rowNumber}`] = item.AreaWeight_;
-        labDataTable[`TensileStrengthMD_${rowNumber}`] = item.TensileStrengthMD_;
-        labDataTable[`TensileStrengthCD_${rowNumber}`] = item.TensileStrengthCD_;
-        console.log(item.TensileStrengthCD_)
-        console.log('!!!!!!!!!!!!!!!!!!!!')
-        
+        labDataTable[`TensileStrength_${rowNumber}`] = item.TensileStrength_;
+  
       }
 
+      for (const item of this.labDataTable2) {
+        const rowNumber = item.row;
+        labDataTable[`AreaWeightLane${rowNumber.substring(2)}`] = item.AreaWeight_;
+      }
+
+      
       console.log(labDataTable);
 
       for (const key in labDataTable) {
