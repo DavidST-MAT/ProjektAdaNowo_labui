@@ -14,11 +14,11 @@
       <!-- Display Table if New or Open Button Clicked -->
       <template v-if="isNewButtonClicked || isOpenButtonClicked">
       
-        <table  class="sizeme1 mx-auto my-4 border border-slate-200 text-sm text-left mt-100 text-gray-100 bg-gray-100 border-black ">
+        <table  class="sizeme1 mx-auto my-4 border border-slate-200 text-sm text-left text-gray-100 bg-gray-100 border-black mt-100 ">
           <tbody id="labUIdata">
 
             <!-- Iterate over headerData for table -->
-            <tr class="bg-white border-b bg-gray-100 border-black" v-for="(item, index) in this.headerData" :key="index">
+            <tr class="border-b bg-gray-100 border-black" v-for="(item, index) in this.headerData" :key="index">
               <th scope="row" class="sizemeTD px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-black">
                 {{ item.Parameter }} <!-- Display Parameter Name -->
               </th>
@@ -125,7 +125,7 @@
 
             <tbody>
               <!-- Rows for Lab Data -->
-              <tr class="sizemeTD bg-white border-b bg-gray-100 border-black" v-for="(item, index) in this.labDataTable" :key="index">
+              <tr class="sizemeTD border-b bg-gray-100 border-black" v-for="(item, index) in this.labDataTable" :key="index">
 
                 <th scope="row" class="font-medium text-gray-900 text-black text-center align-middle" style="width: 15%;">
                   {{ item.row }}
@@ -181,7 +181,7 @@
 
                     <tbody>
                       <!-- Rows for Lab Data -->
-                      <tr class="sizemeTD bg-white border-b bg-gray-100 border-black" v-for="(item, index) in this.labDataTable2" :key="index">
+                      <tr class="sizemeTD border-b bg-gray-100 border-black" v-for="(item, index) in this.labDataTable2" :key="index">
 
                         <th scope="row" class="font-medium text-gray-900 text-black text-center align-middle" style="width: 15%;">
                           {{ item.row }}
@@ -468,7 +468,6 @@ export default {
 
 <style>
 
-/* Styles for the sample number heading */
 .sample-number-heading {
   font-size: 20px; 
   font-weight: bold; 
@@ -479,42 +478,41 @@ export default {
 }
 
 .custom-input {
-  border: 1px solid black; /* Schwarzer Rand */
-  border-radius: 8px; /* Abgerundete Ecken mit 8px Radius */
-  padding: 4px 8px; /* Adjust the top and bottom padding */
+  border: 1px solid black; 
+  border-radius: 8px; 
+  padding: 4px 8px; 
 }
   
 .custom-input2 {
   border: 1px solid black;
-  border-radius: 8px; /* Obere linke Ecke abgerundet, obere rechte Ecke eckig */
-  padding: 3px 8px; /* Adjust the top and bottom padding */
+  border-radius: 8px; 
+  padding: 3px 8px; 
 }
 
 .custom-input3 {
   border: 1px solid black;
-  border-radius: 8px; /* Obere linke Ecke abgerundet, obere rechte Ecke eckig */
-  padding: 3px 8px; /* Adjust the top and bottom padding */
+  border-radius: 8px; 
+  padding: 3px 8px;
 }
 
 .buttons-container {
   display: flex;
   justify-content: center;
-  margin-top: 10px; /* Einstellbarer Abstand zwischen Tabellen und Buttons */
+  margin-top: 10px; 
   margin-left: 30px;
 }
 
 .btn {
-  /* Stile für die Buttons */
-  border: 1px solid #4a5568; /* Ändere die Farbe nach Bedarf */
-  background-color: #2d3748; /* Ändere die Farbe nach Bedarf */
+  border: 1px solid #4a5568; 
+  background-color: #2d3748; 
 
-  padding: 0.5rem 1rem; /* Ändere die Größe nach Bedarf */
-  border-radius: 0.25rem; /* Ändere die Rundung nach Bedarf */
+  padding: 0.5rem 1rem; 
+  border-radius: 0.25rem;
   cursor: pointer;
 }
 
 .btn:hover {
-  background-color: #1a202c; /* Ändere die Farbe nach Bedarf */
+  background-color: #1a202c; 
 }
 
 input {
@@ -538,12 +536,12 @@ input {
 }
 
 .table-container {
-  margin: 0 10px; /* Anpassen des Abstands nach Bedarf */
+  margin: 0 10px; 
 }
 
 @media print {
   body {
-      margin: 0; /* Rand entfernen, um Platz zu sparen */
+      margin: 0; 
     }
 
 
@@ -560,17 +558,17 @@ input {
   }
 
   .sizeme1 {
-    width: 50% !important; /* Beispiel: Ändere die Breite der Tabelle auf 80% des Seiteninhalts */
-      margin: auto !important; /* Zentriere die Tabelle auf der Seite */
+    width: 50% !important; 
+      margin: auto !important; 
       border-collapse: collapse !important;
-      font-size: 7px !important; /* Beispiel: Schriftgröße reduzieren */
+      font-size: 7px !important; 
     }
 
     .sizeme {
-    width: 70% !important; /* Beispiel: Ändere die Breite der Tabelle auf 80% des Seiteninhalts */
-      margin: auto !important; /* Zentriere die Tabelle auf der Seite */
+    width: 70% !important; 
+      margin: auto !important; 
       border-collapse: collapse !important;
-      font-size: 7px !important; /* Beispiel: Schriftgröße reduzieren */
+      font-size: 7px !important; 
     }
 
     .sizemeTD {
@@ -582,7 +580,7 @@ input {
   }
 
   th, td {
-    padding: 0.5px !important;; /* Adjust as needed */
+    padding: 0.5px !important;; 
   }
 
   .custom-input2 {
@@ -591,11 +589,11 @@ input {
   
 
   .sample-number-heading {
-    font-size: 12px; /* Beispiel: Schriftgröße für Überschrift reduzieren */
+    font-size: 12px;
   }
 
   .header {
-    font-size: 5px; /* Beispiel: Schriftgröße für Header reduzieren */
+    font-size: 5px; 
   }
 
   @media print {
