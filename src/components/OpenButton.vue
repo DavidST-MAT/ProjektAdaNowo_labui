@@ -1,7 +1,7 @@
 <template>
   
     <div class="header flex">
-      <button @click="handleOpenButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Open</button>
+      <button @click="handleOpenButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-red-600 hover:bg-red-700 focus:ring-red-900">Open</button>
       
       <div v-if="isModalOpen" class="modal">
         <div class="modal-content">
@@ -9,7 +9,7 @@
           <div id="app">
 
             <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-              <button @click="deleteFilter" class="rounded-lg text-sm px-3 py-1.5 dark:bg-red-600 dark:hover:bg-red-700 dark:text-white" type="button">
+              <button @click="deleteFilter" class="rounded-lg text-sm px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white" type="button">
                 Reset Filter
               </button>
               <button @click="closeModal">                          
@@ -22,16 +22,16 @@
     
           <div>
 
-            <table class="text-sm text-left rtl:text-right dark:text-black-300">
+            <table class="text-sm text-left rtl:text-right :text-black-300">
 
-              <thead class="text-xs text-white-700 bg-gray-50 dark:bg-red-700 dark:text-white">
+              <thead class="text-xs text-white-700 bg-gray-50 bg-red-700 text-white">
 
                 <tr>
                   <th v-for="header in headers" :key="header" scope="col" class="px-4 py-3 uppercase">             
                     {{ header }}
                     <span class="ml-1 cursor-pointer">
                       <div class="dropdown-container">
-                        <button @click="toggleFilter" class="filter-button dark:hover:bg-white">
+                        <button @click="toggleFilter" class="filter-button hover:bg-white">
                           <img
                             src="@/assets/filter-solid.svg"
                             id="filter"
@@ -40,7 +40,7 @@
                                                                 
                         <!-- Dropdown menu -->
                         <div v-if="showFilter" class="dropdown-menu w-48 bg-white rounded-lg shadow  no-uppercase" :style="{ right: (header === 'Sample number') ? 'auto' : '0' }">
-                          <ul class="px-5 py-3 text-xs text-gray-700 dark:text-black" aria-labelledby="dropdownCheckboxButton">
+                          <ul class="px-5 py-3 text-xs text-gray-700 text-black" aria-labelledby="dropdownCheckboxButton">
                             <li>
 
                               <template v-if="header === 'Sample number'">
@@ -51,43 +51,43 @@
                               </template>
 
                               <template v-else-if="header === 'Sample Date/Time'">
-                                <div v-for="(item, index) in this.sampeDate" @click="toggleCheckbox(item, 'selectedSampleDate')" :key="index" class="rounded dark:hover:text-white dark:hover:bg-red-700">
+                                <div v-for="(item, index) in this.sampeDate" @click="toggleCheckbox(item, 'selectedSampleDate')" :key="index" class="rounded hover:text-white hover:bg-red-700">
                                   <input type="checkbox" v-model="selectedSampleDate" :value="item" />
                                   {{ item }}
                                 </div>
                               </template>
 
                               <template v-else-if="header === 'Tester'">
-                                <div v-for="item in this.tester" @click="toggleCheckbox(item, 'selectedTesters')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
-                                  <input type="checkbox" v-model="selectedTesters" :value="item"  class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
+                                <div v-for="item in this.tester" @click="toggleCheckbox(item, 'selectedTesters')" :key="item" class="p-2 rounded hover:text-white hover:bg-red-700">
+                                  <input type="checkbox" v-model="selectedTesters" :value="item"  class="w-4 h-4 text-blue-600 rounded bg-gray-600 border-gray-500"/>
                                   {{ item }}
                                 </div>
                               </template>
 
                               <template v-else-if="header === 'Test'">
-                                <div v-for="item in this.test" :key="item" @click="toggleCheckbox(item, 'selectedTest')" class=" p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
-                                  <input type="checkbox" v-model="selectedTest" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
+                                <div v-for="item in this.test" :key="item" @click="toggleCheckbox(item, 'selectedTest')" class=" p-2 rounded hover:text-white hover:bg-red-700">
+                                  <input type="checkbox" v-model="selectedTest" :value="item" class="w-4 h-4 text-blue-600 rounded bg-gray-600 border-gray-500"/>
                                   {{ item }}
                                 </div>
                               </template>
                                                   
                               <template v-else-if="header === 'Test standard'">
-                                <div v-for="item in this.testStandard" @click="toggleCheckbox(item, 'selectedTestStandard')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
-                                  <input type="checkbox" v-model="selectedTestStandard" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500"/>
+                                <div v-for="item in this.testStandard" @click="toggleCheckbox(item, 'selectedTestStandard')" :key="item" class="p-2 rounded hover:text-white hover:bg-red-700">
+                                  <input type="checkbox" v-model="selectedTestStandard" :value="item" class="w-4 h-4 text-blue-600 rounded bg-gray-600 border-gray-500"/>
                                   {{ item }}
                                 </div>
                               </template>
                           
                               <template v-else-if="header === 'Article'">
-                                <div v-for="item in this.article" @click="toggleCheckbox(item, 'selectedArticle')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
-                                  <input type="checkbox" v-model="selectedArticle" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
+                                <div v-for="item in this.article" @click="toggleCheckbox(item, 'selectedArticle')" :key="item" class="p-2 rounded hover:text-white hover:bg-red-700">
+                                  <input type="checkbox" v-model="selectedArticle" :value="item" class="w-4 h-4 text-blue-600 rounded bg-gray-600 border-gray-500">
                                   {{ item }}
                                 </div>
                               </template>
 
                               <template v-else-if="header === 'Article number'">
-                                <div v-for="item in this.articleNumber" @click="toggleCheckbox(item, 'selectedArticleNumber')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
-                                  <input type="checkbox" v-model="selectedArticleNumber" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
+                                <div v-for="item in this.articleNumber" @click="toggleCheckbox(item, 'selectedArticleNumber')" :key="item" class="p-2 rounded hover:text-white hover:bg-red-700">
+                                  <input type="checkbox" v-model="selectedArticleNumber" :value="item" class="w-4 h-4 text-blue-600 rounded bg-gray-600 border-gray-500">
                                   {{ item }}
                                 </div>
                               </template>
@@ -100,8 +100,8 @@
                               </template>
 
                               <template v-else-if="header === 'Batch number'">
-                                <div v-for="item in this.batchNumber" @click="toggleCheckbox(item, 'selectedBatchNumber')" :key="item" class="p-2 rounded dark:hover:text-white dark:hover:bg-red-700">
-                                  <input type="checkbox" v-model="selectedBatchNumber" :value="item" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500">
+                                <div v-for="item in this.batchNumber" @click="toggleCheckbox(item, 'selectedBatchNumber')" :key="item" class="p-2 rounded hover:text-white hover:bg-red-700">
+                                  <input type="checkbox" v-model="selectedBatchNumber" :value="item" class="w-4 h-4 text-blue-600 rounded bg-gray-600 border-gray-500">
                                   {{ item }}
                                 </div>
                               </template>
@@ -120,7 +120,7 @@
               </thead>
 
               <tbody>
-                <tr class="bg-white border-b dark:bg-white dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 dark:hover:text-white"  v-for="(item, index) in this.filteredData" :key="index" @click="handleRowClick(item)">
+                <tr class="bg-white border-b bg-white border-gray-700 hover:bg-gray-50 hover:bg-gray-600 hover:text-white"  v-for="(item, index) in this.filteredData" :key="index" @click="handleRowClick(item)">
 
                   <th scope="row" class="px-5 py-3">
                       {{item.SampleNumber}}

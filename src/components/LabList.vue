@@ -14,16 +14,16 @@
       <!-- Display Table if New or Open Button Clicked -->
       <template v-if="isNewButtonClicked || isOpenButtonClicked">
       
-        <table  class="sizeme1 mx-auto my-4 border border-slate-200 text-sm text-left dark:bg-gray-100 dark:border-black text-gray-100 dark:text-white mt-100">
+        <table  class="sizeme1 mx-auto my-4 border border-slate-200 text-sm text-left mt-100 text-gray-100 bg-gray-100 border-black ">
           <tbody id="labUIdata">
 
             <!-- Iterate over headerData for table -->
-            <tr class="bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.headerData" :key="index">
-              <th scope="row" class="sizemeTD px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
+            <tr class="bg-white border-b bg-gray-100 border-black" v-for="(item, index) in this.headerData" :key="index">
+              <th scope="row" class="sizemeTD px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-black">
                 {{ item.Parameter }} <!-- Display Parameter Name -->
               </th>
 
-              <td class="sizemeTD px-6 py-4 dark:text-black">
+              <td class="sizemeTD px-6 py-4 text-black">
 
                 <!-- Input or Display Value based on New/Open Button Click -->
                 <template v-if="item.Parameter === 'Tester'">
@@ -112,10 +112,10 @@
         <!-- Table for Lab Data -->
         <div class="sizeme relative flex-grow sm:rounded-lg">
 
-          <table class="sizeme mx-auto my-4 border border-slate-100 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table dark:border-black">
+          <table class="sizeme mx-auto my-4 border border-slate-100 text-sm text-left bg-gray-100 text-gray-100 mt-100 equal-height-table border-black">
 
             <!-- Table Headers -->
-            <thead class="sizemeTD text-xs text-gray-700 uppercase dark:bg-red-700 dark:text-white">
+            <thead class="sizemeTD text-xs text-gray-700 uppercase bg-red-700 text-white">
               <tr class="sizemeTD text-center align-middle">
                 <th v-for="header in headers" :key="header" scope="col" class="px-6 py-3 sizemeTD">
                   {{ header }}
@@ -125,14 +125,14 @@
 
             <tbody>
               <!-- Rows for Lab Data -->
-              <tr class="sizemeTD bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.labDataTable" :key="index">
+              <tr class="sizemeTD bg-white border-b bg-gray-100 border-black" v-for="(item, index) in this.labDataTable" :key="index">
 
-                <th scope="row" class="font-medium text-gray-900 dark:text-black text-center align-middle" style="width: 15%;">
+                <th scope="row" class="font-medium text-gray-900 text-black text-center align-middle" style="width: 15%;">
                   {{ item.row }}
                 </th>
     
                 <!--Rows and columns with input-field and set button-->
-                <td class="sizemeTD px-6 py-4 dark:text-black">
+                <td class="sizemeTD px-6 py-4 text-black">
                   <div class="flex rounded-md overflow-hidden w-full">
                     <template v-if="isNewButtonClicked">
                       <input v-model="item.TensileStrength_" type="text" class="custom-input2" />
@@ -143,7 +143,7 @@
                   </template>  
                 </td>
 
-                <td class="px-6 py-4 dark:text-black">
+                <td class="px-6 py-4 text-black">
                   <div class="flex rounded-md overflow-hidden w-full">
                     <template v-if="isNewButtonClicked">
                       <input v-model="item.TearLength_" type="text" class="custom-input2" />
@@ -168,10 +168,10 @@
                 <!-- Table for Lab Data -->
                 <div class="sizeme relative flex-grow sm:rounded-lg">
 
-                  <table class="sizeme mx-auto my-4 border border-slate-100 text-sm text-left dark:bg-gray-100 dark:text-gray-100 mt-100 equal-height-table dark:border-black">
+                  <table class="sizeme mx-auto my-4 border border-slate-100 text-sm text-left bg-gray-100 text-gray-100 mt-100 equal-height-table border-black">
 
                     <!-- Table Headers -->
-                    <thead class="sizemeTD text-xs text-gray-700 uppercase dark:bg-red-700 dark:text-white">
+                    <thead class="sizemeTD text-xs text-gray-700 uppercase bg-red-700 text-white">
                       <tr class="sizemeTD text-center align-middle">
                         <th v-for="header in headers2" :key="header" scope="col" class="px-6 py-3 sizemeTD">
                           {{ header }}
@@ -181,14 +181,14 @@
 
                     <tbody>
                       <!-- Rows for Lab Data -->
-                      <tr class="sizemeTD bg-white border-b dark:bg-gray-100 dark:border-black" v-for="(item, index) in this.labDataTable2" :key="index">
+                      <tr class="sizemeTD bg-white border-b bg-gray-100 border-black" v-for="(item, index) in this.labDataTable2" :key="index">
 
-                        <th scope="row" class="font-medium text-gray-900 dark:text-black text-center align-middle" style="width: 15%;">
+                        <th scope="row" class="font-medium text-gray-900 text-black text-center align-middle" style="width: 15%;">
                           {{ item.row }}
                         </th>
 
                         <!--Rows and columns with input-field and set button-->
-                        <td class="sizemeTD px-6 py-4 dark:text-black">
+                        <td class="sizemeTD px-6 py-4 text-black">
                           <div class="flex rounded-md overflow-hidden w-full">
                             <template v-if="isNewButtonClicked">
                               <input v-model="item.AreaWeight_" type="text" class="custom-input2" />

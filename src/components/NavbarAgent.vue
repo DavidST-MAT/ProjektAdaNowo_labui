@@ -1,5 +1,5 @@
 <template>
-    <nav class="bg-white text-white border-gray-200 dark:bg-white-900">
+    <nav class="bg-white text-white border-gray-200 bg-white-900">
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <img
             src="@/assets/LogoAdaNowoV2.png"
