@@ -91,7 +91,7 @@
 
                 <template v-else-if="item.Parameter === 'Comment'">
                   <template v-if="isNewButtonClicked">
-                    <textarea v-model.lazy="item.Value" rows="3" cols="22" class="custom-input"></textarea>
+                    <textarea v-model.lazy="item.Value" rows="3" cols="22" class="custom-input"> </textarea>
                   </template>
                   <template v-else-if="isOpenButtonClicked">
                     <div class="text-center align-middle" >{{ item.Value }}</div>
@@ -277,24 +277,24 @@ export default {
         { Parameter: 'Article number', Value: '' },
         { Parameter: 'Order number', Value: '' },
         { Parameter: 'Batch number', Value: '' },
-        { Parameter: 'Comment', Value: ' ' },
+        { Parameter: 'Comment', Value: '' },
       ],
       labDataTable: [
-        { row: 'MD 1', TensileStrength_: '', TearLength_: ''},
-        { row: 'MD 2', TensileStrength_: '', TearLength_: ''},
-        { row: 'MD 3', TensileStrength_: '', TearLength_: ''},
-        { row: 'MD 4', TensileStrength_: '', TearLength_: ''},
-        { row: 'MD 5', TensileStrength_: '', TearLength_: ''},
-        { row: 'CD 1', TensileStrength_: '', TearLength_: ''},
-        { row: 'CD 2', TensileStrength_: '', TearLength_: ''},
-        { row: 'CD 3', TensileStrength_: '', TearLength_: ''},
-        { row: 'CD 4', TensileStrength_: '', TearLength_: ''},
-        { row: 'CD 5', TensileStrength_: '', TearLength_: ''}
+        { row: 'MD1', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD2', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD3', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD4', TensileStrength_: '', TearLength_: ''},
+        { row: 'MD5', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD1', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD2', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD3', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD4', TensileStrength_: '', TearLength_: ''},
+        { row: 'CD5', TensileStrength_: '', TearLength_: ''}
       ],
       labDataTable2: [
-        { row: 'AW 1', AreaWeight_: ''},
-        { row: 'AW 2', AreaWeight_: ''},
-        { row: 'AW 3', AreaWeight_: ''}
+        { row: 'AW1', AreaWeight_: ''},
+        { row: 'AW2', AreaWeight_: ''},
+        { row: 'AW3', AreaWeight_: ''}
       ],
     };
   },
@@ -340,8 +340,12 @@ export default {
             this.headerData[i].Value = item.OrderNumber;
         } else if (this.headerData[i].Parameter === 'Batch number') {
             this.headerData[i].Value = item.BatchNumber;
-        } else if (this.headerData[i].Parameter === 'Comment') {
-            this.headerData[i].Value= item.Comment.replace('\\n', '\n')
+          } else if (this.headerData[i].Parameter === 'Comment') {
+            if (item.Comment !== undefined) {
+                this.headerData[i].Value = item.Comment.replace('\\n', '\n');
+            } else {
+                this.headerData[i].Value = '';
+            }
         }
 
       }
@@ -349,12 +353,14 @@ export default {
 
       // Update labDataTable based on the labValues associated with the clicked row
       this.labDataTable.forEach((row, index) => {
-        const tensileStrengthParameter = `TensileStrength_MD${index + 1}`;
-        const tensileStrengthParameterCD = `TensileStrength_CD${index + 1}`;
-        const tearLengthParameter = `TearLength_MD${index + 1}`;
+        const tensileStrengthParameter = `TensileStrength_${this.labDataTable[index].row}`;
+        const tearLengthParameter = `TearLength_${this.labDataTable[index].row}`;
         console.log(tensileStrengthParameter)
+        console.log(row)
+        console.log(index)
+        console.log(this.labDataTable)
         // Find corresponding values in labValues array and update the labDataTable
-        const tensileStrengthValue = String(labValues.find(item => item.Parameter === tensileStrengthParameter || item.Parameter === tensileStrengthParameterCD)?.Value || '');
+        const tensileStrengthValue = String(labValues.find(item => item.Parameter === tensileStrengthParameter)?.Value || '');
         const tearLengthValue = String(labValues.find(item => item.Parameter === tearLengthParameter)?.Value || '');
 
         // Update the values in the labDataTable row

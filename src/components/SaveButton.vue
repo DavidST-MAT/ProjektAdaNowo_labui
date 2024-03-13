@@ -50,16 +50,16 @@ export default {
     handleButtonClick() {
       const currentTime = new Date();
       
-      //const labValuesSaved = this.saveLabValuesToInflux(currentTime);
+      const labValuesSaved = this.saveLabValuesToInflux(currentTime);
       const labValuesSent =  this.sendSaveLabValuesToOPC();
       
       
         
-        // if (labValuesSaved && labValuesSent) {
-        //   console.log("Save Button succeeded");
-        // } else {
-        //   console.error("Save Button failed.");
-        // }
+        if (labValuesSaved && labValuesSent) {
+          console.log("Save Button succeeded");
+        } else {
+          console.error("Save Button failed.");
+        }
       }, 
 
 
