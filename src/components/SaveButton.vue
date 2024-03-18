@@ -186,24 +186,28 @@ export default {
     // Function to send labValues to OPCUA-Server via REST-API (fastAPI)
     async sendSaveLabValuesToOPC() {
       const labDataTable = {};
+      const labDataTableCheck = {};
 
       for (const item of this.labDataTable) {
         const rowNumber = item.row;
         labDataTable[`TensileStrength_${rowNumber}`] = item.TensileStrength_;
+        labDataTableCheck[`TensileStrength_${rowNumber}`] = item.TensileStrength_;
+        labDataTableCheck[`TearLength_${rowNumber}`] = item.TearLength_;
   
       }
 
       for (const item of this.labDataTable2) {
         const rowNumber = item.row;
         labDataTable[`AreaWeightLane${rowNumber.substring(2)}`] = item.AreaWeight_;
+        labDataTableCheck[`AreaWeightLane${rowNumber.substring(2)}`] = item.AreaWeight_;
       }
 
       
       console.log(labDataTable);
 
-      for (const key in labDataTable) {
+      for (const key in labDataTableCheck) {
         
-          const correctedValue = labDataTable[key].replace(',', '.');
+          const correctedValue = labDataTableCheck[key].replace(',', '.');
         
         if (isNaN(correctedValue)) {
           console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
