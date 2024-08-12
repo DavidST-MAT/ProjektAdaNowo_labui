@@ -160,52 +160,51 @@
 
           </table>
 
-          
-
         </div>
 
 
-                <!-- Table for Lab Data -->
-                <div class="sizeme relative flex-grow sm:rounded-lg">
+        <!-- Table for Lab Data -->
+        <div class="sizeme relative flex-grow sm:rounded-lg">
 
-                  <table class="sizeme mx-auto my-4 border border-slate-100 text-sm text-left bg-gray-100 text-gray-100 mt-100 equal-height-table border-black">
+          <table class="sizeme mx-auto my-4 border border-slate-100 text-sm text-left bg-gray-100 text-gray-100 mt-100 equal-height-table border-black">
 
-                    <!-- Table Headers -->
-                    <thead class="sizemeTD text-xs text-gray-700 uppercase bg-red-700 text-white">
-                      <tr class="sizemeTD text-center align-middle">
-                        <th v-for="header in headers2" :key="header" scope="col" class="px-6 py-3 sizemeTD">
-                          {{ header }}
-                        </th>
-                      </tr>
-                    </thead>
+            <!-- Table Headers -->
+            <thead class="sizemeTD text-xs text-gray-700 uppercase bg-red-700 text-white">
+              <tr class="sizemeTD text-center align-middle">
+                <th v-for="header in headers2" :key="header" scope="col" class="px-6 py-3 sizemeTD">
+                  {{ header }}
+                </th>
+              </tr>
+            </thead>
 
-                    <tbody>
-                      <!-- Rows for Lab Data -->
-                      <tr class="sizemeTD border-b bg-gray-100 border-black" v-for="(item, index) in this.labDataTable2" :key="index">
+            <tbody>
+              <!-- Rows for Lab Data -->
+              <tr class="sizemeTD border-b bg-gray-100 border-black" v-for="(item, index) in this.labDataTable2" :key="index">
 
-                        <th scope="row" class="font-medium text-gray-900 text-black text-center align-middle" style="width: 15%;">
-                          {{ item.row }}
-                        </th>
+                <th scope="row" class="font-medium text-gray-900 text-black text-center align-middle" style="width: 15%;">
+                  {{ item.row }}
+                </th>
 
-                        <!--Rows and columns with input-field and set button-->
-                        <td class="sizemeTD px-6 py-4 text-black">
-                          <div class="flex rounded-md overflow-hidden w-full">
-                            <template v-if="isNewButtonClicked">
-                              <input v-model="item.AreaWeight_" type="text" class="custom-input2" />
+                <!--Rows and columns with input-field and set button-->
+                <td class="sizemeTD px-6 py-4 text-black">
+                  <div class="flex rounded-md overflow-hidden w-full">
+                    <template v-if="isNewButtonClicked">
+                      <input v-model="item.AreaWeight_" type="text" class="custom-input2" />
 
-                            </template>
-                          </div>
-                          <template v-if="isOpenButtonClicked">
-                            <div class="flex items-center justify-center">{{ item.AreaWeight_ }}</div>
-                          </template>  
-                        </td>
-                      </tr>
+                    </template>
+                  </div>
+                  <template v-if="isOpenButtonClicked">
+                    <div class="flex items-center justify-center">{{ item.AreaWeight_ }}</div>
+                  </template>  
+                </td>
+              </tr>
 
-                    </tbody>
+            </tbody>
 
-                  </table>
+          </table>
 
-                </div>
+        </div>
+
 
         <!-- Buttons Container -->
         <div class="buttons-container flex justify-end mt-4">
