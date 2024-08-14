@@ -25,10 +25,11 @@ export default {
     async handleNewButtonClick() {
       try {
         // Query for last database entry
-        const fluxQuery = `from(bucket: "LabValues") 
-          |> range(start: 0, stop: now()) 
-          |> filter(fn: (r) => r["_measurement"] == "LabValues") 
-          |> group(columns: ["_measurement"]) |> last()`;
+        const fluxQuery = `from(bucket: "AgentValues")
+            |> range(start: 0, stop: now())
+            |> filter(fn: (r) => r["_measurement"] == "SetValues" and r["Iteration"] != "-1")
+            |> group(columns: ["_field"])
+            |> last()`;
 
         const myQuery = async () => {
           const result = [];
