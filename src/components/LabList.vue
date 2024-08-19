@@ -2,12 +2,16 @@
   <!-- Modal container -->
   <div class="modal">
     <div class="modal-content flex flex-col items-center">
+      <h4 class="sample-number-heading"> State Agent-Value: {{ agentSetValueState }}</h4>
       <h2 class="sample-number-heading">{{ headerNew }}</h2>
       <h3 class="sample-number-heading"> {{ sampleNumber }} </h3>
 
       <!-- Header Buttons -->
       <div class="header flex">
-        <NewButton @newButtonClick="handleNewButtonClick" />
+        <NewButton :disabled="agentSetValueState === 0 || agentSetValueState === 1 || agentSetValueState === 2 || agentSetValueState === 3 || agentSetValueState === 4 || agentSetValueState === 6"
+        :class="{ 'disabled': agentSetValueState === 0 || agentSetValueState === 1 || agentSetValueState === 2 || agentSetValueState === 3 || agentSetValueState === 4 || agentSetValueState === 6}" 
+        :title="agentSetValueState !== 5 ? 'Wait for Agent-Value 5' : ''"
+        @newButtonClick="handleNewButtonClick" />
         <OpenButton @openButtonClick="handleOpenButtonClick" @row-clicked="handleRowClick"/>
       </div>
 
@@ -208,8 +212,9 @@
 
         <!-- Buttons Container -->
         <div class="buttons-container flex justify-end mt-4">
-          <template v-if="isNewButtonClicked">
-            <SaveButton :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" :labDataTable2="labDataTable2" @button-clicked="handleSaveButtonClick"/>
+          <template v-if="isNewButtonClicked" >
+            <SaveButton :agentSetValueState="agentSetValueState"
+            :headerData="headerData" :sampleNumber="sampleNumber" :labDataTable="labDataTable" :labDataTable2="labDataTable2" @button-clicked="handleSaveButtonClick"/>
           </template>
           <PrintButton/>
         </div>
@@ -237,7 +242,7 @@ import SetButton from './SetButton.vue';
 import TestInput from './TestInput.vue';
 import TestStandardInput from './TestStandardInput.vue';
 
-
+import axios from 'axios';
 
 export default {
   props: {
@@ -247,6 +252,9 @@ export default {
 
   data() {
     return {
+      isButtonDisabled: false,
+      agentSetValueState: 0,
+      executedInterval: false,
       isNewButtonClicked: false,
       isOpenButtonClicked: false,
       headerNew: 'Laboratory testing',
@@ -421,7 +429,7 @@ export default {
       }
 
       // Increment the sample number for new sample number
-      this.sampleNumber = result
+      this.sampleNumber = Number(result)
       this.sampleNumber++
 
       // Switch header
@@ -443,6 +451,34 @@ export default {
       return item.isInputDisabled || false;
     },
 
+    // read the current AgentSetValue from OPC
+    async readAgentSetValueSate() {
+      const url = `${process.env.VUE_APP_API_BASE_URL}/read_agent_set_value_state`;
+      try {
+        const response = await axios.get(url);
+        const responseData = response.data
+        this.agentSetValueState = responseData;
+        console.log(`AgentSetValue: ${this.agentSetValueState}`)
+        if (this.agentSetValueState === 5) {
+          this.isButtonDisabled = true
+        }
+      } catch (error) {
+        console.error("Reading AgentSetValue failed:", error);
+      }
+    },
+
+  },
+
+  // Fetch data for starting or reloading Vue-App
+  async mounted() {
+    if (!this.executedInterval) {
+      this.intervalId = setInterval(this.readAgentSetValueSate, 3000)
+      this.executedInterval = true;
+    }
+  },
+
+  beforeUnmount() {
+    clearInterval(this.intervalId);
   },
 
   components: {
@@ -536,6 +572,11 @@ input {
 
 .table-container {
   margin: 0 10px; 
+}
+
+.disabled {
+  opacity: 0.5; 
+  cursor: not-allowed;
 }
 
 @media print {

@@ -1,5 +1,10 @@
 <template>
-  <button type="button" @click="handleButtonClick" class="hidden-print mt-4 hover:text-white border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-red-600 hover:bg-red-700 focus:ring-red-900">
+  <button
+  type="button" @click="handleButtonClick" 
+  :disabled="agentSetValueState === 0 || agentSetValueState === 1 || agentSetValueState === 2 || agentSetValueState === 3 || agentSetValueState === 4 || agentSetValueState === 6"
+  :class="{ 'disabled': agentSetValueState === 0 || agentSetValueState === 1 || agentSetValueState === 2 || agentSetValueState === 3 || agentSetValueState === 4 || agentSetValueState === 6}" 
+  :title="agentSetValueState !== 5 ? 'Wait for Agent-Value 5' : ''"
+  class="hidden-print mt-4 hover:text-white border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-red-600 hover:bg-red-700 focus:ring-red-900">
     Save
   </button>
     <!-- Error Modal -->
@@ -34,7 +39,8 @@ export default {
       sampleNumber: Number,
       labDataTable: Array,
       labDataTable2: Array,
-  },
+      agentSetValueState: Number,
+      },
 
   data() {
       return {
@@ -268,6 +274,11 @@ export default {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.disabled {
+  opacity: 0.5; 
+  cursor: not-allowed;
 }
 
 @media print {

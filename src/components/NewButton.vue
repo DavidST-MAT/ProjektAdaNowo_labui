@@ -1,7 +1,8 @@
 <!-- NewButton.vue -->
 
 <template>
-  <button type="button" @click="handleNewButtonClick" class="hidden-print mt-4 hover:text-dark border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-6 py-2.5 me-2 mb-2 bg-red-600 hover:bg-red-700 focus:ring-red-900">
+  <button
+  type="button" @click="handleNewButtonClick" class="hidden-print mt-4 hover:text-dark border focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-6 py-2.5 me-2 mb-2 bg-red-600 hover:bg-red-700 focus:ring-red-900">
     New
   </button>
 </template>
@@ -36,7 +37,7 @@ export default {
 
           for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
             const o = tableMeta.toObject(values);
-            result.push({ SampleNumber: o.sample_number });
+            result.push({ SampleNumber: o.Iteration });
           }
           return result;
           };
@@ -67,6 +68,11 @@ export default {
 </script>
 
 <style scoped>
+.disabled {
+  opacity: 0.5; 
+  cursor: not-allowed;
+}
+
 @media print {
   .hidden-print {
     display: none !important;
