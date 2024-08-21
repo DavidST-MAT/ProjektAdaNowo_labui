@@ -430,7 +430,7 @@ export default {
 
       // Increment the sample number for new sample number
       this.sampleNumber = Number(result)
-      this.sampleNumber++
+      //this.sampleNumber++
 
       // Switch header
       this.headerNew = 'SAMPLE NUMBER';
