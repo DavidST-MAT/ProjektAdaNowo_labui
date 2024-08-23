@@ -131,8 +131,25 @@ export default {
 
       console.log(labDataTable);
 
+
+
       for (const key in labDataTable) {
         console.log(`${key}: ${labDataTable[key]}`);
+
+
+        if (
+        key.startsWith('TensileStrength_') && 
+        (labDataTable[key] === '' || labDataTable[key] === null || labDataTable[key] === undefined)
+    ) {
+        console.error(`saveLabValuesToInflux Error: ${key} darf nicht leer sein.`);
+        this.errorValue = key;
+        this.showErrorModal = true; 
+        return false; 
+    }
+
+
+
+
         const correctedValue = labDataTable[key].replace(',', '.');
         if (isNaN(correctedValue)) {
           console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
@@ -211,9 +228,28 @@ export default {
       
       console.log(labDataTable);
 
+
+
       for (const key in labDataTableCheck) {
         
           const correctedValue = labDataTableCheck[key].replace(',', '.');
+
+
+          ///////////////////////////
+          if (
+        key.startsWith('TensileStrength_') && 
+        (labDataTableCheck[key] === '' || labDataTableCheck[key] === null || labDataTableCheck[key] === undefined)
+    ) {
+        console.error(`saveLabValuesToInflux Error: ${key} darf nicht leer sein.`);
+        this.errorValue = key;
+        this.showErrorModal = true; 
+        return false; 
+    }
+
+
+          ////////////////////////
+
+
         
         if (isNaN(correctedValue)) {
           console.error(`saveLabValuesToInflux Error: ${correctedValue} is not a valid number.`);
